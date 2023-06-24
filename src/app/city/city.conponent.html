@@ -1,0 +1,30 @@
+<div class="mt-5">
+    <form [formGroup]="citySearchForm">
+        <div class="field">
+            <div class="control has-icons-left has-icons-right">
+              <input class="input" type="text" 
+              placeholder="Find products..."
+              formControlName="searchTerm">
+              <span class="icon is-small is-right">
+                <i class="fas fa-search"></i>
+              </span>
+            </div>
+        </div>
+        <hr/>
+    </form>
+</div>
+
+<div class="columns is-mobile is-multiline is-centered">
+  <div class="column is-one-third" *ngFor="let city of cities">
+    <div class="card">
+      <div class="card-content">
+        <div class="media">
+          <div class="media-content">
+            <p class="title is-4">{{city.name}}</p>
+            <p class="subtitle is-6">DRZAVA: {{city.country.name}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

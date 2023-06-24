@@ -1,0 +1,24 @@
+.root {
+    --shadowDark: #eff5feaa;
+    --shadowLight: #eff5fe6b;
+  }
+  
+  .bg-image {
+    background-image: url('../../images/blurred.jpeg');
+    background-size: cover;
+  }
+  
+  .hero-body {
+    justify-content: center;
+  }
+  
+  .login {
+    background-color: white;
+    border-radius: 25px;
+    padding: 1.5rem;
+    box-shadow: 8px 8px 15px var(--shadowDark), -8px -8px 15px var(--shadowLight);
+  }
+  
+  .alfa {
+    font-weight: 300;
+  }

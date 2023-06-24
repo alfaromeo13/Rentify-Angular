@@ -1,0 +1,16 @@
+.alfa {
+    text-decoration: none;
+}
+
+.boja {
+    background-color: rgb(218, 218, 229);
+}
+
+.boja2 {
+    color:white;
+}
+
+.navbar-item:hover{
+    text-decoration: none;
+    color:hsl(171, 77%, 40%);
+}

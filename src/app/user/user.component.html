@@ -1,0 +1,45 @@
+<div class="container">
+    <div class="content">
+        <table class="table centered-table is-striped is-narrow is-hoverable is-fullwidth">
+            <thead>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>E-mail</th>
+                <th>Active</th>
+                <th>Created at</th>
+                <th></th>
+            </thead>
+            <tbody>
+            <tr *ngFor="let user of users">
+                <!-- makni href -->
+            <td><a href="https://en.wikipedia.org/wiki/Leicester_City_F.C." >
+                {{user.username}}</a></td>
+            <td>{{user.firstName}}</td>
+            <td>{{user.lastName}}</td>
+            <td>{{user.email}}</td>
+            <td><span *ngIf="user.isActive; else inactive" class="icon has-text-success fa-lg">
+                <i class="fas fa-check"></i>
+                </span>
+            <ng-template #inactive>
+                <span class="icon has-text-danger fa-lg">
+                    <i class="fas fa-times"></i>
+                </span>
+            </ng-template>
+            </td>
+            <td>{{user.createdAt}}</td>
+            <td>
+                <span *ngIf="user.isActive; else activate" class="icon has-text-danger fa-lg" (click)="deleteUser(user.id)">
+                <i class="fas fa-user-minus" style="cursor: pointer"></i>
+                </span>
+                <ng-template #activate>
+                    <span class="icon has-text-success fa-lg" (click)="activateUser(user.id)">
+                        <i class="fas fa-user-plus" style="cursor: pointer"></i>
+                    </span>
+                </ng-template>
+            </td>  
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

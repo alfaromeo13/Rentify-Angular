@@ -1,0 +1,28 @@
+<div class="bg-image">
+    <section class="hero is-fullheight back">
+        <div class="root hero-body has-text-centered">
+        <div class="login">
+            <h1 class="title has-text-link">Enter secret code below..</h1>
+            <hr class="login-hr">
+            <!-- ovaj event detektuje kada se klikne na submit dugme -->
+            <form #confirmForm="ngForm" (ngSubmit)="confirm(confirmForm)">
+            <div class="field">
+                <div class="control">
+                <p class="control has-icons-left">
+                <input class="input is-medium is-rounded" type="password"
+                placeholder="Enter code..." name="code" ngModel required />
+                <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+                </span>
+                </div>
+            </div>
+            <br/>
+            <button class="button is-block is-fullwidth is-primary is-medium is-rounded" type="submit">
+                Send code
+            </button>
+            </form>
+            <br>
+        </div>
+        </div>
+    </section>
+    </div>

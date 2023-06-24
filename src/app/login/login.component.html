@@ -1,0 +1,54 @@
+<div class="bg-image">
+<section class="hero is-fullheight back">
+    <div class="root hero-body has-text-centered">
+    <div class="login">
+        <h4 class="title has-text-link">Welcome back!</h4>
+        <hr class="login-hr">
+        <!-- ovaj event detektuje kada se klikne na submit dugme -->
+        <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+        <div class="field">
+            <label class="label">Username :</label>
+            <div class="control">
+                <p class="control has-icons-left">
+            <input class="input is-medium is-rounded" type="email"
+            placeholder="Type username..." autocomplete="username" name="username" ngModel required />
+            <span class="icon is-small is-left">
+                <i class="fas fa-user"></i>
+            </span>
+            </p>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Password :</label>
+            <div class="control">
+                <p class="control has-icons-left">
+            <input class="input is-medium is-rounded" type="password" placeholder="Type password..." 
+            autocomplete="current-password" name="password" ngModel required />
+            <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+            </span>
+            </p>
+            </div>
+        </div>
+        <br/>
+        <button class="button is-block is-fullwidth is-primary is-medium is-rounded" type="submit">
+            Login
+        </button>
+        </form>
+        <br>
+        <nav class="level">
+        <div class="level-item has-text-centered">
+            <div>
+            <a routerLink="/reset" class="alfa">Forgot password?</a>
+            </div>
+        </div>
+        <div class="level-item has-text-centered" style="margin-left:10px;">
+            <div>
+            <a routerLink="/register" class="alfa">Create an Account</a>
+            </div>
+        </div>
+        </nav>
+    </div>
+    </div>
+</section>
+</div>

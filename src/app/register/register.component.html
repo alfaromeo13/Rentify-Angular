@@ -1,0 +1,94 @@
+ <div class="bg-image">
+    <section class="hero is-fullheight back">
+        <div class="root hero-body has-text-centered">
+        <div class="login">
+            <h4 class="title has-text-link">Here you can create your account!</h4>
+            <hr class="login-hr">
+            <!-- ovaj event detektuje kada se klikne na submit dugme -->
+            <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
+              <div class="field">
+                <label class="label">First name :</label>
+                <div class="control">
+                <input class="input is-medium is-rounded" type="email"
+                placeholder="Type your first name..." name="firstName" ngModel required />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Last name :</label>
+              <div class="control">
+              <input class="input is-medium is-rounded" type="email"
+              placeholder="Type your last name..." name="lastName" ngModel required />
+              </div>
+          </div>
+            <div class="field">
+                <label class="label">Username :</label>
+                <div class="control">
+                    <p class="control has-icons-left">
+                <input class="input is-medium is-rounded" type="email"
+                placeholder="Type username..." name="username" ngModel required />
+                <span class="icon is-small is-left">
+                    <i class="fas fa-user"></i>
+                </span>
+                </p>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Password :</label>
+                <div class="control">
+                    <p class="control has-icons-left">
+                <input class="input is-medium is-rounded" type="password" placeholder="Type password..." 
+                 name="password" ngModel required />
+                <span class="icon is-small is-left">
+                    <i class="fas fa-lock"></i>
+                </span>
+                </p>
+            </div>
+            </div>
+            <div class="field">
+                 <label class="label">Password repeat :</label>
+              <div class="control">
+                  <p class="control has-icons-left">
+              <input class="input is-medium is-rounded" type="password" placeholder="Confirm your password..." 
+               name="passwordConfirm" ngModel required />
+              <span class="icon is-small is-left">
+                  <i class="fas fa-lock"></i>
+              </span>
+              </p>
+          </div>
+          </div>
+          <div class="field">
+            <label class="label">Email :</label>
+            <div class="control">
+            <p class="control has-icons-left">
+            <input class="input is-medium is-rounded" type="email"
+            placeholder="Type your email..." name="email" ngModel required />
+            <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+            </span>
+            </p>
+            </div>
+        </div>
+
+            <br/>
+            <button class="button is-block is-fullwidth is-primary is-medium is-rounded"
+            [ngClass]="{'is-loading': shouldLoad}" type="submit">
+                Register
+            </button>
+            </form>
+            <br>
+            <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                <a routerLink="/login" class="alfa">Already have an account?</a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered" style="margin-left:10px;">
+                <div>
+                <a routerLink="/home" class="alfa">Go back to home page</a>
+                </div>
+            </div>
+            </nav>
+        </div>
+        </div>
+    </section>
+    </div>
