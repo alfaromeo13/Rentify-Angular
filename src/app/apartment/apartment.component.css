@@ -240,3 +240,8 @@ footer {
 .magic{
   transition: 2s;
 }
+
+.ovoono{
+  display: flex;
+  flex-direction: row;
+}

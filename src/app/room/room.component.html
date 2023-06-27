@@ -1,10 +1,8 @@
 <div class="card rb-card">
     <div class="card-image">
         <div class="card-image">
-            <!-- <figure class="image is-16by9"> -->
               <div id="{{'carouselExampleIndicators'+soba.pid}}" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators ">
-                  
                   <li class="box-shadow-gray" *ngFor="let imgs of soba.imgLinks; let i = index;" 
                     [attr.data-target]="'#carouselExampleIndicators'+soba.pid"
                     data-slide-to="i" [class.active]="i==0"></li>
@@ -23,8 +21,6 @@
                   <span class="sr-only">Next</span>
                 </a>
               </div>           
-            
-            <!-- </figure> -->
         </div>
     </div>
 
@@ -43,33 +39,30 @@
   
     <div class="card-content">
         <h3 class="title is-size-6 ellipsis is-ellipsis-1">
-            <a class="has-text-dark" style="text-decoration: none;" href="s/craigslist-sarasota-rentals.html">
+            <p class="has-text-dark" style="text-decoration: none;" href="s/craigslist-sarasota-rentals.html">
                 {{soba.title}}
-            </a>
+            </p>
         </h3>
         <h4 class="subtitle is-size-7 ellipsis is-ellipsis-2">
 
             {{soba.desc}}</h4>
 
             <div>
-                <a href="#">
-
                     <svg style="margin: 10px 10px 0px 4px;" xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 384 512">
                         <path class="locicon"
                             d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
                     </svg>
-                </a>
-    
     
                 <div style="display:inline-block;padding-top: 10px;">{{soba.loc}}</div>
 
             </div>
         <div style="display: flex; gap: 10px; flex-direction: row; margin-top: 10px;">
 
-            <a class="button is-primary open-modal" style="color: white; text-decoration: none;"
-             href="#">Book for € {{soba.price}} /day</a>
+            <button class="button is-primary" style="color: white; text-decoration: none;"
+            [routerLink]="'/details'" >Book for € {{soba.price}} /day</button>
 
-             <button class="button open-modal" style="color: white; background-color: #bebebe;" [routerLink]="'/details'">Preview</button>
+            <button class="button" style="color: white; background-color: #bebebe;" 
+            [routerLink]="'/details'">Preview</button>
 
             <div style="width: 20%;">
                 <div style="margin: 10px">

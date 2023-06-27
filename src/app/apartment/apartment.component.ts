@@ -3,6 +3,7 @@ import { RoomShowcaseModel } from '../models/roomshowcase';
 import { v4 as uuid } from 'uuid';
 import { ApartmentService } from './apartment.service';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { faLessThanEqual } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-apartment',
@@ -26,6 +27,21 @@ export class ApartmentComponent implements OnInit {
   MAX_PAGE : number = 30;
   apartmani : RoomShowcaseModel[] = [];
 
+  isCondoClicked: boolean = false;
+  isApartmentClicked: boolean = false;
+  isHouseClicked: boolean = false;
+  isStudioClicked: boolean = false;
+  isParkingClicked: boolean = false;
+  isPetsClicked: boolean = false;
+  isAppliancesClicked: boolean = false;
+  isBalconyClicked: boolean = false;
+  isAirClicked: boolean = false;
+  isFurnishedClicked: boolean = false;
+  isWifiClicked: boolean = false;
+  isElevatorClicked: boolean = false;
+  isDayClicked : boolean = false;
+  isMonthClicked : boolean = false;
+
   constructor(private apartmentService : ApartmentService) { }
 
   set_page_no(newPageNo:number):void{
@@ -46,7 +62,7 @@ export class ApartmentComponent implements OnInit {
         "https://images1.apartments.com/i2/xF1Yyy9oUaJ7SUK3p20WteWidXGM2VkzcLvIpWN9uIs/116/the-cove-houston-tx-primary-photo.jpg?p=1"
       ], "10 murtovine 6, kuca 51", 69.69, 4.3);
 
-        soba.liked = Math.random() * 2>1;
+      soba.liked =false;
       rez.push(soba);
     }
     return rez;
@@ -58,11 +74,65 @@ export class ApartmentComponent implements OnInit {
 
   cancel() { this.isActive=false; }
 
+  // page: number = 1;//trenutna stranica na kojoj se nalazimo
+  // itemsPerPage=3;
+  // changePage(increase : number){
+  //   this.page += increase;
+  // }
 
-  page: number = 1;//trenutna stranica na kojoj se nalazimo
-  itemsPerPage=3;
+  onCondoClick() {
+    this.isCondoClicked = !this.isCondoClicked;
+  }
 
-  changePage(increase : number){
-    this.page += increase;
+  onApartmentClick() {
+    this.isApartmentClicked = !this.isApartmentClicked;
+  }
+
+  onHouseClick() {
+    this.isHouseClicked = !this.isHouseClicked;
+  }
+
+  onStudioClick() {
+    this.isStudioClicked = !this.isStudioClicked;
+  }
+
+  onPetsClicked(){
+    this.isPetsClicked = !this.isPetsClicked;
+  }
+
+  onParkingClick() {
+    this.isParkingClicked = !this.isParkingClicked;
+  }
+
+  onAppliancesClick() {
+    this.isAppliancesClicked = !this.isAppliancesClicked;
+  }
+
+  onBalconyClick() {
+    this.isBalconyClicked = !this.isBalconyClicked;
+  }
+
+  onAirClick() {
+    this.isAirClicked = !this.isAirClicked;
+  }
+
+  onFurnishedClick() {
+    this.isFurnishedClicked = !this.isFurnishedClicked;
+  }
+
+  onWifiClick() {
+    this.isWifiClicked = !this.isWifiClicked;
+  }
+
+  onElevatorClick(){
+    this.isElevatorClicked = !this.isElevatorClicked;
+  }
+
+  onDayClick(){
+    this.isDayClicked = !this.isDayClicked;
+  }
+
+  onMonthClick(){
+    this.isMonthClicked = !this.isMonthClicked;
   }
 }

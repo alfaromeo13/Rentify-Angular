@@ -41,16 +41,20 @@
 		<hr>
 		<div class="columns">
 			<div class="column">
-				<button class="button is-rounded">Apartment</button>
+				<button class="button is-rounded" [class.is-success]="isApartmentClicked" 
+				(click)="onApartmentClick()">Apartment</button>
 			</div>
 			<div class="column">
-				<button class="button is-rounded">Condo</button>
+				<button class="button is-rounded" [class.is-success]="isCondoClicked" 
+				(click)="onCondoClick()">Condo</button>
 			</div>
 			<div class="column">
-				<button class="button is-rounded">House</button>
+				<button class="button is-rounded" [class.is-success]="isHouseClicked" 
+				(click)="onHouseClick()">House</button>
 			</div>
 			<div class="column">
-				<button class="button is-rounded">House</button>
+				<button class="button is-rounded" [class.is-success]="isStudioClicked" 
+				(click)="onStudioClick()">Studio</button>
 			</div>
 		  </div> 
 		  <br><br>
@@ -123,7 +127,8 @@
 		<hr>
 		<div class="columns">
 			<div class="column">
-				<button class="button is-rounded">
+				<button class="button is-rounded" [class.is-success]="isParkingClicked" 
+				(click)="onParkingClick()">
 					<span class="icon">
 						<img src="../../assets/parked.png">
 					</span>
@@ -131,23 +136,26 @@
 				</button>
 			</div>
 			<div class="column">
-				<button class="button is-rounded">
+				<button class="button is-rounded" [class.is-success]="isPetsClicked" 
+				(click)="onPetsClicked()">
 					<span class="icon">
-						<i class="fas fa-dog"></i>
+						<i class="fas fa-dog" style="color: black;"></i>
 					</span>
 					  <span>Pets allowed</span>
 				</button>
 			</div>
 			<div class="column">
-				<button class="button is-rounded">
+				<button class="button is-rounded" [class.is-success]="isAppliancesClicked" 
+				(click)="onAppliancesClick()">
 					<span class="icon">
-						<i class="fas fa-blender-phone"></i>
+						<i class="fas fa-blender-phone" style="color: black;"></i>
 					  </span>
 					  <span>Appliances</span>
 				</button>
 			</div>
 			<div class="column">
-				<button class="button is-rounded">
+				<button class="button is-rounded" [class.is-success]="isBalconyClicked" 
+				(click)="onBalconyClick()">
 					<span class="icon">
 						<img src="../../assets/balcony.png">
 					</span>
@@ -155,7 +163,8 @@
 				</button>
 			</div>
 			<div class="column">
-				<button class="button is-rounded">
+				<button class="button is-rounded" [class.is-success]="isAirClicked" 
+				(click)="onAirClick()">
 					<span class="icon">
 						<img src="../../assets/air.png">
 					</span>
@@ -163,7 +172,8 @@
 				</button>
 			</div>
 			<div class="column">
-				<button class="button is-rounded">
+				<button class="button is-rounded" [class.is-success]="isFurnishedClicked" 
+				(click)="onFurnishedClick()">
 					<span class="icon">
 						<svg xmlns="http://www.w3.org/2000/svg" style="fill:black;" height="1em" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M64 160C64 89.3 121.3 32 192 32H448c70.7 0 128 57.3 128 128v33.6c-36.5 7.4-64 39.7-64 78.4v48H128V272c0-38.7-27.5-71-64-78.4V160zM544 272c0-20.9 13.4-38.7 32-45.3c5-1.8 10.4-2.7 16-2.7c26.5 0 48 21.5 48 48V448c0 17.7-14.3 32-32 32H576c-17.7 0-32-14.3-32-32H96c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V272c0-26.5 21.5-48 48-48c5.6 0 11 1 16 2.7c18.6 6.6 32 24.4 32 45.3v48 32h32H512h32V320 272z"/></svg>
 					</span>
@@ -171,15 +181,17 @@
 				</button>
 			</div>
 			<div class="column">
-				<button class="button is-rounded">
+				<button class="button is-rounded" [class.is-success]="isWifiClicked" 
+				(click)="onWifiClick()">
 					<span class="icon">
-						<i class="fas fa-wifi"></i>
+						<i class="fas fa-wifi" style="color: black;"></i>
 					</span>
 					  <span>Wifi</span>
 				</button>
 			</div>
 			<div class="column">
-				<button class="button is-rounded">
+				<button class="button is-rounded" [class.is-success]="isElevatorClicked" 
+				(click)="onElevatorClick()">
 						<span class="icon">
 							<svg xmlns="http://www.w3.org/2000/svg" style="fill:black;" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M132.7 4.7l-64 64c-4.6 4.6-5.9 11.5-3.5 17.4s8.3 9.9 14.8 9.9H208c6.5 0 12.3-3.9 14.8-9.9s1.1-12.9-3.5-17.4l-64-64c-6.2-6.2-16.4-6.2-22.6 0zM64 128c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V192c0-35.3-28.7-64-64-64H64zm96 96a48 48 0 1 1 0 96 48 48 0 1 1 0-96zM80 400c0-26.5 21.5-48 48-48h64c26.5 0 48 21.5 48 48v16c0 17.7-14.3 32-32 32H112c-17.7 0-32-14.3-32-32V400zm192 0c0-26.5 21.5-48 48-48h64c26.5 0 48 21.5 48 48v16c0 17.7-14.3 32-32 32H304c-17.7 0-32-14.3-32-32V400zm32-128a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zM356.7 91.3c6.2 6.2 16.4 6.2 22.6 0l64-64c4.6-4.6 5.9-11.5 3.5-17.4S438.5 0 432 0H304c-6.5 0-12.3 3.9-14.8 9.9s-1.1 12.9 3.5 17.4l64 64z"/></svg>
 						</span>
@@ -187,14 +199,17 @@
 				</button>
 			</div>
 		  </div> 
-		  <br><br>
+		 <br><br>
 			<h3 style="color:hsl(171, 77%, 40%);"><b>Location</b></h3>
 		<hr>
-		<label><b>Country name</b></label> <input class="input is-success" type="text" placeholder="Enter country name...">
+		<label><b>Country name</b></label> 
+		<input class="input is-success" type="text" placeholder="Enter country name...">
 		<br><br>
-		<label><b>City name</b></label> <input class="input is-success" type="email" placeholder="Enter city name...">
+		<label><b>City name</b></label>
+		<input class="input is-success" type="email" placeholder="Enter city name..." disabled>
 		<br><br>
-		<label><b>Neighbrourhood name</b></label> <input class="input is-success" type="email" placeholder="Enter neighbourhood name...">
+		<label><b>Neighbrourhood name</b></label> 
+		<input class="input is-success" type="email" placeholder="Enter neighbourhood name..." disabled>
 		<br><br>
 		<hr>
 		<div class="columns">
@@ -202,10 +217,12 @@
 				<h3 style="color:hsl(171, 77%, 40%);"><b>Period</b></h3>
 			</div>
 			<div class="column">
-				<button class="button is-rounded">Day</button>
+				<button class="button is-rounded" [class.is-success]="isDayClicked" 
+				(click)="onDayClick()">Day</button>
 			</div>
 			<div class="column">
-				<button class="button is-rounded">Month</button>
+				<button class="button is-rounded" [class.is-success]="isMonthClicked" 
+				(click)="onMonthClick()">Month</button>
 			</div>
 		</div>
 	  </section>
