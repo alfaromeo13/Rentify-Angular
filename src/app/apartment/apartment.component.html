@@ -1,248 +1,62 @@
 <img src="image.jpg" class="blurredbg">
 
 <button class="button is-primary search" (click)="click()">
-    <span class="icon is-large">
-        <svg xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 0 460 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#d3d7cf}</style><path d="M220.6 130.3l-67.2 28.2V43.2L98.7 233.5l54.7-24.2v130.3l67.2-209.3zm-83.2-96.7l-1.3 4.7-15.2 52.9C80.6 106.7 52 145.8 52 191.5c0 52.3 34.3 95.9 83.4 105.5v53.6C57.5 340.1 0 272.4 0 191.6c0-80.5 59.8-147.2 137.4-158zm311.4 447.2c-11.2 11.2-23.1 12.3-28.6 10.5-5.4-1.8-27.1-19.9-60.4-44.4-33.3-24.6-33.6-35.7-43-56.7-9.4-20.9-30.4-42.6-57.5-52.4l-9.7-14.7c-24.7 16.9-53 26.9-81.3 28.7l2.1-6.6 15.9-49.5c46.5-11.9 80.9-54 80.9-104.2 0-54.5-38.4-102.1-96-107.1V32.3C254.4 37.4 320 106.8 320 191.6c0 33.6-11.2 64.7-29 90.4l14.6 9.6c9.8 27.1 31.5 48 52.4 57.4s32.2 9.7 56.8 43c24.6 33.2 42.7 54.9 44.5 60.3s.7 17.3-10.5 28.5zm-9.9-17.9c0-4.4-3.6-8-8-8s-8 3.6-8 8 3.6 8 8 8 8-3.6 8-8z"/></svg>     
-    </span>
+  <span class="icon is-large">
+    <svg xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 0 460 512">
+      <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+      <style>
+        svg {
+          fill: #d3d7cf
+        }
+      </style>
+      <path
+        d="M220.6 130.3l-67.2 28.2V43.2L98.7 233.5l54.7-24.2v130.3l67.2-209.3zm-83.2-96.7l-1.3 4.7-15.2 52.9C80.6 106.7 52 145.8 52 191.5c0 52.3 34.3 95.9 83.4 105.5v53.6C57.5 340.1 0 272.4 0 191.6c0-80.5 59.8-147.2 137.4-158zm311.4 447.2c-11.2 11.2-23.1 12.3-28.6 10.5-5.4-1.8-27.1-19.9-60.4-44.4-33.3-24.6-33.6-35.7-43-56.7-9.4-20.9-30.4-42.6-57.5-52.4l-9.7-14.7c-24.7 16.9-53 26.9-81.3 28.7l2.1-6.6 15.9-49.5c46.5-11.9 80.9-54 80.9-104.2 0-54.5-38.4-102.1-96-107.1V32.3C254.4 37.4 320 106.8 320 191.6c0 33.6-11.2 64.7-29 90.4l14.6 9.6c9.8 27.1 31.5 48 52.4 57.4s32.2 9.7 56.8 43c24.6 33.2 42.7 54.9 44.5 60.3s.7 17.3-10.5 28.5zm-9.9-17.9c0-4.4-3.6-8-8-8s-8 3.6-8 8 3.6 8 8 8 8-3.6 8-8z" />
+    </svg>
+  </span>
 </button>
 
 <nav style="margin-top: 2vh; color:hsl(171, 77%, 40%)" aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
-      <li class="page-item" [class.disabled]="pageNo == 1" (click)="set_page_no(pageNo-1)">
-        <a class="page-link">Previous</a>
+  <ul class="pagination justify-content-center">
+    <li class="page-item" [class.disabled]="filterService.pageNo == 1" (click)="set_page_no(filterService.pageNo-1)">
+      <a class="page-link">Previous</a>
+    </li>
+    <li *ngIf="filterService.pageNo > PAGE_TOLERANCE + 1" class="page-item"><a class="page-link"
+        (click)="set_page_no(1)">1</a></li>
+    <li *ngIf="filterService.pageNo > PAGE_TOLERANCE + 1" class="unhoverable page-item"><a class="page-link">...</a>
+    </li>
+    <span *ngFor="let item of [].constructor(PAGE_TOLERANCE * 2 + 1); let i = index;">
+      <li [class.active]="filterService.pageNo === (filterService.pageNo + i - PAGE_TOLERANCE)"
+        *ngIf="(filterService.pageNo + i - PAGE_TOLERANCE) > 0" class="page-item">
+        <a class="page-link" (click)="set_page_no(filterService.pageNo + i - PAGE_TOLERANCE)">{{filterService.pageNo + i
+          - PAGE_TOLERANCE}}</a>
       </li>
-      <li *ngIf="pageNo>PAGE_TOLERANCE+1" class="page-item"><a class="page-link" (click)="set_page_no(1)">1</a></li>
-      <li *ngIf="pageNo>PAGE_TOLERANCE+1" class="unhoverable page-item"><a class="page-link">...</a></li>
-      <span *ngFor="let item of [].constructor(PAGE_TOLERANCE*2+1); 
-      let i = index;">
-      <li [class.active]="pageNo===(pageNo+i-PAGE_TOLERANCE)" *ngIf="(pageNo+i-PAGE_TOLERANCE)>0 && (pageNo+i-PAGE_TOLERANCE)<=MAX_PAGE" class="page-item">
-        <a class="page-link" (click)="set_page_no(pageNo+i-PAGE_TOLERANCE)">{{pageNo+i-PAGE_TOLERANCE}}</a>
-        </li>
     </span>
-    <li *ngIf="pageNo<MAX_PAGE-PAGE_TOLERANCE-1" class="unhoverable page-item"><a class="page-link">...</a></li>
-      <li *ngIf="pageNo<MAX_PAGE-PAGE_TOLERANCE" class="page-item"><a class="page-link" (click)="set_page_no(MAX_PAGE)">{{MAX_PAGE}}</a></li>
-      <li class="page-item" [class.disabled]="pageNo === MAX_PAGE" (click)="set_page_no(pageNo+1)">
-        <a class="page-link">Next</a>
-      </li>
-    </ul>
-  </nav>
+    <li *ngIf="filterService.pageNo < filterService.pageNo + PAGE_TOLERANCE" class="unhoverable page-item"><a
+        class="page-link">...</a></li>
+    <li *ngIf="filterService.pageNo > 1" class="page-item"><a class="page-link"
+        (click)="set_page_no(filterService.pageNo + PAGE_TOLERANCE)">{{filterService.pageNo + PAGE_TOLERANCE}}</a></li>
+    <li class="page-item" (click)="set_page_no(filterService.pageNo + 1)">
+      <a class="page-link">Next</a>
+    </li>
+  </ul>
+</nav>
 
-<div class="modal is-active moja" *ngIf="isActive" (onClose)="isActive=false" [@modalTransition]>
-	<div class="modal-background"></div>
-	<div class="modal-card">
-	  <header class="modal-card-head">
-		<p class="modal-card-title" style="color:hsl(171, 77%, 40%);">
-			<b>Customize Your Search!</b></p>
-		<button class="delete" label="close" (click)="cancel()"></button>
-	  </header>
-	  <section class="modal-card-body">
-		<br>
-		<h3 style="color:hsl(171, 77%, 40%);"><b>Property type</b></h3>
-		<hr>
-		<div class="columns">
-			<div class="column">
-				<button class="button is-rounded" [class.is-success]="isApartmentClicked" 
-				(click)="onApartmentClick()">Apartment</button>
-			</div>
-			<div class="column">
-				<button class="button is-rounded" [class.is-success]="isCondoClicked" 
-				(click)="onCondoClick()">Condo</button>
-			</div>
-			<div class="column">
-				<button class="button is-rounded" [class.is-success]="isHouseClicked" 
-				(click)="onHouseClick()">House</button>
-			</div>
-			<div class="column">
-				<button class="button is-rounded" [class.is-success]="isStudioClicked" 
-				(click)="onStudioClick()">Studio</button>
-			</div>
-		  </div> 
-		  <br><br>
-		<h3 style="color:hsl(171, 77%, 40%);"><b>Price</b></h3>
-		<hr>
-		<div class="columns klasa">
-			<div class="column is-one-half">
-				<h3><b>Minimum price </b></h3>
-				<input class="input" type="number" placeholder="5000€"> 
-			</div>
-			<div class="column is-one-half">
-				<h3><b>Maximum price </b></h3>
-				<input class="input" type="number" placeholder="5000€"> 
-			</div>
-		</div>
-		<br><br>
-		<h3 style="color:hsl(171, 77%, 40%);"><b>Bedrooms</b></h3>
-		<hr>
-		<div class="columns klasa">
-			<div class="column is-one-half">
-				<h3><b>Minimum number </b></h3>
-				<input class="input" type="number" placeholder="5"> 
-			</div>
-			<div class="column is-one-half">
-				<h3><b>Maximum number </b></h3>
-				<input class="input" type="number" placeholder="5"> 
-			</div>
-		</div>
-		<br><br>
-		<h3 style="color:hsl(171, 77%, 40%);"><b>Bathrooms</b></h3>
-		<hr>
-		<div class="columns klasa">
-			<div class="column is-one-half">
-				<h3><b>Minimum number </b></h3>
-				<input class="input" type="number" placeholder="5"> 
-			</div>
-			<div class="column is-one-half">
-				<h3><b>Maximum number </b></h3>
-				<input class="input" type="number" placeholder="5"> 
-			</div>
-		</div>
-		<br><br>
-		<h3 style="color:hsl(171, 77%, 40%);"><b>Square feet</b></h3>
-		<hr>
-		<div class="columns klasa">
-			<div class="column is-one-half">
-				<h3><b>Minimum number </b></h3>
-				<input class="input" type="number" placeholder="50"> 
-			</div>
-			<div class="column is-one-half">
-				<h3><b>Maximum number </b></h3>
-				<input class="input" type="number" placeholder="50"> 
-			</div>
-		</div>
-		<br><br>
-		<h3 style="color:hsl(171, 77%, 40%);"><b>Availability date</b></h3>
-		<hr>
-		<div class="columns klasa">
-			<div class="column is-one-half">
-				<h3><b>Date from </b></h3>
-				<input class="input" type="date"> 
-			</div>
-			<div class="column is-one-half">
-				<h3><b>Date to </b></h3>
-				<input class="input" type="date"> 
-			</div>
-		</div>
-		<br><br>
-		<h3 style="color:hsl(171, 77%, 40%);"><b>Amenities</b></h3>
-		<hr>
-		<div class="columns">
-			<div class="column">
-				<button class="button is-rounded" [class.is-success]="isParkingClicked" 
-				(click)="onParkingClick()">
-					<span class="icon">
-						<img src="../../assets/parked.png">
-					</span>
-					  <span>Parking</span>
-				</button>
-			</div>
-			<div class="column">
-				<button class="button is-rounded" [class.is-success]="isPetsClicked" 
-				(click)="onPetsClicked()">
-					<span class="icon">
-						<i class="fas fa-dog" style="color: black;"></i>
-					</span>
-					  <span>Pets allowed</span>
-				</button>
-			</div>
-			<div class="column">
-				<button class="button is-rounded" [class.is-success]="isAppliancesClicked" 
-				(click)="onAppliancesClick()">
-					<span class="icon">
-						<i class="fas fa-blender-phone" style="color: black;"></i>
-					  </span>
-					  <span>Appliances</span>
-				</button>
-			</div>
-			<div class="column">
-				<button class="button is-rounded" [class.is-success]="isBalconyClicked" 
-				(click)="onBalconyClick()">
-					<span class="icon">
-						<img src="../../assets/balcony.png">
-					</span>
-					  <span>Balcony</span>
-				</button>
-			</div>
-			<div class="column">
-				<button class="button is-rounded" [class.is-success]="isAirClicked" 
-				(click)="onAirClick()">
-					<span class="icon">
-						<img src="../../assets/air.png">
-					</span>
-				<span>Air Conditioning</span>
-				</button>
-			</div>
-			<div class="column">
-				<button class="button is-rounded" [class.is-success]="isFurnishedClicked" 
-				(click)="onFurnishedClick()">
-					<span class="icon">
-						<svg xmlns="http://www.w3.org/2000/svg" style="fill:black;" height="1em" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M64 160C64 89.3 121.3 32 192 32H448c70.7 0 128 57.3 128 128v33.6c-36.5 7.4-64 39.7-64 78.4v48H128V272c0-38.7-27.5-71-64-78.4V160zM544 272c0-20.9 13.4-38.7 32-45.3c5-1.8 10.4-2.7 16-2.7c26.5 0 48 21.5 48 48V448c0 17.7-14.3 32-32 32H576c-17.7 0-32-14.3-32-32H96c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V272c0-26.5 21.5-48 48-48c5.6 0 11 1 16 2.7c18.6 6.6 32 24.4 32 45.3v48 32h32H512h32V320 272z"/></svg>
-					</span>
-					  <span>Furnished</span>
-				</button>
-			</div>
-			<div class="column">
-				<button class="button is-rounded" [class.is-success]="isWifiClicked" 
-				(click)="onWifiClick()">
-					<span class="icon">
-						<i class="fas fa-wifi" style="color: black;"></i>
-					</span>
-					  <span>Wifi</span>
-				</button>
-			</div>
-			<div class="column">
-				<button class="button is-rounded" [class.is-success]="isElevatorClicked" 
-				(click)="onElevatorClick()">
-						<span class="icon">
-							<svg xmlns="http://www.w3.org/2000/svg" style="fill:black;" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M132.7 4.7l-64 64c-4.6 4.6-5.9 11.5-3.5 17.4s8.3 9.9 14.8 9.9H208c6.5 0 12.3-3.9 14.8-9.9s1.1-12.9-3.5-17.4l-64-64c-6.2-6.2-16.4-6.2-22.6 0zM64 128c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V192c0-35.3-28.7-64-64-64H64zm96 96a48 48 0 1 1 0 96 48 48 0 1 1 0-96zM80 400c0-26.5 21.5-48 48-48h64c26.5 0 48 21.5 48 48v16c0 17.7-14.3 32-32 32H112c-17.7 0-32-14.3-32-32V400zm192 0c0-26.5 21.5-48 48-48h64c26.5 0 48 21.5 48 48v16c0 17.7-14.3 32-32 32H304c-17.7 0-32-14.3-32-32V400zm32-128a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zM356.7 91.3c6.2 6.2 16.4 6.2 22.6 0l64-64c4.6-4.6 5.9-11.5 3.5-17.4S438.5 0 432 0H304c-6.5 0-12.3 3.9-14.8 9.9s-1.1 12.9 3.5 17.4l64 64z"/></svg>
-						</span>
-						<span>Elevator</span>
-				</button>
-			</div>
-		  </div> 
-		 <br><br>
-			<h3 style="color:hsl(171, 77%, 40%);"><b>Location</b></h3>
-		<hr>
-		<label><b>Country name</b></label> 
-		<input class="input is-success" type="text" placeholder="Enter country name...">
-		<br><br>
-		<label><b>City name</b></label>
-		<input class="input is-success" type="email" placeholder="Enter city name..." disabled>
-		<br><br>
-		<label><b>Neighbrourhood name</b></label> 
-		<input class="input is-success" type="email" placeholder="Enter neighbourhood name..." disabled>
-		<br><br>
-		<hr>
-		<div class="columns">
-			<div class="column">
-				<h3 style="color:hsl(171, 77%, 40%);"><b>Period</b></h3>
-			</div>
-			<div class="column">
-				<button class="button is-rounded" [class.is-success]="isDayClicked" 
-				(click)="onDayClick()">Day</button>
-			</div>
-			<div class="column">
-				<button class="button is-rounded" [class.is-success]="isMonthClicked" 
-				(click)="onMonthClick()">Month</button>
-			</div>
-		</div>
-	  </section>
-	  <footer class="modal-card-foot">
-		<button class="button is-success"(click)="cancel()">Filter changes</button>
-		<button class="button" (click)="cancel()">Cancel</button>
-	  </footer>
-	</div>
+<app-filter></app-filter>
+
+<div class="rooms-container" style="padding-bottom:30px">
+  <div style="margin: auto;" class="container">
+    <div class="columns is-centered">
+      <div class="column is-10">
+        <div class="columns is-multiline">
+          <div *ngFor="let soba of this.apartmentService.apartmani" class="column is-one-third">
+            <app-room [soba]="soba"></app-room>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="rooms-container">
-    <div style="margin: auto;" class="container">
-        <div class="columns is-centered">
-            <div class="column is-10">
-                <div class="columns is-multiline">
-                    <div *ngFor="let soba of apartmani" class="column is-one-third">
-                        <app-room [soba]="soba"></app-room>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div *ngIf="this.apartmentService.apartmani.length === 0" class="buk">
+  <p class="title main-text">Oops! Looks empty. Nothing to see here :/</p>
 </div>

@@ -14,3 +14,7 @@
     text-decoration: none;
     color:hsl(171, 77%, 40%);
 }
+
+.button {
+	transition: 0.3s ;
+}

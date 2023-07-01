@@ -5,7 +5,7 @@ import { PeriodDTO } from "./period.model";
 import { PropertyTypeDTO } from "./propertyType.model";
 import { UserDTO } from "./user.model";
 
-export class ApartmentDTO{
+export class ApartmentDTO {
     id: number;
     title: string;
     price: number;
@@ -14,8 +14,10 @@ export class ApartmentDTO{
     numOfBedrooms: number;
     numOfBathrooms: number;
     createdAt: Date;
+    liked: boolean;
     number: string;
     isActive: boolean;
+    numberOfStars: number;
     user: UserDTO;
     period: PeriodDTO;
     address: AddressDTO;

@@ -35,7 +35,7 @@ export class ErrorInterceptor implements HttpInterceptor{
                     return next.handle(newReq) as Observable<HttpEvent<any>>;
                   }));
               } else { //if we got 401 but there wasn't any token
-                this.toastr.warning('Unauthorized request<br>Please log in again to continue');
+                this.toastr.info('Please log in to continue');
                 this.router.navigate(['login']);
               }
             }else if(errorResponse.status === 400){

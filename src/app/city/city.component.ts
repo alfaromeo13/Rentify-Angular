@@ -3,7 +3,7 @@ import { Component } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { debounceTime, switchMap } from "rxjs";
-import { CityWithCountry } from "../models/city.model";
+import { CityWithCountry } from "../models/city-with-country.model";
 import { CityService } from "./city.service";
 
 @Component({
@@ -16,7 +16,6 @@ export class CityComponent implements OnInit{
     
     constructor(
         private cityService: CityService,
-        private toastr :ToastrService
     ){}
 
     ngOnInit(): void {

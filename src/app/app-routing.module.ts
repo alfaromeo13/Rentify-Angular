@@ -14,12 +14,13 @@ import { RoomDetailsComponent } from "./room-details/room-details.component";
 import { ConfirmAccountComponent } from "./confirm-account/confirm-account.component";
 import { PrikazSlikeComponent } from "./prikaz-slike/prikaz-slike.component";
 import { CityComponent } from "./city/city.component";
+import { CreateApartmentComponent } from "./create-apartment/create-apartment.component";
 
-const routes :Routes = [
+const routes: Routes = [
     {
-        path:'users', //http://localhost:4200/users
+        path: 'users', //http://localhost:4200/users
         component: UserComponent,
-      //  canActivate:[UserGuard],
+        canActivate: [UserGuard], //probaj sa isAuthenticated
     },
     // {
     //     path:'admin', //http://localhost:4200/admin
@@ -32,54 +33,57 @@ const routes :Routes = [
     //     ]
     // },
     {
-        path:'login',
-        component:LoginComponent,
+        path: 'login',
+        component: LoginComponent,
         //canActivate:[IsAlreadyAuthenticatedGuard],
     },
     {
-        path:'apartments',
+        path: 'apartments',
         component: ApartmentComponent,
     },
     {
-        path:'test', //http://localhost:4200/test
+        path: 'test', //http://localhost:4200/test
         component: TestComponent,
-      //  canActivate:[isAuthenticated],
     },
     {
-        path:'reset', //http://localhost:4200/reset
+        path: 'reset', //http://localhost:4200/reset
         component: ResetPassword,
     },
     {
-        path:'register', //http://localhost:4200/register
+        path: 'register', //http://localhost:4200/register
         component: RegisterComponent,
     },
     {
-        path:'home',
-        component:HomeComponent,
+        path: 'home',
+        component: HomeComponent,
     },
     {
-        path:'details',
-        component:RoomDetailsComponent,
+        path: 'details',
+        component: RoomDetailsComponent,
     },
     {
-        path:'confirm',
-        component:ConfirmAccountComponent,
+        path: 'confirm',
+        component: ConfirmAccountComponent,
     },
     {
-        path:'showimg',
-        component:PrikazSlikeComponent,
+        path: 'showimg',
+        component: PrikazSlikeComponent,
     },
     {
-        path:'showCities',
-        component:CityComponent,
+        path: 'showCities',
+        component: CityComponent,
+    },
+    {
+        path:'add-property',
+        component:CreateApartmentComponent,
     },
     {   //http://localhost:4200/something...
-        path:'**', //anything else is entered
-        redirectTo:'home'
+        path: '**', //anything else is entered
+        redirectTo: 'home'
     }]
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
 })
-export class AppRoutingModule{ } 
+export class AppRoutingModule { } 

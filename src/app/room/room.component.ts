@@ -1,4 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ToastrService } from 'ngx-toastr';
+import { ApartmentService } from '../apartment/apartment.service';
+import { AuthService } from '../auth/services/auth.service';
 import { RoomShowcaseModel } from '../models/roomshowcase';
 
 @Component({
@@ -9,16 +13,38 @@ import { RoomShowcaseModel } from '../models/roomshowcase';
 export class RoomComponent implements OnInit {
 
   @Input()
-  public soba : RoomShowcaseModel = new RoomShowcaseModel("","","",[],"",.2,.1);
+  public soba: RoomShowcaseModel = new RoomShowcaseModel(0, "", "", "", "", .2, "", .1, true);
 
   ngOnInit(): void {
+    this.soba.imgLinks.forEach((baseContent: string) => {
+      this.soba.imagePreviews.push(
+        this.domSanitizer.bypassSecurityTrustResourceUrl(`data:image;base64, ${baseContent}`));
+    });
   }
 
-  constructor() { }
+  constructor(
+    private authService: AuthService,
+    private toastr: ToastrService,
+    private domSanitizer: DomSanitizer,
+    private apartmentService: ApartmentService,
+  ) { }
 
-  public toggle_like(): void{
-    this.soba.liked = !this.soba.liked;
+  public toggle_like(): void {
+    if (this.authService.isAuthenticated.getValue()) {
+      if (this.soba.liked)
+        this.apartmentService.deleteFavorite(this.soba.pid).subscribe(data => {
+          console.log("UDJE! :D");
+        }, error => {
+          console.log(error);
+        });
+      else this.apartmentService.addFavorite(this.soba.pid).subscribe(data => {
+        console.log("UDJE! :D");
+      }, error => {
+        console.log(error);
+      });
+      this.soba.liked = !this.soba.liked;
+    } else this.toastr.info("Please log in to like selected " + this.soba.property);
+
 
   }
-
 }

@@ -20,7 +20,7 @@ export class PrikazSlikeComponent implements OnInit {
     //1. salji zahtjev za sliku pr3eko servisa konzumiramo onaj api i dobnijamno value
     //2.prociytamo value i pozovemo
 
-    this.imageService.getImagePreview().subscribe(response => {
+    this.imageService.getImagePreview(107).subscribe(response => {
       //ove 2 vrojednosti citamo iz servisa sto dobijemo
       const imageType = response.type; 
       const imageValue = response.value;

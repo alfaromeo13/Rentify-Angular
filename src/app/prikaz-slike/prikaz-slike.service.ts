@@ -11,8 +11,8 @@ export class ImageService{
         private httpClient: HttpClient
     ){}
  
-    getImagePreview(): Observable<ImagePreview> {
-        const url = `${environment.apiUrl}image/preview/107`;//id nije fixan!
+    getImagePreview(id : number): Observable<ImagePreview> {
+        const url = `${environment.apiUrl}image/preview/${id}`;
         return this.httpClient.get<ImagePreview>(url);//ImagePreview is what we expect in response
     }
 }

@@ -5,23 +5,29 @@ import { Router } from "@angular/router";
 import { switchMap } from "rxjs";
 import { debounceTime } from "rxjs";
 import { AuthService } from "../auth/services/auth.service";
-import { CityWithCountry } from "../models/city.model";
+import { CityWithCountry } from "../models/city-with-country.model";
 import { CityService } from "../city/city.service";
 import { NavbarLink } from "./navbar.model";
+import { FilterService } from "../filter/filter.service";
+import { ApartmentSearch } from "../models/search.model";
+import { ApartmentDTO } from "../models/apartment.model";
+import { ApartmentService } from "../apartment/apartment.service";
 
 @Component({
-    selector:'app-home',
-    templateUrl:'./home.component.html',
-    styleUrls: ['./home.component.css']})
-export class HomeComponent implements OnInit{
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.css']
+})
+export class HomeComponent implements OnInit {
     cities: CityWithCountry[] = [];
     citySearchForm: FormGroup;
-    selectedCity: string="";
-    isMobileNavActive :boolean = false;
-    isUserAuthenticated :boolean = false;
+    selectedCity: string = "";
+    cityWithCountry: CityWithCountry | undefined;
+    isMobileNavActive: boolean = false;
+    isUserAuthenticated: boolean = false;
     recived = false;
     //we load navbar elements dynamicaly with ngFor
-    links :NavbarLink[]=[
+    links: NavbarLink[] = [
         {
             name: "Home",
             path: "/home"
@@ -41,41 +47,63 @@ export class HomeComponent implements OnInit{
     ];
 
     constructor(
-        private router :Router,
-        private cityService : CityService,
-        private authService :AuthService,
-    ){}
-    
+        private router: Router,
+        private cityService: CityService,
+        private filterService: FilterService,
+        private apartmentService: ApartmentService,
+        private authService: AuthService,
+    ) { }
+
     ngOnInit(): void {
         this.authService.isAuthenticated.subscribe(data => {
             this.isUserAuthenticated = data;
         });
         this.initializeForm();
         this.citySearchForm.get('searchTerm')?.valueChanges
-        .pipe(  //ova prica moze jer je reaktivna forma u pitanju,slusacemo na promjene u odredjenoj kontroli
-            debounceTime(500), //svaki put kad se desi neka promjena sacekaj neko vrijeme pa pozovi api 
-            switchMap(value=>{ return this.cityService.searchByTerm(value); })
-        ).subscribe (data=>{ //podaci koje dobijamo sa strane bekenda
-            this.cities=data;
-        });
+            .pipe(  //ova prica moze jer je reaktivna forma u pitanju,slusacemo na promjene u odredjenoj kontroli
+                debounceTime(500), //svaki put kad se desi neka promjena sacekaj neko vrijeme pa pozovi api 
+                switchMap(value => { return this.cityService.searchByTerm(value); })
+            ).subscribe(data => { //podaci koje dobijamo sa strane bekenda
+                this.cities = data;
+            });
     }
 
-    search(){
-        if(this.selectedCity.length !== 0)
-        this.router.navigate(['apartments'])
+    search() {
+        if (this.selectedCity.length !== 0) {
+            const cityData = this.selectedCity.split(',');
+            const cityName = cityData.length >= 2 ? cityData[0].trim() : '';
+            const countryCode = cityData.length >= 2 ? cityData[1].trim() : '';
+
+            const apartmentSearch: ApartmentSearch = {
+                cityName: cityName,
+                countryCode: countryCode,
+            };
+
+            if (cityName.length > 0 && countryCode.length > 0) {
+                this.filterService.filter(apartmentSearch, 0).subscribe(
+                    (apartmentDTOs: ApartmentDTO[]) => {
+                        console.log(apartmentDTOs);
+                        this.apartmentService.apartmentList = apartmentDTOs;
+                        this.router.navigate(['apartments']);
+                    }, (error) => {
+                        console.error(error);
+                    }
+                );
+            }
+        }
     }
 
-    private initializeForm(): void{
-        this.citySearchForm=new FormGroup({
-            searchTerm : new FormControl(null)
+    private initializeForm(): void {
+        this.citySearchForm = new FormGroup({
+            searchTerm: new FormControl(null)
         });
     }
 
     toggleMobileView(): void {
-        this.isMobileNavActive=!this.isMobileNavActive;
+        this.isMobileNavActive = !this.isMobileNavActive;
     }
 
-    logout(): void{
+    logout(): void {
         this.authService.logout();
         this.router.navigate(['login'])
     }

@@ -1,0 +1,279 @@
+<div class="modal is-active moja" *ngIf="filterService.isActive" (onClose)="filterService.isActive=false"
+	[@modalTransition]>
+	<div class="modal-background">
+		<div class="modal-card">
+			<header class="modal-card-head">
+				<p class="modal-card-title" style="color:hsl(171, 77%, 40%);">
+					<b>Customize Your Search!</b>
+				</p>
+				<button class="delete" label="close" (click)="cancel()"></button>
+			</header>
+			<section class="modal-card-body">
+				<br>
+				<h3 style="color:hsl(171, 77%, 40%);"><b>Property type</b></h3>
+				<hr>
+				<div class="columns">
+					<div class="column">
+						<button class="button is-rounded" [class.is-success]="isApartmentClicked"
+							(click)="onApartmentClick()">Apartment</button>
+					</div>
+					<div class="column">
+						<button class="button is-rounded" [class.is-success]="isCondoClicked"
+							(click)="onCondoClick()">Condo</button>
+					</div>
+					<div class="column">
+						<button class="button is-rounded" [class.is-success]="isHouseClicked"
+							(click)="onHouseClick()">House</button>
+					</div>
+					<div class="column">
+						<button class="button is-rounded" [class.is-success]="isStudioClicked"
+							(click)="onStudioClick()">Studio</button>
+					</div>
+				</div>
+				<br><br>
+				<h3 style="color:hsl(171, 77%, 40%);"><b>Price</b></h3>
+				<hr>
+				<div class="columns klasa">
+					<div class="column is-one-half">
+						<h3><b>Minimum price </b></h3>
+						<input class="input" type="number" placeholder="5000€" min="0" [(ngModel)]="selectedMinPrice"
+							ngDefaultControl style="margin-left: 10px;">
+					</div>
+					<div class="column is-one-half">
+						<h3><b>Maximum price</b></h3>
+						<input class="input" type="number" placeholder="5000€" min="0" [(ngModel)]="selectedMaxPrice"
+							ngDefaultControl style="margin-left: 10px;">
+					</div>
+				</div>
+				<br><br>
+				<h3 style="color:hsl(171, 77%, 40%);"><b>Bedrooms</b></h3>
+				<hr>
+				<div class="columns klasa">
+					<div class="column is-one-half">
+						<h3><b>Minimum number </b></h3>
+						<input class="input" type="number" placeholder="5" min="0"
+							[(ngModel)]="selectedMinNumOfBedrooms" ngDefaultControl>
+					</div>
+					<div class="column is-one-half">
+						<h3><b>Maximum number </b></h3>
+						<input class="input" type="number" placeholder="5" min="0"
+							[(ngModel)]="selectedMaxNumOfBedrooms" ngDefaultControl>
+					</div>
+				</div>
+				<br><br>
+				<h3 style="color:hsl(171, 77%, 40%);"><b>Bathrooms</b></h3>
+				<hr>
+				<div class="columns klasa">
+					<div class="column is-one-half">
+						<h3><b>Minimum number </b></h3>
+						<input class="input" type="number" placeholder="5" min="0"
+							[(ngModel)]="selectedMinNumOfBathrooms" ngDefaultControl>
+					</div>
+					<div class="column is-one-half">
+						<h3><b>Maximum number </b></h3>
+						<input class="input" type="number" placeholder="5" min="0"
+							[(ngModel)]="selectedMaxNumOfBathrooms" ngDefaultControl>
+					</div>
+				</div>
+				<br><br>
+				<h3 style="color:hsl(171, 77%, 40%);"><b>Square meters</b></h3>
+				<hr>
+				<div class="columns klasa">
+					<div class="column is-one-half">
+						<h3><b>Minimum number </b></h3>
+						<input class="input" type="number" placeholder="50" min="0"
+							[(ngModel)]="selectedMinSquareMeters" ngDefaultControl>
+					</div>
+					<div class="column is-one-half">
+						<h3><b>Maximum number </b></h3>
+						<input class="input" type="number" placeholder="50" min="0"
+							[(ngModel)]="selectedMaxSquareMeters" ngDefaultControl>
+					</div>
+				</div>
+				<br><br>
+				<h3 style="color:hsl(171, 77%, 40%);"><b>Availability date</b></h3>
+				<hr>
+				<div class="columns klasa">
+					<div class="column is-one-half">
+						<h3><b>Date from </b></h3>
+						<input class="input" type="date" [(ngModel)]="selectedAvailableFrom" ngDefaultControl>
+					</div>
+					<div class="column is-one-half">
+						<h3><b>Date to </b></h3>
+						<input class="input" type="date" [(ngModel)]="selectedAvailableTo" ngDefaultControl>
+					</div>
+				</div>
+				<br><br>
+				<h3 style="color:hsl(171, 77%, 40%);"><b>Amenities</b></h3>
+				<hr>
+				<div class="columns">
+					<div class="column">
+						<button class="button is-rounded" [class.is-success]="isParkingClicked"
+							(click)="onParkingClick()">
+							<span class="icon">
+								<img src="../../assets/parked.png">
+							</span>
+							<span>Parking</span>
+						</button>
+					</div>
+					<div class="column">
+						<button class="button is-rounded" [class.is-success]="isPetsClicked" (click)="onPetsClicked()">
+							<span class="icon">
+								<i class="fas fa-dog" style="color: black;"></i>
+							</span>
+							<span>Pets allowed</span>
+						</button>
+					</div>
+					<div class="column">
+						<button class="button is-rounded" [class.is-success]="isAppliancesClicked"
+							(click)="onAppliancesClick()">
+							<span class="icon">
+								<i class="fas fa-blender-phone" style="color: black;"></i>
+							</span>
+							<span>Appliances</span>
+						</button>
+					</div>
+					<div class="column">
+						<button class="button is-rounded" [class.is-success]="isBalconyClicked"
+							(click)="onBalconyClick()">
+							<span class="icon">
+								<img src="../../assets/balcony.png">
+							</span>
+							<span>Balcony</span>
+						</button>
+					</div>
+					<div class="column">
+						<button class="button is-rounded" [class.is-success]="isAirClicked" (click)="onAirClick()">
+							<span class="icon">
+								<img src="../../assets/air.png">
+							</span>
+							<span>Air Conditioning</span>
+						</button>
+					</div>
+					<div class="column">
+						<button class="button is-rounded" [class.is-success]="isFurnishedClicked"
+							(click)="onFurnishedClick()">
+							<span class="icon">
+								<svg xmlns="http://www.w3.org/2000/svg" style="fill:black;" height="1em"
+									viewBox="0 0 640 512">
+									<!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+									<path
+										d="M64 160C64 89.3 121.3 32 192 32H448c70.7 0 128 57.3 128 128v33.6c-36.5 7.4-64 39.7-64 78.4v48H128V272c0-38.7-27.5-71-64-78.4V160zM544 272c0-20.9 13.4-38.7 32-45.3c5-1.8 10.4-2.7 16-2.7c26.5 0 48 21.5 48 48V448c0 17.7-14.3 32-32 32H576c-17.7 0-32-14.3-32-32H96c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V272c0-26.5 21.5-48 48-48c5.6 0 11 1 16 2.7c18.6 6.6 32 24.4 32 45.3v48 32h32H512h32V320 272z" />
+								</svg>
+							</span>
+							<span>Furnished</span>
+						</button>
+					</div>
+					<div class="column">
+						<button class="button is-rounded" [class.is-success]="isWifiClicked" (click)="onWifiClick()">
+							<span class="icon">
+								<i class="fas fa-wifi" style="color: black;"></i>
+							</span>
+							<span>Wifi</span>
+						</button>
+					</div>
+					<div class="column">
+						<button class="button is-rounded" [class.is-success]="isElevatorClicked"
+							(click)="onElevatorClick()">
+							<span class="icon">
+								<svg xmlns="http://www.w3.org/2000/svg" style="fill:black;" height="1em"
+									viewBox="0 0 512 512">
+									<!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+									<path
+										d="M132.7 4.7l-64 64c-4.6 4.6-5.9 11.5-3.5 17.4s8.3 9.9 14.8 9.9H208c6.5 0 12.3-3.9 14.8-9.9s1.1-12.9-3.5-17.4l-64-64c-6.2-6.2-16.4-6.2-22.6 0zM64 128c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V192c0-35.3-28.7-64-64-64H64zm96 96a48 48 0 1 1 0 96 48 48 0 1 1 0-96zM80 400c0-26.5 21.5-48 48-48h64c26.5 0 48 21.5 48 48v16c0 17.7-14.3 32-32 32H112c-17.7 0-32-14.3-32-32V400zm192 0c0-26.5 21.5-48 48-48h64c26.5 0 48 21.5 48 48v16c0 17.7-14.3 32-32 32H304c-17.7 0-32-14.3-32-32V400zm32-128a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zM356.7 91.3c6.2 6.2 16.4 6.2 22.6 0l64-64c4.6-4.6 5.9-11.5 3.5-17.4S438.5 0 432 0H304c-6.5 0-12.3 3.9-14.8 9.9s-1.1 12.9 3.5 17.4l64 64z" />
+								</svg>
+							</span>
+							<span>Elevator</span>
+						</button>
+					</div>
+				</div>
+				<br><br>
+				<div class="columns is-1">
+					<div class="column is-narrow">
+						<h3 style="color:hsl(171, 77%, 40%);padding-top:10px;"><b>Period</b></h3>
+					</div>
+					<div class="column is-narrow">
+						<button class="button is-rounded" [class.is-success]="isDayClicked"
+							(click)="onDayClick()">Day</button>
+					</div>
+					<div class="column is-3">
+						<button class="button is-rounded" [class.is-success]="isMonthClicked"
+							(click)="onMonthClick()">Month</button>
+					</div>
+					<div class="column is-narrow">
+						<h3 style="color:hsl(171, 77%, 40%);padding-top:10px;"><b>Sort by</b></h3>
+					</div>
+					<div class="column is-0">
+						<div class="dropdown" [ngClass]="{'is-active': isDropdownActive}">
+							<div class="dropdown-trigger">
+								<button class="button" aria-haspopup="true" aria-controls="dropdown-menu"
+									(click)="toggleDropdown()">
+									<span>{{ filterService.sort }}</span>
+									<span class="icon is-small">
+										<i class="fas fa-angle-down" aria-hidden="true"></i>
+									</span>
+								</button>
+							</div>
+							<div class="dropdown-menu" id="dropdown-menu" role="menu">
+								<div class="dropdown-content">
+									<a class="dropdown-item" (click)="selectValue('Price (Low to High)')">
+										Price (Low to High)
+									</a>
+									<a class="dropdown-item" (click)="selectValue('Price (High to Low)')">
+										Price (High to Low)
+									</a>
+									<a class="dropdown-item" (click)="selectValue('Ratings (High to Low)')">
+										Ratings (High to Low)
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br><br>
+				<h3 style="color:hsl(171, 77%, 40%);"><b>Location</b></h3>
+				<hr>
+				<label><b>Country name</b></label>
+
+				<form [formGroup]="countrySearchForm">
+					<input class="input is-success" type="text" placeholder="Enter country name..."
+						[(ngModel)]="selectedCountryName" formControlName="searchTerm" list="countryname"
+						(ngModelChange)="enableCity()" ngDefaultControl>
+					<datalist id="countryname">
+						<option *ngFor="let country of countries" [value]="country.name + ' , ' + country.shortCode">
+						</option>
+					</datalist>
+				</form>
+
+				<br><br>
+				<label><b>City name</b></label>
+
+				<form [formGroup]="citySearchForm">
+					<input class="input is-success" type="email" placeholder="Enter city name..."
+						[(ngModel)]="selectedCityName" formControlName="searchTerm" list="cityname"
+						(ngModelChange)="enableNeighbourhood()" ngDefaultControl>
+					<datalist id="cityname">
+						<option *ngFor="let city of cities" [value]="city.name"></option>
+					</datalist>
+				</form>
+
+				<br><br>
+				<label><b>Neighbrourhood name</b></label>
+
+				<form [formGroup]="neighbourhoodSearchForm">
+					<input class="input is-success" type="email" placeholder="Enter neighbourhood name..."
+						[(ngModel)]="selectedNeighborhoodName" formControlName="searchTerm" list="neighbourhoods"
+						ngDefaultControl>
+					<datalist id="neighbourhoods">
+						<option *ngFor="let neighbourhood of neighbourhoods" [value]="neighbourhood.name"></option>
+					</datalist>
+				</form>
+				<br><br>
+			</section>
+			<footer class="modal-card-foot">
+				<button class="button is-success" (click)="search()">Filter changes</button>
+				<button class="button" (click)="cancel()">Cancel</button>
+			</footer>
+		</div>
+	</div>
+</div>

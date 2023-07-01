@@ -23,6 +23,8 @@ import { RoomDetailsComponent } from './room-details/room-details.component';
 import { ConfirmAccountComponent } from './confirm-account/confirm-account.component';
 import { CityComponent } from './city/city.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FilterComponent } from './filter/filter.component';
+import { CreateApartmentComponent } from './create-apartment/create-apartment.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     CityComponent,
     RoomDetailsComponent,
     ConfirmAccountComponent,
+    FilterComponent,
+    CreateApartmentComponent,
   ],
   imports: [
     FormsModule,

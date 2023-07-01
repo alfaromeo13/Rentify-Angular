@@ -183,6 +183,22 @@ footer {
   color: #fff;
 }
 
+.buk{
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  transform: translate(-50%, -50%);
+}
+
+.buk p {
+  font-size: 35px;
+}
+
+.main-text {
+  color: white;
+  text-shadow: 4px 4px 12px #29211b;
+}
+
 .newsletter-form button {
   width: 50px;
   height: 40px;

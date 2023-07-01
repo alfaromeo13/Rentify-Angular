@@ -1,20 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApartmentService } from '../apartment/apartment.service';
 import { AuthService } from '../auth/services/auth.service';
+import { FilterService } from '../filter/filter.service';
 import { NavbarLink } from './navbar.model';
 
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls:['navbar.component.css'],
+    selector: 'app-navbar',
+    templateUrl: './navbar.component.html',
+    styleUrls: ['navbar.component.css'],
 })
-export class NavbarComponent implements OnInit{
-    
-    isMobileNavActive :boolean = false;
-    isUserAuthenticated :boolean = false;
+export class NavbarComponent implements OnInit {
+
+    isMobileNavActive: boolean = false;
+    isUserAuthenticated: boolean = false;
 
     //we load navbar elements dynamicaly with ngFor
-    links :NavbarLink[]=[
+    links: NavbarLink[] = [
         {
             name: "Test",
             path: "/test"
@@ -26,24 +28,16 @@ export class NavbarComponent implements OnInit{
         {
             name: "Users",
             path: "/users"
-        },
-        {
-            name: "Apartments",
-            path: "/apartments"
-        },
-        {
-            name: "Favourites",
-            path: "/favourites"
-        },
+        }
     ];
 
     constructor(
-        private router :Router,
-        private authService :AuthService
-    ){}
+        private router: Router,
+        private authService: AuthService,
+        private apartmentService: ApartmentService,
+    ) { }
 
-    //prilikom inicijalizacije navbar komponente 
-    //subscribujemo se na behavioursubject
+
     ngOnInit(): void {
         this.authService.isAuthenticated.subscribe(data => {
             this.isUserAuthenticated = data;
@@ -51,10 +45,15 @@ export class NavbarComponent implements OnInit{
     }
 
     toggleMobileView(): void {
-        this.isMobileNavActive=!this.isMobileNavActive;
+        this.isMobileNavActive = !this.isMobileNavActive;
     }
 
-    logout(): void{
+    showLiked():void{
+        this.apartmentService.filterService.pageNo=1;
+        this.apartmentService.allFavorite();
+    }
+
+    logout(): void {
         this.authService.logout();
         this.router.navigate(['login'])
     }

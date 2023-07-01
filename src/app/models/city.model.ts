@@ -1,6 +1,3 @@
-import { Country } from "./country.model";
-
-export class CityWithCountry{
+export class City{
     name: string;
-    country: Country;
 }

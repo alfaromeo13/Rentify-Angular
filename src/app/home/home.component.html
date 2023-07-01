@@ -15,8 +15,8 @@
                 <div class="control has-icons-left is-expanded">
                   <div class="control has-icons-left has-icons-right">
                     <input class="input is-light is-large" type="text" 
-                    placeholder="Enter city name..."  formControlName="searchTerm"
-                    list="cityname" [(ngModel)]="selectedCity">
+                    placeholder="Enter city name..." formControlName="searchTerm"
+                    list="cityname" [(ngModel)]="selectedCity" (keydown.enter)="search()">
 
                     <datalist id="cityname">
                       <option *ngFor="let city of cities" [value]="city.name + ' , ' + city.country.shortCode"></option>
