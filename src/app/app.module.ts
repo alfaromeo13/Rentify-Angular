@@ -25,6 +25,9 @@ import { CityComponent } from './city/city.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FilterComponent } from './filter/filter.component';
 import { CreateApartmentComponent } from './create-apartment/create-apartment.component';
+// import { WINDOW_PROVIDERS } from '@app/core/providers/window.provider';
+import { CommonModule } from '@angular/common';
+
 
 @NgModule({
   declarations: [
@@ -49,6 +52,7 @@ import { CreateApartmentComponent } from './create-apartment/create-apartment.co
     FormsModule,
     ReactiveFormsModule,
     BrowserModule,
+    CommonModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule, // required animations module
@@ -60,7 +64,9 @@ import { CreateApartmentComponent } from './create-apartment/create-apartment.co
   ],
   providers: 
   [{provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor , multi:true},
-   {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor,multi:true}],
+   {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor,multi:true}
+  //  WINDOW_PROVIDERS
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
