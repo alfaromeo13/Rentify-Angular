@@ -14,24 +14,25 @@ export class FilterService {
   sort: string = 'Choose value';
   apartmentSearch: ApartmentSearch; //we memorize last search specification
 
+
   constructor(
     private httpClient: HttpClient) { }
 
   filter(apartmentSearch: ApartmentSearch, pageNumber: number): Observable<ApartmentDTO[]> {
-    const url = `${environment.apiUrl}apartment/pageable-search?page=${pageNumber}&size=9`;
+    const url = `${environment.apiUrl}apartment/pageable-search?page=${pageNumber}&size=9&sort=price,desc`;
     //&sort=price,desc
     let params = new HttpParams();
     this.apartmentSearch = apartmentSearch;
 
-    if (this.sort.trim() === 'Price (Low to High)') {
-      params.set('sort', 'price,asc');
-    } else if (this.sort.trim() === 'Price (High to Low)') {
-      params.set('sort', 'price,desc');
-    } else if (this.sort.trim() === 'Ratings (High to Low)') {
-      params.set('ratings', ',desc');
-    }
+    // if (this.sort.trim() === 'Price (Low to High)')
+    //   params = params.set('sort', 'price,asc');
+    // else if (this.sort.trim() === 'Price (High to Low)')
+    //   params = params.set('sort', 'price,desc');
+    // else if (this.sort.trim() === 'Ratings (Low to High)')
+    //   params = params.set('grade', ',asc');
+    // else if (this.sort.trim() === 'Ratings (High to Low)')
+    //   params = params.set('grade', ',desc');
 
-    
     // Set search parameters from the ApartmentSearch object
     for (const [key, value] of Object.entries(apartmentSearch))
       if (value !== undefined) params = params.set(key, value.toString());

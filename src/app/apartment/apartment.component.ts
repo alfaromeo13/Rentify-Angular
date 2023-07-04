@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ApartmentService } from './apartment.service';
 import { FilterService } from '../filter/filter.service';
 import { ApartmentDTO } from '../models/apartment.model';
+import { OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-apartment',
   templateUrl: './apartment.component.html',
   styleUrls: ['./apartment.component.css']
 })
-export class ApartmentComponent implements OnInit {
+export class ApartmentComponent implements OnInit, OnDestroy {
 
   PAGE_TOLERANCE: number = 3;
 
@@ -16,6 +17,9 @@ export class ApartmentComponent implements OnInit {
     public filterService: FilterService,
     public apartmentService: ApartmentService
   ) { }
+  ngOnDestroy(): void {
+    this.filterService.pageNo = 1;
+  }
 
   ngOnInit(): void {
     this.apartmentService.generateRooms();

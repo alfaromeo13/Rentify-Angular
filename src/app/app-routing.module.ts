@@ -74,16 +74,15 @@ const routes: Routes = [
         component: CityComponent,
     },
     {
-        path:'add-property',
-        component:CreateApartmentComponent,
+        path: 'add-property',
+        component: CreateApartmentComponent,
     },
-    {   //http://localhost:4200/something...
-        path: '**', //anything else is entered
+    {   //if anything else is entered ex: http://localhost:4200/something...
+        path: '**', //we redirect request to home component
         redirectTo: 'home'
     }]
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule],
-})
+    exports: [RouterModule],})
 export class AppRoutingModule { } 

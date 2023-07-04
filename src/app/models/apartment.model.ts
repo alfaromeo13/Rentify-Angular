@@ -17,11 +17,11 @@ export class ApartmentDTO {
     liked: boolean;
     number: string;
     isActive: boolean;
-    numberOfStars: number;
     user: UserDTO;
     period: PeriodDTO;
     address: AddressDTO;
     images: ImageDTO[];
     propertyType: PropertyTypeDTO;
+    grade : number;
     apartmentAttributes: ApartmentAttributeDTO[];
 }

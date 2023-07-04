@@ -11,6 +11,7 @@ import { ApartmentSearch } from "../models/search.model";
 @Injectable({ providedIn: 'root' })
 export class ApartmentService {
 
+  selectedApartment: ApartmentDTO;
   apartmentList: ApartmentDTO[] = [];
   apartmani: RoomShowcaseModel[] = [];
 
@@ -24,15 +25,24 @@ export class ApartmentService {
     for (let apartment of this.apartmentList) {
       var soba = new RoomShowcaseModel(apartment.id, apartment.propertyType.name.toLowerCase(),
         apartment.title, apartment.description, apartment.address.street + ' , ' + apartment.address.neighborhood.name,
-        apartment.price, apartment.period.name, apartment.numberOfStars, apartment.liked);
+        apartment.price, apartment.period.name, apartment.grade, apartment.liked);
       apartment.images.forEach((image: ImageDTO) => {
         soba.imgLinks.push(image.path);
       });
       rez.push(soba);
     }
     this.apartmani = rez;
+    console.log(this.apartmani);
   }
 
+  setSelected(pid: number) {
+    this.apartmentList.forEach((apartment: ApartmentDTO) => {
+      if (apartment.id === pid) {
+        this.selectedApartment = apartment;
+        return;
+      }
+    });
+  }
 
   allFavorite(): void {
     this.getFavoriteIds(this.filterService.pageNo - 1).subscribe(

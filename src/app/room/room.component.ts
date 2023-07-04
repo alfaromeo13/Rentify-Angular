@@ -29,7 +29,11 @@ export class RoomComponent implements OnInit {
     private apartmentService: ApartmentService,
   ) { }
 
-  public toggle_like(): void {
+  setSelected(pid: number) {
+    this.apartmentService.setSelected(pid);
+  }
+
+  public toggle_like(): void { //we can like each card
     if (this.authService.isAuthenticated.getValue()) {
       if (this.soba.liked)
         this.apartmentService.deleteFavorite(this.soba.pid).subscribe(data => {

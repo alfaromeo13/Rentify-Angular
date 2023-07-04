@@ -1,224 +1,393 @@
-
-<!-- Features Modal -->
-<div class="modal">
-    <div class="modal-background"></div>
-    <div class="modal-content">
-      <div class="content">
-        <div class="columns">
-          <div class="column">
-            <img src="https://bulma.io/images/bulma-logo.png" alt="Bulma Hotels" width="150" />
-          </div>
-          <div class="column">
-            <div>
-              <i class="fa fa-phone"></i> &nbsp; <span>Phone Number</span> &nbsp;
-              <a style="color: black;" href="tel:+30 2109999999">+30 2109999999</a>
-            </div>
-            <div>
-              <i class="fa fa-phone"></i> &nbsp; <span>Reservation</span> &nbsp;
-              <a style="color: black;" href="tel:+30 2109999997">+30 210999997</a>
+<div style="background-color: #f5f4f3" class="bg-image">
+  <section class="hero" style="background-color:black;">
+    <div class="hero-body is-paddingless">
+      <div class="container is-clipped">
+        <div id="{{'carouselExampleIndicators'+apartment.id}}" class="carousel slide" data-ride="carousel">
+          <ol class="carousel-indicators ">
+            <li class="box-shadow-gray" *ngFor="let imgs of imagePreviews; let i = index;"
+              [attr.data-target]="'#carouselExampleIndicators'+apartment.id" data-slide-to="i" [class.active]="i==0">
+            </li>
+          </ol>
+          <div class="carousel-inner">
+            <div *ngFor="let imgs of imagePreviews; let i = index;" class="carousel-item" [class.active]="i==0">
+              <img class="h-275px d-block w-100" [src]="imgs" alt="First slide">
             </div>
           </div>
-        </div>
-        <h3>Facilities &amp; Features</h3>
-        <div class="columns">
-          <ul class="column">
-            <li>Free Wi-Fi Connectivity</li>
-            <li>Complimentary Breakfast</li>
-            <li>Doc on Call</li>
-            <li>Board Rooms</li>
-            <li>Electronic Card Locks</li>
-            <li>In Room Safe</li>
-          </ul>
-          <ul class="column">
-            <li>Laundry Facility</li>
-            <li>Hair Dryer</li>
-            <li>Travel Assistance</li>
-            <li>24 hrs Check-in &amp; Check-out</li>
-            <li>Coffee / Tea Maker in Room</li>
-            <li>Mini Bar</li>
-          </ul>
+          <a class="carousel-control-prev" href="{{'#carouselExampleIndicators'+apartment.id}}" role="button"
+            data-slide="prev">
+            <span class="box-shadow-gray carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="{{'#carouselExampleIndicators'+apartment.id}}" role="button"
+            data-slide="next">
+            <span class="box-shadow-gray carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
         </div>
       </div>
     </div>
-    <button class="modal-close is-large" aria-label="close"></button>
-  </div>
-  <!-- ./Features Modal -->
-  <!-- About Section -->
+  </section>
   <section class="hero" id="about-us">
     <div class="hero-body">
       <div class="container">
-        <div class="content">
-          <h4 class="main_title title is-4">Explore Bulma Hotel</h4>
-        </div>
         <div class="columns content">
           <div class="column">
-            <p>
-              With unmatched hospitality, convenience &amp; comforts, Bulma Hotel is an ideal choice for your stay.
-              Whether business trip or just a weekend leisure, we make an effort to bestow the finest services, that
-              will make your stay memorable.
-            </p>
-            <div class="reception">
-              <h5 class="main_title title is-5">Reception</h5>
+            <h1>{{apartment.title}}</h1>
+            <i><q style="color:rgb(48, 48, 48);">
+                {{apartment.description}}</q></i>
+          </div>
+          <div class="column">
+            <div class="reception" style="margin-top: 120px ;">
+              <br>
+              <h5 class="main_title title is-5"
+                style="margin-left: 100px;margin-top: 100px; color: rgb(109, 109, 109);">
+                Owner information</h5>
               <div class="reception-item">
                 <div>
-                  <div>
-                    <i class="fa fa-phone"></i>
-                    <span>Phone Number</span>
+                  <div class="klasaaa">
+                    <i class="fa fa-user"></i>
+                    <p>{{apartment.user.firstName}} {{apartment.user.lastName}}</p>
                   </div>
-                  <a href="tel:+302109999999">+30 210 9999999</a>
                 </div>
-                <a href="tel:+302109999999" class="button mobile-only">
-                  <span>Call</span>
-                </a>
               </div>
               <div class="reception-item">
                 <div>
-                  <div>
+                  <div class="klasaaa">
                     <i class="fa fa-phone"></i>
-                    <span>Reservation</span>
+                    {{apartment.number}}
                   </div>
-                  <a href="tel:+302109999997">+30 2109999997</a>
                 </div>
-                <a href="tel:+302109999997" class="button mobile-only">
-                  <span>Call</span>
-                </a>
               </div>
               <div class="reception-item">
                 <div>
-                  <div>
+                  <div class="klasaaa">
                     <i class="fa fa-envelope"></i>
-                    <span>Email</span>
+                    <a href="mailto:{{apartment.user.email}}" style="color:hsl(171, 77%, 40%);">
+                      {{apartment.user.email}}</a>
                   </div>
-                  <a href="mailto:reservations@bulmahotels.com">reservations@bulmahotels.com</a>
                 </div>
-                <a href="mailto:reservations@bulmahotels.com" class="button mobile-only">
-                  <span>Mail</span>
-                </a>
+              </div>
+              <div class="reception-item">
+                <div>
+                  <div class="klasaaa">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512">
+                      <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                      <path
+                        d="M208 352c114.9 0 208-78.8 208-176S322.9 0 208 0S0 78.8 0 176c0 38.6 14.7 74.3 39.6 103.4c-3.5 9.4-8.7 17.7-14.2 24.7c-4.8 6.2-9.7 11-13.3 14.3c-1.8 1.6-3.3 2.9-4.3 3.7c-.5 .4-.9 .7-1.1 .8l-.2 .2 0 0 0 0C1 327.2-1.4 334.4 .8 340.9S9.1 352 16 352c21.8 0 43.8-5.6 62.1-12.5c9.2-3.5 17.8-7.4 25.3-11.4C134.1 343.3 169.8 352 208 352zM448 176c0 112.3-99.1 196.9-216.5 207C255.8 457.4 336.4 512 432 512c38.2 0 73.9-8.7 104.7-23.9c7.5 4 16 7.9 25.2 11.4c18.3 6.9 40.3 12.5 62.1 12.5c6.9 0 13.1-4.5 15.2-11.1c2.1-6.6-.2-13.8-5.8-17.9l0 0 0 0-.2-.2c-.2-.2-.6-.4-1.1-.8c-1-.8-2.5-2-4.3-3.7c-3.6-3.3-8.5-8.1-13.3-14.3c-5.5-7-10.7-15.4-14.2-24.7c24.9-29 39.6-64.7 39.6-103.4c0-92.8-84.9-168.9-192.6-175.5c.4 5.1 .6 10.3 .6 15.5z" />
+                    </svg>
+                    <p>{{apartment.user.username}}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <!-- Reception Image -->
-          <div class="column reception-image">
-            <img
-              src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=80"
-              alt="Bulma Hotels"
-            />
-          </div>
-        </div>
-        <div class="content">
-          <h5 class="main_title title is-5">Location</h5>
-          <p>
-            Bulma Hotel is a business hotel with 45 air conditioned luxury rooms. The hotel is conveniently located in
-            close proximity to Athens, Greece.
-          </p>
-          <ul>
-            <li>3 kms from Kifisia bus station and railway station.</li>
-            <li>25 kms from Athens International Airport.</li>
-            <li>Less than 2 km from nearest shopping malls (The Mall Athens, &amp; Icon Mall).</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- ./About Section -->
-  <!-- Gallery Section -->
-  <section class="hero" id="hotel-gallery">
-    <div class="hero-body is-paddingless">
-      <div class="container is-clipped">
-        <div class="content">
-          <h4 class="main_title title is-4">Hotel Gallery</h4>
-        </div>
-        <section class="section">
-                <div class="carousel carousel-container" id="carousel">
-                  <div class="item" *ngFor="let image of images">
-                    <img src="{{image}}" alt="">
-                </div>
-              </div>
-        </section>
-      </div>
-    </div>
-  </section>
-  <!-- ./Gallery Section -->
-  <!-- Contact Us Section -->
-  <section class="hero" id="contact-us">
-    <div class="hero-body">
-      <div class="container">
-        <div>
-          <div class="content">
-            <h4 class="title is-4">Contact Us</h4>
-          </div>
-          <h6 class="subtitle is-6">If you've any queries feel free to contact us</h6>
-          <div class="columns box">
-            <form class="column" action="#">
-              <div class="field">
-                <label class="label">Name</label>
-                <div class="control">
-                  <input class="input" type="text" placeholder="Your Name" required="" />
-                </div>
-              </div>
-              <div class="field">
-                <label class="label">Email</label>
-                <div class="control">
-                  <input class="input" type="text" placeholder="Email address" required="" />
-                </div>
-              </div>
-              <div class="field">
-                <label class="label">Phone Number</label>
-                <div class="control">
-                  <input class="input" type="text" placeholder="Phone number" required="" />
-                </div>
-              </div>
-              <div class="field">
-                <label class="label">Message</label>
-                <div class="control">
-                  <textarea
-                    class="textarea"
-                    type="text"
-                    placeholder="Type your message here..."
-                    required=""
-                  ></textarea>
-                </div>
-              </div>
-              <div class="field">
-                <label class="label"></label>
-                <div class="control">
-                  <input class="button is-primary" type="submit" />
-                </div>
-              </div>
-            </form>
-            <div class="column">
-              <iframe
-                width="100%"
-                height="100%"
-                frameborder="0"
-                style="border: 0;"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50310.604001548294!2d23.703320025394262!3d37.99083200838609!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14a1bd1f067043f1%3A0x2736354576668ddd!2zzpHOuM6uzr3OsQ!5e0!3m2!1sel!2sgr!4v1593689527371!5m2!1sel!2sgr"
-                allowfullscreen
-              ></iframe>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-</section>
 
-<div class="field">
-<div class="control">
-      <textarea class="textarea" readonly>Strasan stan tresem se od srece...</textarea>
-</div>
-</div>
-<div class="field">
-<div class="control">
-  <textarea class="textarea" readonly>N evalja nista...</textarea>
-</div>
-</div>
-<div class="field">
-<div class="control">
-  <textarea class="textarea" readonly>Uraaa</textarea>
-</div>
-</div>
-<div class="field">
-<div class="control">
-  <textarea class="textarea" readonly>XD</textarea>
-</div>
+          <div class="column bucika">
+            <div class="box shadow" style="margin-right: -150px;margin-top: -155px;">
+              <div style="display: flex;flex-direction: row;">
+                <h3 style="color:rgb(45, 45, 45);font-weight: 400;padding-right: 100px;"><i> {{apartment.price}}€
+                    <sup>per
+                      {{apartment.period.name}}</sup></i>
+                </h3>
+                <svg *ngFor="let zlatne of brojZlatnih" xmlns="http://www.w3.org/2000/svg" height="1.3em"
+                  viewBox="0 0 576 512">
+                  <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                  <path fill="#ffcc00"
+                    d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
+                </svg>
+                <svg *ngFor="let sive of brojSivih" xmlns="http://www.w3.org/2000/svg" height="1.3em"
+                  viewBox="0 0 576 512">
+                  <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                  <path style="fill:#929292"
+                    d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
+                </svg>
+              </div>
+              <hr style="background-color: rgb(234, 234, 234);">
+              <div class="klasaaa">
+                <h2 style="margin-top: 15px;">Start</h2>
+
+                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                  <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                  <path
+                    d="M128 0c17.7 0 32 14.3 32 32V64H288V32c0-17.7 14.3-32 32-32s32 14.3 32 32V64h48c26.5 0 48 21.5 48 48v48H0V112C0 85.5 21.5 64 48 64H96V32c0-17.7 14.3-32 32-32zM0 192H448V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V192zm64 80v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16zm128 0v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H208c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H336zM64 400v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H208zm112 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H336c-8.8 0-16 7.2-16 16z" />
+                </svg>
+                <input type="date" style="margin-right:40px;">
+                <h2 style="margin-top: 16px;">End</h2>
+
+                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                  <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                  <path
+                    d="M128 0c17.7 0 32 14.3 32 32V64H288V32c0-17.7 14.3-32 32-32s32 14.3 32 32V64h48c26.5 0 48 21.5 48 48v48H0V112C0 85.5 21.5 64 48 64H96V32c0-17.7 14.3-32 32-32zM0 192H448V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V192zm64 80v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16zm128 0v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H208c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H336zM64 400v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H208zm112 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H336c-8.8 0-16 7.2-16 16z" />
+                </svg>
+                <input type="date">
+              </div>
+
+              <div class="klasaaa">
+                <p style="font-weight: 200px; color:rgb(128, 130, 9); margin-top:10px;">Total 2000€</p>
+              </div>
+              <div class="klasaaa">
+                <button class="button is-rounded is-medium is-info">
+                  <span>Book now</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br><br>
+        <div class="content" style="display: flex;">
+          <div class="buttons">
+            <button class="button is-info shadow is-large non-selectable-button"
+              style="height: 200px; border-radius: 20px;border:2px solid white">
+              <svg xmlns="http://www.w3.org/2000/svg" style="padding-right:20px;" height="1em" viewBox="0 0 512 512">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path
+                  d="M200 32H56C42.7 32 32 42.7 32 56V200c0 9.7 5.8 18.5 14.8 22.2s19.3 1.7 26.2-5.2l40-40 79 79-79 79L73 295c-6.9-6.9-17.2-8.9-26.2-5.2S32 302.3 32 312V456c0 13.3 10.7 24 24 24H200c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-40-40 79-79 79 79-40 40c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H456c13.3 0 24-10.7 24-24V312c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2l-40 40-79-79 79-79 40 40c6.9 6.9 17.2 8.9 26.2 5.2s14.8-12.5 14.8-22.2V56c0-13.3-10.7-24-24-24H312c-9.7 0-18.5 5.8-22.2 14.8s-1.7 19.3 5.2 26.2l40 40-79 79-79-79 40-40c6.9-6.9 8.9-17.2 5.2-26.2S209.7 32 200 32z" />
+              </svg>
+              <i>Sq.
+                Meters: {{apartment.sqMeters}}</i>
+            </button>
+            <button class="button is-info shadow is-large non-selectable-button"
+              style="height: 200px;border-radius: 20px;border:2px solid white">
+              <svg xmlns="http://www.w3.org/2000/svg" style="padding-right:20px;" height="1em" viewBox="0 0 640 512">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path
+                  d="M32 32c17.7 0 32 14.3 32 32V320H288V160c0-17.7 14.3-32 32-32H544c53 0 96 43 96 96V448c0 17.7-14.3 32-32 32s-32-14.3-32-32V416H352 320 64v32c0 17.7-14.3 32-32 32s-32-14.3-32-32V64C0 46.3 14.3 32 32 32zm144 96a80 80 0 1 1 0 160 80 80 0 1 1 0-160z" />
+              </svg>
+              <i>Bedrooms:
+                {{apartment.numOfBedrooms}}</i></button>
+            <button class="button is-info shadow is-large non-selectable-button"
+              style="height: 200px;border-radius: 20px;border:2px solid white">
+              <svg xmlns="http://www.w3.org/2000/svg" style="padding-right:20px;" height="1em" viewBox="0 0 512 512">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path
+                  d="M96 77.3c0-7.3 5.9-13.3 13.3-13.3c3.5 0 6.9 1.4 9.4 3.9l14.9 14.9C130 91.8 128 101.7 128 112c0 19.9 7.2 38 19.2 52c-5.3 9.2-4 21.1 3.8 29c9.4 9.4 24.6 9.4 33.9 0L289 89c9.4-9.4 9.4-24.6 0-33.9c-7.9-7.9-19.8-9.1-29-3.8C246 39.2 227.9 32 208 32c-10.3 0-20.2 2-29.2 5.5L163.9 22.6C149.4 8.1 129.7 0 109.3 0C66.6 0 32 34.6 32 77.3V256c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H96V77.3zM32 352v16c0 28.4 12.4 54 32 71.6V480c0 17.7 14.3 32 32 32s32-14.3 32-32V464H384v16c0 17.7 14.3 32 32 32s32-14.3 32-32V439.6c19.6-17.6 32-43.1 32-71.6V352H32z" />
+              </svg>
+              <i>Bathrooms:
+                {{apartment.numOfBathrooms}}</i></button>
+            <button class="button is-info shadow is-large non-selectable-button"
+              style="height: 200px;border-radius: 20px;border:2px solid white">
+              <svg xmlns="http://www.w3.org/2000/svg" style="padding-right:20px;" height="1em" viewBox="0 0 448 512">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path
+                  d="M128 0c17.7 0 32 14.3 32 32V64H288V32c0-17.7 14.3-32 32-32s32 14.3 32 32V64h48c26.5 0 48 21.5 48 48v48H0V112C0 85.5 21.5 64 48 64H96V32c0-17.7 14.3-32 32-32zM0 192H448V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V192zm64 80v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16zm128 0v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H208c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H336zM64 400v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H208zm112 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H336c-8.8 0-16 7.2-16 16z" />
+              </svg>
+              <i>Renting
+                period:
+                {{apartment.period.name}}</i></button>
+            <button class="button is-info  shadow is-large non-selectable-button"
+              style="height: 200px;border-radius: 20px; border:2px solid white">
+              <svg xmlns="http://www.w3.org/2000/svg" style="padding-right:20px;" height="1em" viewBox="0 0 576 512">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path
+                  d="M64 64C28.7 64 0 92.7 0 128V384c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H64zM272 192H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H272c-8.8 0-16-7.2-16-16s7.2-16 16-16zM256 304c0-8.8 7.2-16 16-16H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H272c-8.8 0-16-7.2-16-16zM164 152v13.9c7.5 1.2 14.6 2.9 21.1 4.7c10.7 2.8 17 13.8 14.2 24.5s-13.8 17-24.5 14.2c-11-2.9-21.6-5-31.2-5.2c-7.9-.1-16 1.8-21.5 5c-4.8 2.8-6.2 5.6-6.2 9.3c0 1.8 .1 3.5 5.3 6.7c6.3 3.8 15.5 6.7 28.3 10.5l.7 .2c11.2 3.4 25.6 7.7 37.1 15c12.9 8.1 24.3 21.3 24.6 41.6c.3 20.9-10.5 36.1-24.8 45c-7.2 4.5-15.2 7.3-23.2 9V360c0 11-9 20-20 20s-20-9-20-20V345.4c-10.3-2.2-20-5.5-28.2-8.4l0 0 0 0c-2.1-.7-4.1-1.4-6.1-2.1c-10.5-3.5-16.1-14.8-12.6-25.3s14.8-16.1 25.3-12.6c2.5 .8 4.9 1.7 7.2 2.4c13.6 4.6 24 8.1 35.1 8.5c8.6 .3 16.5-1.6 21.4-4.7c4.1-2.5 6-5.5 5.9-10.5c0-2.9-.8-5-5.9-8.2c-6.3-4-15.4-6.9-28-10.7l-1.7-.5c-10.9-3.3-24.6-7.4-35.6-14c-12.7-7.7-24.6-20.5-24.7-40.7c-.1-21.1 11.8-35.7 25.8-43.9c6.9-4.1 14.5-6.8 22.2-8.5V152c0-11 9-20 20-20s20 9 20 20z" />
+              </svg>
+              <i>Price: {{apartment.price}}€</i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div style="display: flex; justify-content: center;">
+    <h5 class="main_title title is-5" style="color: white;">Amenities</h5>
+  </div>
+  <br>
+  <div class="columns" style="margin-left: 200px;margin-right: 200px;">
+    <div class="column">
+      <button class="button is-rounded is-medium non-selectable-button"
+        [ngClass]="{'is-success': containsAttribute('Pets allowed')}" style="border: 2px solid white;">
+        <span class="icon">
+          <i class="fas fa-dog" style="color: black;"></i>
+        </span>
+        <span>Pets allowed</span>
+      </button>
+    </div>
+
+    <div class="column">
+      <button class="button is-rounded is-medium non-selectable-button" style="border: 2px solid white;"
+        [ngClass]="{'is-success': containsAttribute('Appliances')}">
+        <span class="icon">
+          <i class="fas fa-blender-phone" style="color: black;"></i>
+        </span>
+        <span>Appliances</span>
+      </button>
+    </div>
+
+    <div class="column">
+      <button class="button is-rounded is-medium non-selectable-button" style="border: 2px solid white;"
+        [ngClass]="{'is-success': containsAttribute('Air Conditioning')}">
+        <span class="icon">
+          <img src="../../assets/air.png">
+        </span>
+        <span>Air Conditioning</span>
+      </button>
+    </div>
+
+    <div class="column">
+      <button class="button is-rounded is-medium non-selectable-button" style="border: 2px solid white;"
+        [ngClass]="{'is-success': containsAttribute('Furnished')}">
+        <span class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" style="fill:black;" height="1em" viewBox="0 0 640 512">
+            <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+            <path
+              d="M64 160C64 89.3 121.3 32 192 32H448c70.7 0 128 57.3 128 128v33.6c-36.5 7.4-64 39.7-64 78.4v48H128V272c0-38.7-27.5-71-64-78.4V160zM544 272c0-20.9 13.4-38.7 32-45.3c5-1.8 10.4-2.7 16-2.7c26.5 0 48 21.5 48 48V448c0 17.7-14.3 32-32 32H576c-17.7 0-32-14.3-32-32H96c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V272c0-26.5 21.5-48 48-48c5.6 0 11 1 16 2.7c18.6 6.6 32 24.4 32 45.3v48 32h32H512h32V320 272z" />
+          </svg>
+        </span>
+        <span>Furnished</span>
+      </button>
+    </div>
+
+    <div class="column">
+      <button class="button is-rounded is-medium non-selectable-button" style="border: 2px solid white;">
+        <span class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" style="fill:black;"
+            [ngClass]="{'is-success': containsAttribute('Elevator')}" height="1em" viewBox="0 0 512 512">
+            <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+            <path
+              d="M132.7 4.7l-64 64c-4.6 4.6-5.9 11.5-3.5 17.4s8.3 9.9 14.8 9.9H208c6.5 0 12.3-3.9 14.8-9.9s1.1-12.9-3.5-17.4l-64-64c-6.2-6.2-16.4-6.2-22.6 0zM64 128c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V192c0-35.3-28.7-64-64-64H64zm96 96a48 48 0 1 1 0 96 48 48 0 1 1 0-96zM80 400c0-26.5 21.5-48 48-48h64c26.5 0 48 21.5 48 48v16c0 17.7-14.3 32-32 32H112c-17.7 0-32-14.3-32-32V400zm192 0c0-26.5 21.5-48 48-48h64c26.5 0 48 21.5 48 48v16c0 17.7-14.3 32-32 32H304c-17.7 0-32-14.3-32-32V400zm32-128a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zM356.7 91.3c6.2 6.2 16.4 6.2 22.6 0l64-64c4.6-4.6 5.9-11.5 3.5-17.4S438.5 0 432 0H304c-6.5 0-12.3 3.9-14.8 9.9s-1.1 12.9 3.5 17.4l64 64z" />
+          </svg>
+        </span>
+        <span>Elevator</span>
+      </button>
+    </div>
+
+    <div class="column">
+      <button class="button is-rounded is-medium non-selectable-button" style="border: 2px solid white;"
+        [ngClass]="{'is-success': containsAttribute('Balcony')}">
+        <span class="icon">
+          <img src="../../assets/balcony.png">
+        </span>
+        <span>Balcony</span>
+      </button>
+    </div>
+
+    <div class="column">
+      <button class="button is-rounded is-medium non-selectable-button" style="border: 2px solid white;"
+        [ngClass]="{'is-success': containsAttribute('WiFi')}">
+        <span class="icon">
+          <i class="fas fa-wifi" style="color: black;"></i>
+        </span>
+        <span>Wifi</span>
+      </button>
+    </div>
+
+    <div class="column">
+      <button class="button is-rounded is-medium non-selectable-button"
+        style="border: 2px solid white;margin-left: -30px;" [ngClass]="{'is-success': containsAttribute('Parking')}">
+        <span class="icon">
+          <img src="../../assets/parked.png">
+        </span>
+        <span>Parking</span>
+      </button>
+    </div>
+  </div>
+  <br><br>
+  <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
+    <svg style="margin: 10px 10px 0px 4px; fill: hsl(141, 53%, 53%);" xmlns="http://www.w3.org/2000/svg" height="2.0em"
+      viewBox="0 0 384 512">
+      <path class="locicon"
+        d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
+    </svg>
+    <div style="display:inline-block;padding-top: 10px;">
+      <h1 style="font-weight: 280;font-size: 40px; color: white;"> {{apartment.address.street}} ,
+        {{apartment.address.neighborhood.name}}</h1>
+    </div>
+  </div>
+
+  <div class="column map-container ">
+    <div class="map-frame">
+      <div id="map"></div>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
+    <div class="column is-6" style="margin-right:20px;margin-top: 30px;">
+      <div class="box content">
+        <div style="display: flex; flex-direction: row;gap: 20px;">
+          <h2 style="color:rgb(140, 140, 140); font-weight: 300; gap: 20px;">Reviews</h2>
+          <span class="has-text-grey-light"><i class="fa fa-comments"></i></span>
+          <div style="width: 20%;">
+            <div style="position:relative; left: 590px;">
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 576 512" (click)="set1()">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path [style.fill]="is1 ? '#ffcc00' : '#929292'"
+                  d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 576 512" (click)="set2()">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path [style.fill]="is1 ? '#ffcc00' : '#929292'"
+                  d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 576 512" (click)="set3()">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path [style.fi]="is1 ? '#ffcc00' : '#929292'"
+                  d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 576 512" (click)="set4()">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path [style.fill]="is1 ? '#ffcc00' : '#929292'"
+                  d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 576 512" (click)="set5()">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path [style.fill]="is1 ? '#ffcc00' : '#929292'"
+                  d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- svaki komentar je article -->
+        <article class="post">
+          <textarea class="textarea" placeholder="e.g. Hello world"></textarea>
+          <br><br>
+          <button class="button is-success" style="float: right;margin-top: -40px;">Add review</button>
+        </article>
+        <article class="post" *ngFor="let review of this.reviews">
+          <hr>
+          <div class="media">
+            <div class="media-content">
+              <div class="content">
+                <p> {{review.user.firstName}} {{review.user.lastName}}
+                  <a href="#">@{{review.user.username}}</a> &nbsp;
+                </p>
+                <h4 style="font-weight: 340;"> <q><i> {{review.comment}} </i></q> </h4>
+                <sub style="color: hsl(171, 77%, 40%);">{{review.localTime}}</sub>
+              </div>
+            </div>
+            <div class="media-right">
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 576 512">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path [ngStyle]="{ 'fill': review.grade >= 1 ? '#ffcc00' : '#929292' }"
+                  d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 576 512">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path [ngStyle]="{ 'fill': review.grade >= 2 ? '#ffcc00' : '#929292' }"
+                  d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 576 512">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path [ngStyle]="{ 'fill': review.grade >= 3 ? '#ffcc00' : '#929292' }"
+                  d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 576 512">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path [ngStyle]="{ 'fill': review.grade >= 4 ? '#ffcc00' : '#929292' }"
+                  d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 576 512">
+                <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path [ngStyle]="{ 'fill': review.grade == 5 ? '#ffcc00' : '#929292' }"
+                  d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
+              </svg>
+            </div>
+          </div>
+        </article>
+      </div>
+      <div style="text-align: center;">
+        <button class="button is-success" (click)="loadMore()" [disabled]="isButtonDisabled">More reviews</button>
+      </div>
+      <br>
+    </div>
+  </div>
 </div>
