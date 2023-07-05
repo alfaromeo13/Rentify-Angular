@@ -18,29 +18,22 @@ export class CoreSocketService {
 
     static standardParse(data: any) {
         try {
-        return JSON.parse(data.body);
+            console.log('Received data: ', data);
+            return JSON.parse(data.body);
         } catch (e) {
-        console.log('error JSON parsing data.body');
-        return {};
+            console.log('error JSON parsing data.body');
+            return {};
         }
     }
 
     static stringify(data: any) {
         try {
-        return JSON.stringify(data);
+            return JSON.stringify(data); // {} =>  '{}' // application/json ~ plain text
         } catch (e) {
         console.log('Could not stringify object');
-        return '';
+            return '';
         }
     }
-
-   
-
-    // constructor(@Inject(WINDOW) private window: Window) {}
-
-    // private get location() {
-    //     return this.window.location;
-    // }
 
 
     private get url() {
@@ -49,7 +42,7 @@ export class CoreSocketService {
 
     static onConnect(callback: any) {
         if (callback) {
-        callback();
+            callback();
         }
         CoreSocketService.connected.next(true);
     }
@@ -68,12 +61,12 @@ export class CoreSocketService {
         },
         debug: function(str: any) {
             if (environment.production) {
-            console.log(str);
+                console.log(str);
             }
         },
-        reconnectDelay: 5000,
-        heartbeatIncoming: 4000,
-        heartbeatOutgoing: 4000
+            reconnectDelay: 5000,
+            heartbeatIncoming: 4000,
+            heartbeatOutgoing: 4000
         });
 
         this._stompClient.onConnect = CoreSocketService.onConnect.bind(this, callback);
@@ -83,16 +76,17 @@ export class CoreSocketService {
 
     subscribe(url: string, callBack: (data?: any) => void) {
         return CoreSocketService.connected
-        .pipe(
-            filter((connectedSocket: any) => connectedSocket),
-            take(1),
-            map(() => this.getClient().subscribe(url, callBack))
-        )
-        .toPromise();
+            .pipe(
+                filter((connectedSocket: any) => connectedSocket),
+                take(1),
+                map(() => this.getClient().subscribe(url, callBack))
+            )
+            .toPromise();
     }
+
     // ovdje je primjer kako se publish-uje poruka sa front-a na back
-    sendByUserName(destination: string, data: string) {
-        this.getClient().publish({
+    sendByUserName(destination: string, data: string) { // => /app/receive/user1/user2
+        this.getClient().publish({ // /app
             destination,
             // headers: this.userHeader,
             body: data
@@ -101,8 +95,8 @@ export class CoreSocketService {
 
     closeConnection() {
         if (this._stompClient) {
-        CoreSocketService.connected.next(false);
-        this._stompClient.deactivate();
+            CoreSocketService.connected.next(false);
+            this._stompClient.deactivate();
         }
     }
 }

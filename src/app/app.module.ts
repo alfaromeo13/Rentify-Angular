@@ -27,6 +27,7 @@ import { FilterComponent } from './filter/filter.component';
 import { CreateApartmentComponent } from './create-apartment/create-apartment.component';
 // import { WINDOW_PROVIDERS } from '@app/core/providers/window.provider';
 import { CommonModule } from '@angular/common';
+import { MessageComponent } from './messages/message.component';
 
 
 @NgModule({
@@ -47,6 +48,7 @@ import { CommonModule } from '@angular/common';
     ConfirmAccountComponent,
     FilterComponent,
     CreateApartmentComponent,
+    MessageComponent,
   ],
   imports: [
     FormsModule,

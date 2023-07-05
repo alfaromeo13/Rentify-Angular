@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
   handleClick():void {
     this.isActive=!this.isActive;
     this.showParagraph=!this.showParagraph;
-    console.log('Clicked!')
+    console.log('Clicked!');
   }
 
 
