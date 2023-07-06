@@ -9,17 +9,17 @@ export class MessageService {
 
     // conversation => {usernameFrom: "", usernameTo: ""} (bez poruka, samo kreiranje)
     createNewConversation(conversation: any): Observable<any> {
-        const url = `${environment.apiUrl}/api/conversations`;
+        const url = `${environment.apiUrl}conversations`;
         return this.httpClient.post(url, conversation, {headers: {'Content-Type': 'application/json'}});
     }
 
     getAllConversationsByUser(username: string): Observable<any> {
-        const url = `${environment.apiUrl}/api/conversations/by-user/${username}`;
+        const url = `${environment.apiUrl}conversations/by-user/${username}`;
         return this.httpClient.get(url, {headers: {'Content-Type': 'application/json'}});
     }
 
     getMessagesFromConversationById(conversationId: string): Observable<any> {
-        const url = `${environment.apiUrl}/api/conversations/${conversationId}/messages`;
+        const url = `${environment.apiUrl}conversations/${conversationId}/messages`;
         return this.httpClient.get(url, {headers: {'Content-Type': 'application/json'}});
     }
 
