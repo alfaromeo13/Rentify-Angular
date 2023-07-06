@@ -7,8 +7,20 @@ import { environment } from "src/environments/environment";
 export class MessageService {
     constructor(private httpClient: HttpClient) { }
 
-    getAllConversations(): Observable<any> {
+    // conversation => {usernameFrom: "", usernameTo: ""} (bez poruka, samo kreiranje)
+    createNewConversation(conversation: any): Observable<any> {
         const url = `${environment.apiUrl}/api/conversations`;
-        return this.httpClient.get(url);
+        return this.httpClient.post(url, conversation, {headers: {'Content-Type': 'application/json'}});
     }
+
+    getAllConversationsByUser(username: string): Observable<any> {
+        const url = `${environment.apiUrl}/api/conversations/by-user/${username}`;
+        return this.httpClient.get(url, {headers: {'Content-Type': 'application/json'}});
+    }
+
+    getMessagesFromConversationById(conversationId: string): Observable<any> {
+        const url = `${environment.apiUrl}/api/conversations/${conversationId}/messages`;
+        return this.httpClient.get(url, {headers: {'Content-Type': 'application/json'}});
+    }
+
 }

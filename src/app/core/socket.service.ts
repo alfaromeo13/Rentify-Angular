@@ -13,4 +13,14 @@ import { CoreSocketService } from "./core-socket.service";
     //     callback();
     //   });
     // }
+
+    subscribeToConversation(topic: string, callback: any): any {
+      return this._ws.subscribe(topic, (data: any) => {
+        callback(data);
+      });
+    }
+
+    sendMessageToConversation(destination: string, payload: any) {
+      return this._ws.sendMessageToConversation(destination, payload);
+    }
   }

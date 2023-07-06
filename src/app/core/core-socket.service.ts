@@ -85,10 +85,9 @@ export class CoreSocketService {
     }
 
     // ovdje je primjer kako se publish-uje poruka sa front-a na back
-    sendByUserName(destination: string, data: string) { // => /app/receive/user1/user2
-        this.getClient().publish({ // /app
+    sendMessageToConversation(destination: string, data: string) {
+        this.getClient().publish({
             destination,
-            // headers: this.userHeader,
             body: data
         });
     }
