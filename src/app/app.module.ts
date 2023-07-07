@@ -29,6 +29,7 @@ import { CreateApartmentComponent } from './create-apartment/create-apartment.co
 import { CommonModule } from '@angular/common';
 import { MessageComponent } from './messages/message.component';
 
+import { AdminComponent } from './admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { MessageComponent } from './messages/message.component';
     FilterComponent,
     CreateApartmentComponent,
     MessageComponent,
+    AdminComponent,
   ],
   imports: [
     FormsModule,
@@ -59,16 +61,14 @@ import { MessageComponent } from './messages/message.component';
     AppRoutingModule,
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot({
-      preventDuplicates:true,
-      timeOut:2700,
-      enableHtml:true,
+      preventDuplicates: true,
+      timeOut: 2700,
+      enableHtml: true,
     }), FontAwesomeModule, // ToastrModule
   ],
-  providers: 
-  [{provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor , multi:true},
-   {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor,multi:true}
-  //  WINDOW_PROVIDERS
-  ],
+  providers:
+    [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

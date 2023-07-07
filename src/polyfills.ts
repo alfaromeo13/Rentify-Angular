@@ -48,6 +48,7 @@
 import 'zone.js';  // Included with Angular CLI.
 import '@angular/localize/init'
 
+(window as any).global = window;
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */

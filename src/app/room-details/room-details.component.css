@@ -26,6 +26,10 @@ a.button {
   box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, .4);
 }
 
+.custom-box-shadow {
+  box-shadow: 1px 3px 10px rgba(0, 0, 0, 0.3);
+}
+
 .klasaaa {
   display: flex;
   flex-direction: row;
@@ -34,15 +38,10 @@ a.button {
   gap: 10px;
 }
 
-.bucika{
+.bucika {
   position: absolute;
   top: 20px;
   right: 0px;
-}
-
-.bg-image {
-  background-image: url('../../images/blurred.jpeg');
-  background-size: cover;
 }
 
 .main_title {
@@ -203,7 +202,8 @@ footer {
 
 .carousel-item img {
   max-width: 100%;
-  max-height: 738px; /* Adjust this value to your desired maximum height */
+  max-height: 738px;
+  /* Adjust this value to your desired maximum height */
   object-fit: contain;
 }
 
@@ -240,9 +240,55 @@ footer {
   margin: 0 auto;
 }
 
+
+.custom-marker {
+  background-color: red;
+  border-radius: 50%;
+}
+
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.bounce-animation {
+  animation: bounce 0.8s;
+}
+
+.rating-stars {
+  display: flex;
+  align-items: center;
+}
+
+.star {
+  fill: #929292;
+  /* Default star color */
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.star:hover,
+.star.highlighted {
+  fill: #ffcc00;
+  transition: color 0.2s;
+  /* Highlighted star color */
+}
+
 .map-frame {
   border: 2px solid rgba(179, 179, 179, 0.44);
   height: 100%;
+}
+
+.leaflet-marker-icon {
+  border: none;
 }
 
 #map {

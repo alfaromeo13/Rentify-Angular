@@ -1,16 +1,19 @@
-import { EventEmitter } from "@angular/core";
+import { AfterViewInit, EventEmitter } from "@angular/core";
 import { Output } from "@angular/core";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 // import { saveAs } from 'file-saver' ;
 import { TestService } from "./test.component.service";
 
+
+declare var bulmaCalendar: any;
+
 @Component({
   selector:'app-test',
   templateUrl:'test.component.html',
   styleUrls:['test.component.css'],
 })
-export class TestComponent implements OnInit {
+export class TestComponent implements OnInit,AfterViewInit {
 
   documentUploadForm?: FormGroup;
   documents: any[] = [];
@@ -18,6 +21,21 @@ export class TestComponent implements OnInit {
   @ViewChild('fileName') fileNameSpanElement!: ElementRef;
 
   constructor(private testService: TestService) { }
+  
+  ngAfterViewInit(): void {
+    const datepicker = document.getElementById('datepicker');
+    const today = new Date();
+    const nextFiveDays = new Date(today.getTime() + 5 * 24 * 60 * 60 * 1000); // Calculate the date of 5 days from today
+    const invalidDates = [
+      new Date(),
+      new Date(new Date().getTime() + 192 * 60 * 60 * 1000)
+    ]
+    
+    bulmaCalendar.attach(datepicker, {
+      startDate: today,
+      disabledDates: invalidDates
+    });
+  }
 
   ngOnInit(): void {
     this.initializeForm();

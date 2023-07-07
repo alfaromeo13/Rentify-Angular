@@ -13,6 +13,7 @@ import { ToastrService } from "ngx-toastr";
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
+    username: string = "";
     isAuthenticated = new BehaviorSubject<boolean>(false);
 
     constructor(
@@ -26,6 +27,7 @@ export class AuthService {
         //JwtToken is what we expect in response
         return this.httpClient.post<JwtToken>(url, loginData)
             .pipe(tap(responseData => {
+                this.username = loginData.username;
                 const access = responseData.token;
                 const refresh = responseData["refresh-token"];
                 localStorage.setItem('access-token', access);
@@ -79,9 +81,11 @@ export class AuthService {
                 tap(responseData => { //otherwise we extended our tokens
                     const access = responseData.token;
                     const refresh = responseData['refresh-token'];
-                    localStorage.setItem('access-token', access);
-                    localStorage.setItem('refresh-token', refresh);
-                    this.isAuthenticated.next(true);
+                    if (access.trim.length > 0 && refresh.trim.length > 0) {
+                        localStorage.setItem('access-token', access);
+                        localStorage.setItem('refresh-token', refresh);
+                        this.isAuthenticated.next(true);
+                    }
                 })
             );
     }

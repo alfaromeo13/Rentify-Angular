@@ -8,6 +8,15 @@ import { ImageDTO } from '../models/image.model';
 import { ReviewService } from './room-details.service';
 import { ReviewDTO } from '../models/review.model';
 import * as moment from 'moment';
+import { AuthService } from '../auth/services/auth.service';
+import { ToastrService } from 'ngx-toastr';
+import { ReviewApartmentDTO } from '../models/review-apartment.model';
+import { RentalService } from '../services/rental.service';
+
+import 'leaflet-control-geocoder/dist/Control.Geocoder.js';
+import { RentalApartmentDTO } from '../models/rental-apartment.model';
+
+declare var bulmaCalendar: any;
 
 @Component({
   selector: 'app-room-details',
@@ -17,52 +26,120 @@ import * as moment from 'moment';
 export class RoomDetailsComponent implements OnInit, AfterViewInit {
 
   pageNumber: number = 0;
+  shownPrice: number = 0;
   reviews: ReviewDTO[] = [];
   brojSivih: any[] = []
   brojZlatnih: any[] = [];
   apartment: ApartmentDTO;
+  isButtonDisabled: boolean = false;
+  public imagePreviews: any[] = [];
+  stars: number[] = [1, 2, 3, 4, 5];
+  rental = new RentalApartmentDTO();
+  invalidDates: Date[] = [];
+  enteredText: string = ''
+  highlightedStars: number = 0;
+  selectedRating: number;
+  showBounceAnimation: boolean = false;
   is1: boolean = false;
   is2: boolean = false;
   is3: boolean = false;
   is4: boolean = false;
   is5: boolean = false;
-  isButtonDisabled: boolean = false;
-  public imagePreviews: any[] = [];
+
   private map: L.Map;
-  private centroid: L.LatLngExpression = [42.3601, -71.0589]; //Boston
 
   constructor(
     private domSanitizer: DomSanitizer,
     private reviewService: ReviewService,
+    private toastr: ToastrService,
+    public authService: AuthService,
+    private rentalService: RentalService,
     private apartmentService: ApartmentService,
   ) { }
 
-  set1() {
-    this.is1 = true;
+  highlightStars(starCount: number): void {
+    if (this.selectedRating === 0) {
+      this.highlightedStars = starCount;
+    }
   }
 
-  set2() {
-    this.set1();
-    this.is2 = true;
+  setRating(rating: number): void {
+    this.selectedRating = rating;
+    this.highlightedStars = 0;
+
+    for (let i = 1; i <= rating; i++) {
+      if (!this.is1) {
+        this.is1 = true;
+        continue;
+      }
+      if (!this.is2) {
+        this.is2 = true;
+        continue;
+      }
+      if (!this.is3) {
+        this.is3 = true;
+        continue;
+      }
+      if (!this.is4) {
+        this.is4 = true;
+        continue;
+      }
+      if (!this.is5) {
+        this.is5 = true;
+        continue;
+      }
+    }
+    for (let i = rating; i < 5; i++) {
+      if (i == 1) {
+        this.is2 = false;
+        this.is3 = false;
+        this.is4 = false;
+        this.is5 = false;
+        continue;
+      }
+      if (i == 2) {
+        this.is3 = false;
+        this.is4 = false;
+        this.is5 = false;
+        continue;
+      }
+      if (i == 3) {
+        this.is4 = false;
+        this.is5 = false;
+        continue;
+      }
+      if (i == 4) {
+        this.is5 = false;
+        continue;
+      }
+
+    }
+    // Add your logic for handling the selected rating here
   }
 
-  set3() {
-    this.set2();
-    this.is3 = true;
+  toggleIcon(id: number): void {
+    this.showBounceAnimation = true;
+    setTimeout(() => {
+      this.showBounceAnimation = false;
+      this.reviewService.deleteById(id).subscribe(data => {
+        const index = this.reviews.findIndex((review) => review.id === id);
+        if (index !== -1) {
+          this.reviews.splice(index, 1);
+        }
+      });
+    }, 1000);
   }
 
-  set4() {
-    this.set3();
-    this.is4 = true;
-  }
-
-  set5() {
-    this.set4();
-    this.is5 = true;
+  addReview() {
+    if (this.authService.isAuthenticated.getValue()) {
+      this.reviewService.addReview(new ReviewApartmentDTO(this.selectedRating, this.enteredText, this.apartment.id)).subscribe(data => {
+        this.enteredText = "";
+        this.getReviews();
+      });
+    } else this.toastr.info("You have to be logged in to add a review");
   }
 
   ngOnInit(): void {
-
     this.apartment = this.apartmentService.selectedApartment;
     console.log(this.apartment.apartmentAttributes.length);
     this.getReviews();
@@ -75,20 +152,68 @@ export class RoomDetailsComponent implements OnInit, AfterViewInit {
       this.brojSivih.push(i);
     }
 
+    this.rentalService.getRentals(this.apartment.id).subscribe(data => {
+      for (const disabled of data)
+        this.disableDatesBetween(disabled.startDate, disabled.endDate);
+
+      const datepicker = document.getElementById('datepicker');
+      const today = new Date();
+      const calendarOptions = {
+        type: 'date',
+        minDate: today.toISOString().split('T')[0],
+        disabledDates: this.invalidDates,
+        isRange: true,
+        timePicker: false,
+      };
+      const calendar = bulmaCalendar.attach(datepicker, calendarOptions)[0];
+
+      calendar.on('select', (datepicker: any) => {
+        const startDate = datepicker.data.datePicker._date.start
+        const endDate = datepicker.data.datePicker._date.end;
+        this.rental.apartmentId = this.apartment.id;
+        this.rental.startDate = startDate;
+        this.rental.endDate = endDate;
+        this.rentalService.calculatePrice(this.rental).subscribe(data => {
+          this.shownPrice = data;
+        });
+      });
+    }, error => {
+      console.log('error');
+    })
+
     this.apartment.images.forEach((image: ImageDTO) => {
       this.imagePreviews.push(
         this.domSanitizer.bypassSecurityTrustResourceUrl(`data:image;base64, ${image.path}`));
     });
   }
 
+  book() {
+    // if (this.authService.isAuthenticated.value) {
+    this.rentalService.book(this.rental).subscribe(data => {
+      this.toastr.success('Apartment booked successfully!', 'Booking Confirmation');
+    });
+    // } else this.toastr.info('You have to be looged to book any property');
+  }
+
   ngAfterViewInit(): void {
     this.initMap();
   }
 
+  disableDatesBetween(start: Date, end: Date): void {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+      this.invalidDates.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+  }
 
   containsAttribute(name: string): boolean {
     for (let i = 0; i < this.apartment.apartmentAttributes.length; i++) {
-      return this.apartment.apartmentAttributes[i].attribute.name === name;
+      if (this.apartment.apartmentAttributes[i].attribute.name === name) {
+        return true;
+      }
     }
     return false;
   }
@@ -118,30 +243,40 @@ export class RoomDetailsComponent implements OnInit, AfterViewInit {
     }, error => {
       console.log(error);
     });
-
   }
 
   private initMap(): void {
+
+    const centroid: L.LatLngExpression = [this.apartment.address.x, this.apartment.address.y];// [42.3601, -71.0589]; //Boston
+
     this.map = L.map('map', {
-      center: this.centroid,
-      zoom: 12
+      center: centroid,
+      zoom: 20
     });
 
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
       minZoom: 10,
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    });
-
-    // create 5 random jitteries and add them to map
-    const jittery = Array(1).fill(this.centroid).map(
-      x => [x[0] + (Math.random() - .5) / 10, x[1] + (Math.random() - .5) / 10]
-    ).map(
-      x => L.marker(x as L.LatLngExpression)
-    ).forEach(
-      x => x.addTo(this.map)
-    );
+    }).addTo(this.map);
 
     tiles.addTo(this.map);
+
+    const customIcon = L.icon({
+      iconUrl: '/assets/house.png',
+      iconSize: [50, 50], // Set the dimensions of your icon image
+      iconAnchor: [25, 25] // Set the anchor point of your icon relative to its size
+    });
+
+    L.marker(centroid, { icon: customIcon }).addTo(this.map);
+
+    L.circle(centroid, {
+      radius: 30,
+      color: '#48c774', // Set the color to match Bulma's success class color
+      fillColor: '#48c774', // Set the fill color to match Bulma's success class color
+      fillOpacity: 0.5
+    }).addTo(this.map);
+
+    (L.Control as any).geocoder().addTo(this.map);
   }
 }
