@@ -25,12 +25,16 @@
             "styles": [
               "src/styles.css",
               "node_modules/leaflet/dist/leaflet.css",
+              "node_modules/leaflet-control-geocoder/dist/Control.Geocoder.css",
+              "node_modules/bulma-calendar/dist/css/bulma-calendar.min.css",
               "node_modules/bulma-carousel/dist/css/bulma-carousel.min.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "node_modules/bulma/css/bulma.min.css",
               "node_modules/ngx-toastr/toastr.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/bulma-calendar/dist/js/bulma-calendar.min.js"
+            ]
           },
           "configurations": {
             "production": {

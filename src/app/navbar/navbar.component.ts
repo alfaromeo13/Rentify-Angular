@@ -22,10 +22,6 @@ export class NavbarComponent implements OnInit {
             path: "/test"
         },
         {
-            name: "Messages",
-            path: "/messages"
-        },
-        {
             name: "Users",
             path: "/users"
         }
@@ -33,7 +29,7 @@ export class NavbarComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private authService: AuthService,
+        public authService: AuthService,
         private apartmentService: ApartmentService,
     ) { }
 

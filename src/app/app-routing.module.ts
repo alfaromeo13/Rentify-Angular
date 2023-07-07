@@ -15,6 +15,7 @@ import { ConfirmAccountComponent } from "./confirm-account/confirm-account.compo
 import { PrikazSlikeComponent } from "./prikaz-slike/prikaz-slike.component";
 import { CityComponent } from "./city/city.component";
 import { CreateApartmentComponent } from "./create-apartment/create-apartment.component";
+import { AdminComponent } from "./admin/admin.component";
 
 const routes: Routes = [
     {
@@ -77,6 +78,10 @@ const routes: Routes = [
         path: 'add-property',
         component: CreateApartmentComponent,
     },
+    {
+        path: 'admin', //http://localhost:4200/admin
+        component: AdminComponent,
+    },
     {   //if anything else is entered ex: http://localhost:4200/something...
         path: '**', //we redirect request to home component
         redirectTo: 'home'
@@ -84,5 +89,6 @@ const routes: Routes = [
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule],})
+    exports: [RouterModule],
+})
 export class AppRoutingModule { } 

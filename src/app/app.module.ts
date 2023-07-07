@@ -25,6 +25,7 @@ import { CityComponent } from './city/city.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FilterComponent } from './filter/filter.component';
 import { CreateApartmentComponent } from './create-apartment/create-apartment.component';
+import { AdminComponent } from './admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { CreateApartmentComponent } from './create-apartment/create-apartment.co
     ConfirmAccountComponent,
     FilterComponent,
     CreateApartmentComponent,
+    AdminComponent,
   ],
   imports: [
     FormsModule,
@@ -53,14 +55,14 @@ import { CreateApartmentComponent } from './create-apartment/create-apartment.co
     AppRoutingModule,
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot({
-      preventDuplicates:true,
-      timeOut:2700,
-      enableHtml:true,
+      preventDuplicates: true,
+      timeOut: 2700,
+      enableHtml: true,
     }), FontAwesomeModule, // ToastrModule
   ],
-  providers: 
-  [{provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor , multi:true},
-   {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor,multi:true}],
+  providers:
+    [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
