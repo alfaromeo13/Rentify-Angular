@@ -30,10 +30,8 @@ export class MessageComponent implements OnInit {
 
         this.messageService.createNewConversation(data).subscribe((data: any) => {
             console.log(data);
-            // subscribe na topic => /topic/conversation/{conversationId}
-            // {conversationId} je id konverzacije koji dobijas u data objektu
-            // pristupas mu sa data.conversationId (String)
-            // subscribe-ujes se preko socketService-a
+            // TODO: dodati custom logiku...
+            // otvara novu konverzaciju, a na prikaz svih konverzacija radis subscribe
         });
     }
 

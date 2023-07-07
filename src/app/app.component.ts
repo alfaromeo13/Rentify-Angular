@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CoreSocketService } from './core/core-socket.service';
+import { GlobalSocketService } from './core/socket.service';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +9,16 @@ import { CoreSocketService } from './core/core-socket.service';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private coreSocketService: CoreSocketService) { }
+  constructor(private coreSocketService: CoreSocketService, private globalSocketService: GlobalSocketService) { }
   
   ngOnInit(): void {
     this.coreSocketService.initConnection();
+    
+    // obavezan subscribe na onInit => IPAK NA LOGIN!!!
+    this.globalSocketService.subscribeToConversation("/topic/notifications", (data: any) => {
+      console.log(data); // vraca se kompletan conversation objekat
+      // TODO: logika...
+    });
   }
 
   isActive:boolean=false;
