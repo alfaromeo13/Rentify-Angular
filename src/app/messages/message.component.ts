@@ -20,7 +20,7 @@ export class MessageComponent implements OnInit {
     }
 
     // pozivas klikom na odredjeno dugme (nova konverzacija ili postojeca konverzacija)
-    openNewConversation(toUsername: string) { // toUserId je id korisnika sa kojim zelis da zapocnes konverzaciju
+    openNewConversation(toUsername: string) { // toUsername je username korisnika sa kojim zelis da zapocnes konverzaciju
         const data = {"usernameFrom": "", "usernameTo": toUsername};
         // usernameFrom => username trenutno ulogovanog korisnika (izvuci iz locale storage-a)
         // npr: const username = localStorage.getItem("username");
