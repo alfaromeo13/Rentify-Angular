@@ -25,6 +25,10 @@ import { CityComponent } from './city/city.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FilterComponent } from './filter/filter.component';
 import { CreateApartmentComponent } from './create-apartment/create-apartment.component';
+// import { WINDOW_PROVIDERS } from '@app/core/providers/window.provider';
+import { CommonModule } from '@angular/common';
+import { MessageComponent } from './messages/message.component';
+
 import { AdminComponent } from './admin/admin.component';
 
 @NgModule({
@@ -45,12 +49,14 @@ import { AdminComponent } from './admin/admin.component';
     ConfirmAccountComponent,
     FilterComponent,
     CreateApartmentComponent,
+    MessageComponent,
     AdminComponent,
   ],
   imports: [
     FormsModule,
     ReactiveFormsModule,
     BrowserModule,
+    CommonModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule, // required animations module

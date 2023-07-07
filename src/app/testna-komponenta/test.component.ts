@@ -2,7 +2,7 @@ import { AfterViewInit, EventEmitter } from "@angular/core";
 import { Output } from "@angular/core";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
-import { saveAs } from 'file-saver' ;
+// import { saveAs } from 'file-saver' ;
 import { TestService } from "./test.component.service";
 
 
@@ -73,7 +73,7 @@ export class TestComponent implements OnInit,AfterViewInit {
 
       const fileName = headers.get('FILE-NAME');
       const blob = new Blob([body]);
-      saveAs(blob, fileName);
+      // saveAs(blob, fileName);
     });
   }
 

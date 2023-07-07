@@ -52,3 +52,4 @@ import '@angular/localize/init'
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+(window as any).global = window;
