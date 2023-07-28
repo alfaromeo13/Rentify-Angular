@@ -12,9 +12,13 @@ import { AuthService } from '../auth/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { ReviewApartmentDTO } from '../models/review-apartment.model';
 import { RentalService } from '../services/rental.service';
-
 import 'leaflet-control-geocoder/dist/Control.Geocoder.js';
 import { RentalApartmentDTO } from '../models/rental-apartment.model';
+import { MessageService } from '../messages/message.service';
+import { CreateConversationDTO } from '../models/create-conversation.model';
+import { Router } from '@angular/router';
+import { FilterService } from '../filter/filter.service';
+import { ApartmentSearch } from '../models/search.model';
 
 declare var bulmaCalendar: any;
 
@@ -23,8 +27,7 @@ declare var bulmaCalendar: any;
   templateUrl: './room-details.component.html',
   styleUrls: ['./room-details.component.css']
 })
-export class RoomDetailsComponent implements OnInit, AfterViewInit {
-
+export class RoomDetailsComponent implements OnInit {
   pageNumber: number = 0;
   shownPrice: number = 0;
   reviews: ReviewDTO[] = [];
@@ -45,16 +48,17 @@ export class RoomDetailsComponent implements OnInit, AfterViewInit {
   is3: boolean = false;
   is4: boolean = false;
   is5: boolean = false;
-
   private map: L.Map;
 
   constructor(
+    private router: Router,
+    private filterService: FilterService,
     private domSanitizer: DomSanitizer,
-    private reviewService: ReviewService,
+    public reviewService: ReviewService,
     private toastr: ToastrService,
     public authService: AuthService,
     private rentalService: RentalService,
-    private apartmentService: ApartmentService,
+    private messageService: MessageService,
   ) { }
 
   highlightStars(starCount: number): void {
@@ -112,9 +116,7 @@ export class RoomDetailsComponent implements OnInit, AfterViewInit {
         this.is5 = false;
         continue;
       }
-
     }
-    // Add your logic for handling the selected rating here
   }
 
   toggleIcon(id: number): void {
@@ -140,63 +142,73 @@ export class RoomDetailsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.apartment = this.apartmentService.selectedApartment;
-    console.log(this.apartment.apartmentAttributes.length);
-    this.getReviews();
-
-    for (let i = 0; i < this.apartment.grade; i++) {
-      this.brojZlatnih.push(i);
-    }
-
-    for (let i = 0; i < 5 - this.apartment.grade; i++) {
-      this.brojSivih.push(i);
-    }
-
-    this.rentalService.getRentals(this.apartment.id).subscribe(data => {
-      for (const disabled of data)
-        this.disableDatesBetween(disabled.startDate, disabled.endDate);
-
-      const datepicker = document.getElementById('datepicker');
-      const today = new Date();
-      const calendarOptions = {
-        type: 'date',
-        minDate: today.toISOString().split('T')[0],
-        disabledDates: this.invalidDates,
-        isRange: true,
-        timePicker: false,
+    const storedData = localStorage.getItem('selectedApartmentId');
+    if (storedData) {
+      const ids = [parseInt(storedData, 10)];
+      const search: ApartmentSearch = {
+        id: ids,
       };
-      const calendar = bulmaCalendar.attach(datepicker, calendarOptions)[0];
 
-      calendar.on('select', (datepicker: any) => {
-        const startDate = datepicker.data.datePicker._date.start
-        const endDate = datepicker.data.datePicker._date.end;
-        this.rental.apartmentId = this.apartment.id;
-        this.rental.startDate = startDate;
-        this.rental.endDate = endDate;
-        this.rentalService.calculatePrice(this.rental).subscribe(data => {
-          this.shownPrice = data;
+      this.filterService.filter(search, 0).subscribe(data => {
+        this.apartment = data[0];
+        this.initMap();
+        console.log(this.apartment);
+        this.getReviews();
+
+        for (let i = 0; i < this.apartment.grade; i++)
+          this.brojZlatnih.push(i);
+
+        for (let i = 0; i < 5 - this.apartment.grade; i++)
+          this.brojSivih.push(i);
+
+        this.rentalService.getRentals(this.apartment.id).subscribe(data => {
+          for (const disabled of data) {
+            const startDate = new Date(disabled.startDate); // Convert the start date to a Date object
+            const endDate = new Date(disabled.endDate); // Convert the end date to a Date object
+            const modifiedStartDate = new Date(startDate.setDate(startDate.getDate() + 1));
+            const modifiedEndDate = new Date(endDate.setDate(endDate.getDate() + 1))
+            this.disableDatesBetween(modifiedStartDate, modifiedEndDate);
+          }
+          const datepicker = document.getElementById('datepicker');
+          const today = new Date();
+          const calendarOptions = {
+            type: 'date',
+            minDate: today.toISOString().split('T')[0],
+            disabledDates: this.invalidDates,
+            isRange: true,
+            dateFormat: 'dd-MM-yyyy',
+            timePicker: false,
+          };
+          const calendar = bulmaCalendar.attach(datepicker, calendarOptions)[0];
+
+          calendar.on('select', (datepicker: any) => {
+            const startDate = datepicker.data.datePicker._date.start
+            const endDate = datepicker.data.datePicker._date.end;
+            this.rental.apartmentId = this.apartment.id;
+            this.rental.startDate = startDate;
+            this.rental.endDate = endDate;
+            this.rentalService.calculatePrice(this.rental).subscribe(data => {
+              this.shownPrice = data;
+            });
+          });
+        }, error => {
+          console.log('error');
+        })
+
+        this.apartment.images.forEach((image: ImageDTO) => {
+          this.imagePreviews.push(
+            this.domSanitizer.bypassSecurityTrustResourceUrl(`data:image;base64, ${image.path}`));
         });
       });
-    }, error => {
-      console.log('error');
-    })
-
-    this.apartment.images.forEach((image: ImageDTO) => {
-      this.imagePreviews.push(
-        this.domSanitizer.bypassSecurityTrustResourceUrl(`data:image;base64, ${image.path}`));
-    });
+    }
   }
 
   book() {
-    // if (this.authService.isAuthenticated.value) {
-    this.rentalService.book(this.rental).subscribe(data => {
-      this.toastr.success('Apartment booked successfully!', 'Booking Confirmation');
-    });
-    // } else this.toastr.info('You have to be looged to book any property');
-  }
-
-  ngAfterViewInit(): void {
-    this.initMap();
+    if (this.authService.isAuthenticated.value) {
+      this.rentalService.book(this.rental).subscribe(data => {
+        this.toastr.success('Apartment booked successfully!', 'Booking Confirmation');
+      });
+    } else this.toastr.info('You have to be looged to book any property');
   }
 
   disableDatesBetween(start: Date, end: Date): void {
@@ -210,18 +222,14 @@ export class RoomDetailsComponent implements OnInit, AfterViewInit {
   }
 
   containsAttribute(name: string): boolean {
-    for (let i = 0; i < this.apartment.apartmentAttributes.length; i++) {
-      if (this.apartment.apartmentAttributes[i].attribute.name === name) {
-        return true;
-      }
-    }
-    return false;
+    return this.apartment.apartmentAttributes.some(attr => attr.attribute.name === name && attr.attributeValue === "Yes");
   }
 
   getReviews() {
     this.reviewService.getReviews(this.apartment.id, this.pageNumber).subscribe(data => {
       this.reviews = data;
-      if (data.length < 5) this.isButtonDisabled = true;
+      this.isButtonDisabled = data.length < 5;
+
       for (const review of this.reviews) {
         review.createdAt = new Date(review.createdAt);
         review.localTime = moment(review.createdAt).format('DD/MM/YYYY, h:mm:ss A');
@@ -245,10 +253,52 @@ export class RoomDetailsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  onNewestClicked() {
+    this.pageNumber = 0;
+    this.reviewService.isNewestClicked = true;
+    this.reviewService.isHighestClicked = false;
+    this.reviewService.isLowestClicked = false;
+    this.getReviews();
+  }
+
+  onHighestClicked() {
+    this.pageNumber = 0;
+    this.reviewService.isNewestClicked = false;
+    this.reviewService.isHighestClicked = true;
+    this.reviewService.isLowestClicked = false;
+    this.getReviews();
+  }
+
+  onLowestCLicked() {
+    this.pageNumber = 0;
+    this.reviewService.isNewestClicked = false;
+    this.reviewService.isHighestClicked = false;
+    this.reviewService.isLowestClicked = true;
+    this.getReviews();
+  }
+
+
+  // pozivas klikom na odredjeno dugme (nova konverzacija)
+  openNewConversation(toUsername: string) {
+    if (this.authService.isAuthenticated.value) {
+      // usernameFrom => username trenutno ulogovanog korisnika
+      // toUsername je username korisnika sa kojim zapocinjes konverzaciju
+      const conversation: CreateConversationDTO = {
+        usernameFrom: this.authService.username,
+        usernameTo: toUsername,
+      };
+      this.messageService.createNewConversation(conversation).subscribe((data: any) => {
+        this.messageService.selectedConversationId = data.conversationId;
+        this.router.navigate(['messages']);
+      }, error => {
+        console.log(error);
+      });
+    } else this.toastr.info('You have to be looged to send someone a message');
+  }
+
+
   private initMap(): void {
-
-    const centroid: L.LatLngExpression = [this.apartment.address.x, this.apartment.address.y];// [42.3601, -71.0589]; //Boston
-
+    const centroid: L.LatLngExpression = [this.apartment.address.x, this.apartment.address.y];
     this.map = L.map('map', {
       center: centroid,
       zoom: 20
@@ -276,7 +326,5 @@ export class RoomDetailsComponent implements OnInit, AfterViewInit {
       fillColor: '#48c774', // Set the fill color to match Bulma's success class color
       fillOpacity: 0.5
     }).addTo(this.map);
-
-    (L.Control as any).geocoder().addTo(this.map);
   }
 }

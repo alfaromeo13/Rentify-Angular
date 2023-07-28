@@ -1,0 +1,61 @@
+.root {
+  --shadowDark: #eff5feaa;
+  --shadowLight: #eff5fe6b;
+}
+
+.hero-body {
+  justify-content: center;
+}
+
+.login {
+  background-color: white;
+  border-radius: 25px;
+  margin-top: -36px;
+  margin-left: -28px;
+  padding: 1.5rem;
+  box-shadow: 3px 3px 15px, -8px -8px 15px var(--shadowLight);
+}
+
+.alfa {
+  font-weight: 600;
+}
+
+div .field .label {
+  text-align: left;
+  margin-left: 20px;
+}
+
+div a {
+  text-decoration: none;
+}
+
+.map-frame {
+  border: 2px solid rgba(179, 179, 179, 0.44);
+  height: 50%;
+  margin-left: -40px;
+  margin-right: 7px;
+}
+
+.leaflet-marker-icon {
+  border: none;
+}
+
+#map {
+  height: 100%;
+}
+
+.image-container {
+  background-color: hsl(0, 0%, 89%);
+  border-radius: 20px;
+  border: 3px solid hsl(0, 0%, 53%);
+  border-style: dashed;
+  max-height: calc(370px * 2 + 10px);
+  overflow: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.img {
+  width: calc(30%);
+  margin: 20px;
+}

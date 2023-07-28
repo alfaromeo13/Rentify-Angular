@@ -1,76 +1,99 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import * as moment from "moment";
+import { ToastrService } from "ngx-toastr";
+import { AuthService } from "../auth/services/auth.service";
 import { GlobalSocketService } from "../core/socket.service";
+import { MessageDTO } from "../models/message.model";
+import { RedisConversation } from "../models/redis-conversation.model";
+import { NavbarService } from "../navbar/navbar.service";
 import { MessageService } from "./message.service";
 
 @Component({
     selector: 'app-message',
-    templateUrl: './message.component.html'
+    templateUrl: './message.component.html',
+    styleUrls: ['./message.component.css'],
 })
-export class MessageComponent implements OnInit {
+export class MessageComponent implements OnInit, OnDestroy {
 
-    conversations: any[] = []; // lista konverzacija
+    enteredText: string = ''
+    @ViewChild('scrollMe') private myScrollContainer: ElementRef;
+
+    ngAfterViewChecked() {
+        this.scrollToBottom();
+    }
+
+    scrollToBottom(): void {
+        try {
+            this.myScrollContainer.nativeElement.scrollTop =
+                this.myScrollContainer.nativeElement.scrollHeight;
+        } catch (err) { }
+    }
 
     constructor(
+        private toastr: ToastrService,
+        public authService: AuthService,
+        private navbarService: NavbarService,
+        public messageService: MessageService,
         private socketService: GlobalSocketService,
-        private messageService: MessageService
     ) { }
 
+    ngOnDestroy(): void {
+        var hasUnoppened: boolean = false;
+        for (const conversation of this.messageService.conversations) {
+            if (!conversation.isOpened) hasUnoppened = true;
+            if (conversation.id === this.messageService.selectedConversationId) {
+                conversation.isClicked = false;
+                break;
+            }
+        }
+        this.navbarService.newMessages = hasUnoppened;
+        this.messageService.insideMessages = false;
+        this.messageService.selectedConversationId = '';
+        this.messageService.currentMessages = [];
+    }
+
     ngOnInit(): void {
-        
+        this.messageService.insideMessages = true;
+        for (const conversation of this.messageService.conversations) {
+            if (conversation.id === this.messageService.selectedConversationId) {
+                conversation.isClicked = true;
+                break;
+            }
+        }
+        this.scrollToBottom();
     }
 
-    // pozivas klikom na odredjeno dugme (nova konverzacija ili postojeca konverzacija)
-    openNewConversation(toUsername: string) { // toUsername je username korisnika sa kojim zelis da zapocnes konverzaciju
-        const data = {"usernameFrom": "", "usernameTo": toUsername};
-        // usernameFrom => username trenutno ulogovanog korisnika (izvuci iz locale storage-a)
-        // npr: const username = localStorage.getItem("username");
+    previewMessagesForConversationWithId(conversation: RedisConversation) {
+        this.messageService.selectedConversationId = conversation.id;
+        conversation.showNotification = false;
+        conversation.isOpened = true;
 
-        // usernameTo => sa kojim user-om zelis da ostvaris konverzaciju
+        for (const conversation of this.messageService.conversations)
+            conversation.isClicked = false;
 
+        conversation.isClicked = !conversation.isClicked;
 
-        this.messageService.createNewConversation(data).subscribe((data: any) => {
-            console.log(data);
-            // TODO: dodati custom logiku...
-            // otvara novu konverzaciju, a na prikaz svih konverzacija radis subscribe
-        });
-    }
-
-    previewMessagesFromConversation(conversationId: string) {
-        this.messageService.getMessagesFromConversationById(conversationId).subscribe((data: any) => {
-            console.log(data);
-        });
-    }
-
-    previewAllConversationsForCurrentUser() {
-        const username = ""; 
-        // username trenutno ulogovanog korisnika (izvuci iz locale storage-a)
-        // npr: const username = localStorage.getItem("username");
-
-        this.messageService.getAllConversationsByUser(username).subscribe((data: any) => {
-            console.log(data);
-        });
+        this.messageService.getMessagesFromConversationById(conversation.id)
+            .subscribe((data: MessageDTO[]) => {
+                this.messageService.currentMessages = data;
+                for (const msg of this.messageService.currentMessages)
+                    msg.localTime = moment(msg.timestamp).format('DD/MM/YYYY, h:mm:ss A');
+                console.log(data);
+            });
     }
 
     // slanje poruke korisniku
-    sendMessage(conversationId: string, message: string) {
-        const currentUsername = ""; // username ulogovanog korisnika
-
-        const destination = `/app/receive/${conversationId}`;
-        const payload = {
-            message: message,
-            sender: currentUsername,
-            timestamp: new Date()
-        };
-
-        // slanje poruke preko socket-a
-        this.socketService.sendMessageToConversation(destination, payload);
-    }
-
-    subscribeToConversation(conversationId: string) {
-        const topic = `/topic/conversation/${conversationId}`;
-        this.socketService.subscribeToConversation(topic, (data: any) => {
-            console.log(data);
-            // data je poruka koju si primio preko socket-a (poslata od strane drugog korisnika)
-        });
+    sendMessage() {
+        if (this.enteredText.trim().length !== 0 && this.messageService.selectedConversationId.length !== 0) {
+            const destination = `/app/receive/${this.messageService.selectedConversationId}`;
+            const payload = {
+                timestamp: new Date(),
+                message: this.enteredText,
+                sender: this.authService.username,
+            };
+            // slanje poruke preko socket-a
+            this.socketService.sendMessageToConversation(destination, payload);
+            this.enteredText = '';
+        } else this.toastr.info('Please select desired conversation first')
     }
 }

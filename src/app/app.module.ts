@@ -14,7 +14,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { ResetPassword } from './password-reset/reset-password.component';
 import { RegisterComponent } from './register/register.component';
 import { TestComponent } from './testna-komponenta/test.component';
-import { UserComponent } from './user/user.component';
+import { UserComponent } from './admin-users/user.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { RoomComponent } from './room/room.component';
@@ -30,6 +30,12 @@ import { CommonModule } from '@angular/common';
 import { MessageComponent } from './messages/message.component';
 
 import { AdminComponent } from './admin/admin.component';
+import { UserPanelComponent } from './user-panel/user-panel.component';
+import { AdminPropertiesComponent } from './admin-properties/admin-properties.component';
+import { ImageWithButtonComponent } from './image-with-button/image-with-button.component';
+import { ReportComponent } from './report/report.component';
+import { BookingHistoryComponent } from './booking-history/booking-history.component';
+import { VisitedPlacesComponent } from './visited-places/visited-places.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +57,12 @@ import { AdminComponent } from './admin/admin.component';
     CreateApartmentComponent,
     MessageComponent,
     AdminComponent,
+    UserPanelComponent,
+    AdminPropertiesComponent,
+    ImageWithButtonComponent,
+    ReportComponent,
+    BookingHistoryComponent,
+    VisitedPlacesComponent,
   ],
   imports: [
     FormsModule,

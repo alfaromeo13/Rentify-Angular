@@ -47,7 +47,7 @@ export class FilterComponent implements OnInit {
   selectedCountryCode: string = '';
   selectedCityName: string = '';
   selectedNeighborhoodName: string;
-  selectedUserId: number;
+  selectedUsername: string;
   selectedAvailableFrom: Date;
   selectedAvailableTo: Date;
   isCondoClicked: boolean = false;
@@ -264,6 +264,7 @@ export class FilterComponent implements OnInit {
     const apartmentSearch: ApartmentSearch = {
       type: this.selectedType,
       period: this.selectedPeriod,
+      isActive: true,
       minPrice: this.selectedMinPrice,
       maxPrice: this.selectedMaxPrice,
       minNumOfBedrooms: this.selectedMinNumOfBedrooms,
@@ -276,7 +277,7 @@ export class FilterComponent implements OnInit {
       countryCode: this.selectedCountryCode,
       cityName: this.selectedCityName,
       neighborhoodName: this.selectedNeighborhoodName,
-      userId: this.selectedUserId,
+      username: this.selectedUsername,
       availableFrom: this.selectedAvailableFrom,
       availableTo: this.selectedAvailableTo,
       parking: this.isParkingClicked ? 'Yes' : '',
@@ -289,14 +290,13 @@ export class FilterComponent implements OnInit {
       appliances: this.isAppliancesClicked ? 'Yes' : ''
     };
 
-
     console.log(apartmentSearch);
 
     this.filterService.filter(apartmentSearch, 0).subscribe(
       (apartmentDTOs: ApartmentDTO[]) => {
         this.apartmentService.apartmentList = apartmentDTOs;
         this.apartmentService.generateRooms();
-        this.filterService.isActive = false;
+        this.filterService.isActive = false; //we close modal with this...
       }, (error) => {
         console.error(error);
       }

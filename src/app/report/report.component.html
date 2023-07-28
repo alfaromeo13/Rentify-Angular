@@ -1,0 +1,30 @@
+<div class="modal is-active" *ngIf="notificationservice.isActive" (onClose)="notificationservice.isActive=false"
+    [@modalTransition]>
+    <div class="modal-background">
+        <div class="modal-card" style="margin-top: 200px;">
+            <header class="modal-card-head">
+                <p class="modal-card-title" style="color:hsl(348, 100%, 61%)">
+                    <b>What seems to be a problem?</b>
+                </p>
+                <button class="delete" label="close" (click)="cancel()"></button>
+            </header>
+            <section class="modal-card-body">
+                <label class="label" style="font-weight: 350;font-size: 18px;"><i>Send us detailed description
+                        :</i></label>
+                <hr>
+                <form [formGroup]="reportForm">
+                    <div class="control">
+                        <textarea class="textarea"
+                            style="border-radius: 20px 0 20px 20px;height: 300px; font-size: 18px;"
+                            placeholder="Enter detailed description..." formControlName="description"
+                            required></textarea>
+                    </div>
+                </form>
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-danger" (click)="send()">Report</button>
+                <button class="button" (click)="cancel()">Cancel</button>
+            </footer>
+        </div>
+    </div>
+</div>

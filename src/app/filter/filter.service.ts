@@ -14,7 +14,6 @@ export class FilterService {
   sort: string = 'Choose value';
   apartmentSearch: ApartmentSearch; //we memorize last search specification
 
-
   constructor(
     private httpClient: HttpClient) { }
 

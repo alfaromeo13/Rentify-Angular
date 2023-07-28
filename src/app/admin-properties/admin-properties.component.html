@@ -1,0 +1,60 @@
+<div style="margin-top: 10px; margin-left: 50px;margin-right: 50px;">
+    <div class="content">
+        <div class="control has-icons-left" style="justify-content: center;">
+            <form [formGroup]="userSearchForm">
+                <input class="input is-medium is" type="text"
+                    placeholder="Search for specific {{this.propertiesService.selectedType}} by owners username..."
+                    formControlName="searchTerm">
+                <span class="icon is-medium is-left">
+                    <i class="fa fa-search"></i>
+                </span>
+            </form>
+        </div>
+    </div>
+    <div class="content" style="font-size: 20px;justify-content: center;align-items: center;">
+        <table class="table centered-table is-striped is-narrow is-hoverable is-fullwidth">
+            <thead>
+                <th>Title</th>
+                <th>Address</th>
+                <th>Created at</th>
+                <th>Owner username</th>
+                <th>Active</th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let apartment of apartments">
+                    <td>{{apartment.title}}</td>
+                    <td>{{apartment.address.street}},{{apartment.address.neighborhood.name}}</td>
+                    <td>{{apartment.createdAt}}</td>
+                    <td style="color:hsl(171, 77%, 40%);">@{{apartment.user.username}}</td>
+                    <td><span *ngIf="apartment.isActive; else inactive" class="icon has-text-success fa-lg">
+                            <i class="fas fa-check"></i>
+                        </span>
+                        <ng-template #inactive>
+                            <span class="icon has-text-danger fa-lg">
+                                <i class="fas fa-times"></i>
+                            </span>
+                        </ng-template>
+                    </td>
+                    <td>
+                        <button class="button is-small is-danger" *ngIf="apartment.isActive; else activate"
+                            (click)="deleteApartment(apartment)">Deactivate
+                        </button>
+                        <ng-template #activate>
+                            <button class="button is-small is-primary" (click)="activateApartment(apartment)">Activate
+                            </button>
+                        </ng-template>
+                        <button class="button is-small"
+                            style="background-color: rgb(187, 187, 187); color:white; margin-left: 10px;"
+                            (click)="previewProperty(apartment.id)" [routerLink]="'/details'">Preview</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div style="text-align: center;">
+        <button class="button is-success" *ngIf="show" (click)="loadMore()" [disabled]="isButtonDisabled">Load
+            more</button>
+    </div>
+    <br>
+</div>

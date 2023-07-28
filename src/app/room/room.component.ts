@@ -48,7 +48,5 @@ export class RoomComponent implements OnInit {
       });
       this.soba.liked = !this.soba.liked;
     } else this.toastr.info("Please log in to like selected " + this.soba.property);
-
-
   }
 }

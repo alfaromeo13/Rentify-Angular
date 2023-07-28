@@ -1,0 +1,12 @@
+.shadow {
+    box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, .4);
+}
+
+:hover {
+    text-decoration: none;
+}
+
+.bg-image {
+    background-image: url('../../images/blurred.jpeg');
+    background-size: cover;
+}

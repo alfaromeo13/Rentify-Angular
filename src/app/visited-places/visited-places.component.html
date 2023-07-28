@@ -1,0 +1,55 @@
+<img src="image.jpg" class="blurredbg">
+<nav style="margin-top: 2.2vh;" aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [class.disabled]="filterService.pageNo == 1" (click)="set_page_no(filterService.pageNo-1)">
+        <a class="page-link">Previous</a>
+      </li>
+      <li *ngIf="filterService.pageNo > PAGE_TOLERANCE + 1" class="page-item"><a class="page-link"
+          (click)="set_page_no(1)">1</a></li>
+      <li *ngIf="filterService.pageNo > PAGE_TOLERANCE + 1" class="unhoverable page-item"><a class="page-link">...</a>
+      </li>
+      <span *ngFor="let item of [].constructor(PAGE_TOLERANCE * 2 + 1); let i = index;">
+        <li [class.active]="filterService.pageNo === (filterService.pageNo + i - PAGE_TOLERANCE)"
+          *ngIf="(filterService.pageNo + i - PAGE_TOLERANCE) > 0" class="page-item">
+          <a [ngClass]="{ 'page-link': true, 'active': filterService.pageNo === (filterService.pageNo + i - PAGE_TOLERANCE) }"
+            (click)="set_page_no(filterService.pageNo + i - PAGE_TOLERANCE)">
+            {{filterService.pageNo + i - PAGE_TOLERANCE}}
+          </a>
+        </li>
+      </span>
+      <li *ngIf="filterService.pageNo < filterService.pageNo + PAGE_TOLERANCE" class="unhoverable page-item"><a
+          class="page-link">...</a></li>
+      <li *ngIf="filterService.pageNo > 1" class="page-item"><a class="page-link"
+          (click)="set_page_no(filterService.pageNo + PAGE_TOLERANCE)">{{filterService.pageNo + PAGE_TOLERANCE}}</a></li>
+      <li class="page-item" (click)="set_page_no(filterService.pageNo + 1)">
+        <a class="page-link">Next</a>
+      </li>
+    </ul>
+  </nav>
+  
+  <app-filter *ngIf="this.filterService.isActive"></app-filter>
+  
+  <div class="rooms-container" style="padding-bottom:30px">
+    <div style="margin: auto;" class="container">
+      <div class="columns is-centered">
+        <div class="column is-10">
+          <div class="columns is-multiline">
+            <div *ngFor="let soba of this.apartmentService.apartmani" class="column is-one-third">
+              <app-room [soba]="soba"></app-room>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="containerz" *ngIf="showLoader">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+  
+  <div *ngIf="showEmpty" class="buk">
+    <p class="title main-text">Oops! Looks empty. Nothing to see here :/</p>
+  </div>

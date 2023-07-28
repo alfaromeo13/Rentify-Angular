@@ -1,257 +1,135 @@
-<!-- START NAV -->
-<nav class="navbar is-white">
+<div class="bg-image" style="height: 100vh;">
     <div class="container">
-        <div class="navbar-brand">
-            <a class="navbar-item brand-text" href="../index.html">
-                Bulma Admin
-            </a>
-            <div class="navbar-burger burger" data-target="navMenu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-        <div id="navMenu" class="navbar-menu">
-            <div class="navbar-start">
-                <a class="navbar-item" href="admin.html">
-                    Home
-                </a>
-                <a class="navbar-item" href="admin.html">
-                    Orders
-                </a>
-                <a class="navbar-item" href="admin.html">
-                    Payments
-                </a>
-                <a class="navbar-item" href="admin.html">
-                    Exceptions
-                </a>
-                <a class="navbar-item" href="admin.html">
-                    Reports
-                </a>
-            </div>
+        <div class="columns">
+            <div class="column is-12" style="margin-top:30px;">
+                <section class="hero welcome is-small shadow" style="background-color: rgba(244, 244, 244, 0.5);">
+                    <div class="hero-body">
+                        <div class="container">
+                            <h1 class="title" style="color:hsl(141, 53%, 53%);font-weight: 300;">
+                                Hello, Admin.
+                            </h1>
+                            <h2 class="subtitle">
+                                I hope you are having a great day!
+                            </h2>
+                        </div>
+                    </div>
+                </section>
+                <section class="info-tiles">
+                    <div class="tile is-ancestor has-text-centered" style="margin-top: 10px;">
+                        <div class="tile is-parent">
+                            <article class="tile is-child box shadow">
+                                <a routerLink="/users">
+                                    <p class="title" style="color:hsl(204, 86%, 53%)">{{users}}</p>
+                                    <p class="subtitle">Users</p>
+                                </a>
+                            </article>
+                        </div>
+                        <div class="tile is-parent">
+                            <article class="tile is-child box shadow">
+                                <a routerLink="/properties" (click)="setSelected('Apartment')">
+                                    <p class="title" style="color:hsl(204, 86%, 53%)">{{apartments}}</p>
+                                    <p class="subtitle">Apartments</p>
+                                </a>
+                            </article>
+                        </div>
+                        <div class="tile is-parent">
+                            <article class="tile is-child box shadow">
+                                <a routerLink="/properties" (click)="setSelected('Studio')">
+                                    <p class="title" style="color:hsl(204, 86%, 53%)">{{studios}}</p>
+                                    <p class="subtitle">Studios</p>
+                                </a>
+                            </article>
+                        </div>
+                        <div class="tile is-parent">
+                            <article class="tile is-child box shadow">
+                                <a routerLink="/properties" (click)="setSelected('House')">
+                                    <p class="title" style="color:hsl(204, 86%, 53%)">{{houses}}</p>
+                                    <p class="subtitle">Houses</p>
+                                </a>
+                            </article>
+                        </div>
+                        <div class="tile is-parent">
+                            <article class="tile is-child box shadow">
+                                <a routerLink="/properties" (click)="setSelected('Condo')">
+                                    <p class="title" style="color:hsl(204, 86%, 53%)">{{condos}}</p>
+                                    <p class="subtitle">Condos</p>
+                                </a>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+                <div class="columns" style="margin-top: 20px;">
+                    <div class="column is-6">
+                        <div class="card events-card" style="overflow: auto;">
+                            <header class="card-header">
+                                <p class="card-header-title"
+                                    style="color:hsl(204, 86%, 53%);justify-content: center;font-size:18px;">
+                                    Property notifications
+                                </p>
+                            </header>
+                            <div class="card-table">
+                                <div class="content" style="height: 51.5vh; overflow: auto;font-size: 20px;">
+                                    <table class="table is-fullwidth is-striped" style="overflow: auto;">
+                                        <tbody>
+                                            <tr *ngFor="let apartment of this.adminService.apartmentList">
+                                                <td width="5%"><i class="fa fa-bell-o"></i></td>
+                                                <td><i><span
+                                                            style="color: hsl(171, 100%, 41%);"><b>@{{apartment.user.username}}</b></span>
+                                                        created {{apartment.propertyType.name}}
+                                                        <span style="color: hsl(171, 100%, 41%);margin-left: 2px;">
+                                                            {{apartment.createdAt}}</span></i></td>
+                                                <td class="level-right" style="gap: 10px;height: 100px;">
+                                                    <a class="button is-medium"
+                                                        style="background-color: rgb(187, 187, 187); color:white;"
+                                                        (click)="previewProperty(apartment.id)"
+                                                        [routerLink]="'/details'">Preview</a>
+                                                    <a class="button is-medium is-primary" style="color:white"
+                                                        (click)="accept(apartment)">Accept</a>
+                                                    <a class="button is-medium is-danger" style="color:white"
+                                                        (click)="decline(apartment)">Decline</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-6">
+                        <div class="card events-card" style="overflow: auto;">
+                            <header class="card-header">
+                                <p class="card-header-title"
+                                    style="justify-content:center;color:hsl(348, 100%, 61%); font-size: 18px;">
+                                    Reports
 
-        </div>
-    </div>
-</nav>
-<!-- END NAV -->
-<div class="container">
-    <div class="columns">
-        <div class="column is-3 ">
-            <aside class="menu is-hidden-mobile">
-                <p class="menu-label">
-                    General
-                </p>
-                <ul class="menu-list">
-                    <li><a class="is-active">Dashboard</a></li>
-                    <li><a>Customers</a></li>
-                    <li><a>Other</a></li>
-                </ul>
-                <p class="menu-label">
-                    Administration
-                </p>
-                <ul class="menu-list">
-                    <li><a>Team Settings</a></li>
-                    <li>
-                        <a>Manage Your Team</a>
-                        <ul>
-                            <li><a>Members</a></li>
-                            <li><a>Plugins</a></li>
-                            <li><a>Add a member</a></li>
-                            <li><a>Remove a member</a></li>
-                        </ul>
-                    </li>
-                    <li><a>Invitations</a></li>
-                    <li><a>Cloud Storage Environment Settings</a></li>
-                    <li><a>Authentication</a></li>
-                    <li><a>Payments</a></li>
-                </ul>
-                <p class="menu-label">
-                    Transactions
-                </p>
-                <ul class="menu-list">
-                    <li><a>Payments</a></li>
-                    <li><a>Transfers</a></li>
-                    <li><a>Balance</a></li>
-                    <li><a>Reports</a></li>
-                </ul>
-            </aside>
-        </div>
-        <div class="column is-9">
-            <nav class="breadcrumb" aria-label="breadcrumbs">
-                <ul>
-                    <li><a href="../">Bulma</a></li>
-                    <li><a href="../">Templates</a></li>
-                    <li><a href="../">Examples</a></li>
-                    <li class="is-active"><a href="#" aria-current="page">Admin</a></li>
-                </ul>
-            </nav>
-            <section class="hero is-info welcome is-small">
-                <div class="hero-body">
-                    <div class="container">
-                        <h1 class="title">
-                            Hello, Admin.
-                        </h1>
-                        <h2 class="subtitle">
-                            I hope you are having a great day!
-                        </h2>
-                    </div>
-                </div>
-            </section>
-            <section class="info-tiles">
-                <div class="tile is-ancestor has-text-centered">
-                    <div class="tile is-parent">
-                        <article class="tile is-child box">
-                            <p class="title">439k</p>
-                            <p class="subtitle">Users</p>
-                        </article>
-                    </div>
-                    <div class="tile is-parent">
-                        <article class="tile is-child box">
-                            <p class="title">59k</p>
-                            <p class="subtitle">Products</p>
-                        </article>
-                    </div>
-                    <div class="tile is-parent">
-                        <article class="tile is-child box">
-                            <p class="title">3.4k</p>
-                            <p class="subtitle">Open Orders</p>
-                        </article>
-                    </div>
-                    <div class="tile is-parent">
-                        <article class="tile is-child box">
-                            <p class="title">19</p>
-                            <p class="subtitle">Exceptions</p>
-                        </article>
-                    </div>
-                </div>
-            </section>
-            <div class="columns">
-                <div class="column is-6">
-                    <div class="card events-card">
-                        <header class="card-header">
-                            <p class="card-header-title">
-                                Events
-                            </p>
-                            <a href="#" class="card-header-icon" aria-label="more options">
-                                <span class="icon">
-                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                </span>
-                            </a>
-                        </header>
-                        <div class="card-table">
-                            <div class="content">
-                                <table class="table is-fullwidth is-striped">
-                                    <tbody>
-                                        <tr>
-                                            <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                            <td>Lorum ipsum dolem aire</td>
-                                            <td class="level-right"><a class="button is-small is-primary"
-                                                    href="#">Action</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                            <td>Lorum ipsum dolem aire</td>
-                                            <td class="level-right"><a class="button is-small is-primary"
-                                                    href="#">Action</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                            <td>Lorum ipsum dolem aire</td>
-                                            <td class="level-right"><a class="button is-small is-primary"
-                                                    href="#">Action</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                            <td>Lorum ipsum dolem aire</td>
-                                            <td class="level-right"><a class="button is-small is-primary"
-                                                    href="#">Action</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                            <td>Lorum ipsum dolem aire</td>
-                                            <td class="level-right"><a class="button is-small is-primary"
-                                                    href="#">Action</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                            <td>Lorum ipsum dolem aire</td>
-                                            <td class="level-right"><a class="button is-small is-primary"
-                                                    href="#">Action</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                            <td>Lorum ipsum dolem aire</td>
-                                            <td class="level-right"><a class="button is-small is-primary"
-                                                    href="#">Action</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                            <td>Lorum ipsum dolem aire</td>
-                                            <td class="level-right"><a class="button is-small is-primary"
-                                                    href="#">Action</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                            <td>Lorum ipsum dolem aire</td>
-                                            <td class="level-right"><a class="button is-small is-primary"
-                                                    href="#">Action</a></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <footer class="card-footer">
-                            <a href="#" class="card-footer-item">View All</a>
-                        </footer>
-                    </div>
-                </div>
-                <div class="column is-6">
-                    <div class="card">
-                        <header class="card-header">
-                            <p class="card-header-title">
-                                Inventory Search
-                            </p>
-                            <a href="#" class="card-header-icon" aria-label="more options">
-                                <span class="icon">
-                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                </span>
-                            </a>
-                        </header>
-                        <div class="card-content">
-                            <div class="content">
-                                <div class="control has-icons-left has-icons-right">
-                                    <input class="input is-large" type="text" placeholder="">
-                                    <span class="icon is-medium is-left">
-                                        <i class="fa fa-search"></i>
-                                    </span>
-                                    <span class="icon is-medium is-right">
-                                        <i class="fa fa-check"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <header class="card-header">
-                            <p class="card-header-title">
-                                User Search
-                            </p>
-                            <a href="#" class="card-header-icon" aria-label="more options">
-                                <span class="icon">
-                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                </span>
-                            </a>
-                        </header>
-                        <div class="card-content">
-                            <div class="content">
-                                <div class="control has-icons-left has-icons-right">
-                                    <input class="input is-large" type="text" placeholder="">
-                                    <span class="icon is-medium is-left">
-                                        <i class="fa fa-search"></i>
-                                    </span>
-                                    <span class="icon is-medium is-right">
-                                        <i class="fa fa-check"></i>
-                                    </span>
+                                    <svg style="fill:hsl(348, 100%, 61%); margin-left: 10px;"
+                                        xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                        <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                                        <path
+                                            d="M64 32C64 14.3 49.7 0 32 0S0 14.3 0 32V64 368 480c0 17.7 14.3 32 32 32s32-14.3 32-32V352l64.3-16.1c41.1-10.3 84.6-5.5 122.5 13.4c44.2 22.1 95.5 24.8 141.7 7.4l34.7-13c12.5-4.7 20.8-16.6 20.8-30V66.1c0-23-24.2-38-44.8-27.7l-9.6 4.8c-46.3 23.2-100.8 23.2-147.1 0c-35.1-17.6-75.4-22-113.5-12.5L64 48V32z" />
+                                    </svg>
+                                </p>
+
+                            </header>
+                            <div class="card-table">
+                                <div class="content" style="height: 51.5vh; font-size: 20px; overflow: auto;">
+                                    <table class="table is-fullwidth is-striped" style="overflow: auto;">
+                                        <tbody>
+                                            <tr *ngFor="let report of this.notificationService.notifications">
+                                                <td><i><span style="color: hsl(171, 100%, 41%);"><b>@{{report.senderUsername}}:</b>
+                                                        </span>
+                                                        {{report.message}}</i></td>
+                                                <td class="level-right"> <svg xmlns="http://www.w3.org/2000/svg"
+                                                        height="1.5em" viewBox="0 0 448 512"
+                                                        style="cursor: pointer;margin-right: 20px; margin-top: 4px;"
+                                                        (click)="deleteReport(report)">
+                                                        <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                                                        <path style="fill: red;"
+                                                            d="M170.5 51.6L151.5 80h145l-19-28.4c-1.5-2.2-4-3.6-6.7-3.6H177.1c-2.7 0-5.2 1.3-6.7 3.6zm147-26.6L354.2 80H368h48 8c13.3 0 24 10.7 24 24s-10.7 24-24 24h-8V432c0 44.2-35.8 80-80 80H112c-44.2 0-80-35.8-80-80V128H24c-13.3 0-24-10.7-24-24S10.7 80 24 80h8H80 93.8l36.7-55.1C140.9 9.4 158.4 0 177.1 0h93.7c18.7 0 36.2 9.4 46.6 24.9zM80 128V432c0 17.7 14.3 32 32 32H336c17.7 0 32-14.3 32-32V128H80zm80 64V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16z" />
+                                                    </svg></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -260,4 +138,5 @@
             </div>
         </div>
     </div>
+    <br>
 </div>

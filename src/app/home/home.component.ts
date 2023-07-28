@@ -12,6 +12,7 @@ import { FilterService } from "../filter/filter.service";
 import { ApartmentSearch } from "../models/search.model";
 import { ApartmentDTO } from "../models/apartment.model";
 import { ApartmentService } from "../apartment/apartment.service";
+import { NotificationService } from "../services/notification.service";
 
 @Component({
     selector: 'app-home',
@@ -48,6 +49,7 @@ export class HomeComponent implements OnInit {
 
     constructor(
         private router: Router,
+        public notificationService: NotificationService,
         private cityService: CityService,
         private filterService: FilterService,
         private apartmentService: ApartmentService,
@@ -77,9 +79,11 @@ export class HomeComponent implements OnInit {
             const apartmentSearch: ApartmentSearch = {
                 cityName: cityName,
                 countryCode: countryCode,
+                isActive: true,
             };
 
             if (cityName.length > 0 && countryCode.length > 0) {
+                localStorage.setItem('apartmentSearch', JSON.stringify(apartmentSearch));
                 this.filterService.filter(apartmentSearch, 0).subscribe(
                     (apartmentDTOs: ApartmentDTO[]) => {
                         console.log(apartmentDTOs);

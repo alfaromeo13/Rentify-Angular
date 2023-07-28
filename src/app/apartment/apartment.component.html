@@ -1,6 +1,6 @@
 <img src="image.jpg" class="blurredbg">
 
-<button class="button is-primary search" (click)="click()">
+<button class="button is-primary search" (click)="click()" *ngIf="this.apartmentService.isFilterVisible">
   <span class="icon is-large">
     <svg xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 0 460 512">
       <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
@@ -15,7 +15,7 @@
   </span>
 </button>
 
-<nav style="margin-top: 2vh; color:hsl(171, 77%, 40%)" aria-label="Page navigation example">
+<nav style="margin-top: 2.2vh;" aria-label="Page navigation example">
   <ul class="pagination justify-content-center">
     <li class="page-item" [class.disabled]="filterService.pageNo == 1" (click)="set_page_no(filterService.pageNo-1)">
       <a class="page-link">Previous</a>
@@ -27,8 +27,10 @@
     <span *ngFor="let item of [].constructor(PAGE_TOLERANCE * 2 + 1); let i = index;">
       <li [class.active]="filterService.pageNo === (filterService.pageNo + i - PAGE_TOLERANCE)"
         *ngIf="(filterService.pageNo + i - PAGE_TOLERANCE) > 0" class="page-item">
-        <a class="page-link" (click)="set_page_no(filterService.pageNo + i - PAGE_TOLERANCE)">{{filterService.pageNo + i
-          - PAGE_TOLERANCE}}</a>
+        <a [ngClass]="{ 'page-link': true, 'active': filterService.pageNo === (filterService.pageNo + i - PAGE_TOLERANCE) }"
+          (click)="set_page_no(filterService.pageNo + i - PAGE_TOLERANCE)">
+          {{filterService.pageNo + i - PAGE_TOLERANCE}}
+        </a>
       </li>
     </span>
     <li *ngIf="filterService.pageNo < filterService.pageNo + PAGE_TOLERANCE" class="unhoverable page-item"><a
@@ -41,7 +43,8 @@
   </ul>
 </nav>
 
-<app-filter></app-filter>
+<app-filter *ngIf="this.filterService.isActive"></app-filter>
+<app-report *ngIf="this.notificationService.isActive"></app-report>
 
 <div class="rooms-container" style="padding-bottom:30px">
   <div style="margin: auto;" class="container">
@@ -57,6 +60,13 @@
   </div>
 </div>
 
-<div *ngIf="this.apartmentService.apartmani.length === 0" class="buk">
+<div class="containerz" *ngIf="showLoader">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+</div>
+
+<div *ngIf="showEmpty" class="buk">
   <p class="title main-text">Oops! Looks empty. Nothing to see here :/</p>
 </div>

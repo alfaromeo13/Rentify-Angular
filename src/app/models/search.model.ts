@@ -1,6 +1,8 @@
 export class ApartmentSearch {
     id?: number[];
     type?: string[];
+    isActive?: boolean;
+    isApproved?: boolean;
     period?: string[];
     minPrice?: number;
     maxPrice?: number;
@@ -11,10 +13,10 @@ export class ApartmentSearch {
     minSquareMeters?: number;
     maxSquareMeters?: number;
     countryName?: string;
-    countryCode?:string;
+    countryCode?: string;
     cityName?: string;
     neighborhoodName?: string;
-    userId?: number;
+    username?: string;
     availableFrom?: Date;
     availableTo?: Date;
     parking?: string;

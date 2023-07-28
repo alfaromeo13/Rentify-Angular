@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApartmentService } from '../apartment/apartment.service';
 import { AuthService } from '../auth/services/auth.service';
-import { FilterService } from '../filter/filter.service';
-import { NavbarLink } from './navbar.model';
+import { MessageService } from '../messages/message.service';
+import { NotificationService } from '../services/notification.service';
+import { NavbarService } from './navbar.service';
 
 @Component({
     selector: 'app-navbar',
@@ -15,26 +16,25 @@ export class NavbarComponent implements OnInit {
     isMobileNavActive: boolean = false;
     isUserAuthenticated: boolean = false;
 
-    //we load navbar elements dynamicaly with ngFor
-    links: NavbarLink[] = [
-        {
-            name: "Test",
-            path: "/test"
-        },
-        {
-            name: "Users",
-            path: "/users"
-        }
-    ];
-
     constructor(
         private router: Router,
+        private notificationService: NotificationService,
+        public messageService: MessageService,
         public authService: AuthService,
+        public navbarService: NavbarService,
         private apartmentService: ApartmentService,
     ) { }
 
 
     ngOnInit(): void {
+        const username = localStorage.getItem('username');
+        const token = localStorage.getItem('access-token');
+        if (token && username) {
+            this.isUserAuthenticated = true;
+            this.authService.isAuthenticated.next(true);
+            this.authService.username = username;
+        }
+
         this.authService.isAuthenticated.subscribe(data => {
             this.isUserAuthenticated = data;
         });
@@ -44,13 +44,17 @@ export class NavbarComponent implements OnInit {
         this.isMobileNavActive = !this.isMobileNavActive;
     }
 
-    showLiked():void{
-        this.apartmentService.filterService.pageNo=1;
+    showReportModal(): void {
+        this.notificationService.isActive = true;
+    }
+
+    showLiked(): void {
+        this.apartmentService.filterService.pageNo = 1;
         this.apartmentService.allFavorite();
     }
 
     logout(): void {
         this.authService.logout();
-        this.router.navigate(['login'])
+        this.router.navigate(['login']);
     }
 }

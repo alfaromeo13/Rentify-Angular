@@ -2,28 +2,36 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
+import { CreateConversationDTO } from "../models/create-conversation.model";
+import { MessageDTO } from "../models/message.model";
+import { RedisConversation } from "../models/redis-conversation.model";
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class MessageService {
+
+    insideMessages: boolean = false;
+    selectedConversationId: string = '';
+    conversations: RedisConversation[] = []; // lista konverzacija
+    currentMessages: MessageDTO[] = []; //poruke za trenutno kliknutu konverzaciju
+
     constructor(private httpClient: HttpClient) { }
 
     // kreiranje konverzacije
     // conversation => {usernameFrom: "", usernameTo: ""} (bez poruka, samo kreiranje)
-    createNewConversation(conversation: any): Observable<any> {
-        const url = `${environment.apiUrl}conversations`;
-        return this.httpClient.post(url, conversation, {headers: {'Content-Type': 'application/json'}});
+    createNewConversation(conversation: CreateConversationDTO): Observable<any> {
+        const url = `${environment.apiUrl}conversations/`;
+        return this.httpClient.post(url, conversation, { headers: { 'Content-Type': 'application/json' } });
     }
 
     // izlistavanje svih konverzacija za ulogovanog korisnika
-    getAllConversationsByUser(username: string): Observable<any> {
+    getAllConversationsByUser(username: string): Observable<RedisConversation[]> {
         const url = `${environment.apiUrl}conversations/by-user/${username}`;
-        return this.httpClient.get(url, {headers: {'Content-Type': 'application/json'}});
+        return this.httpClient.get<RedisConversation[]>(url, { headers: { 'Content-Type': 'application/json' } });
     }
 
     // izlistavanje svih poruka za odredjenu konverzaciju
-    getMessagesFromConversationById(conversationId: string): Observable<any> {
+    getMessagesFromConversationById(conversationId: string): Observable<MessageDTO[]> {
         const url = `${environment.apiUrl}conversations/${conversationId}/messages`;
-        return this.httpClient.get(url, {headers: {'Content-Type': 'application/json'}});
+        return this.httpClient.get<MessageDTO[]>(url, { headers: { 'Content-Type': 'application/json' } });
     }
-
 }

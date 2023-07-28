@@ -1,9 +1,9 @@
-import { HttpErrorResponse } from "@angular/common/http";
+import { HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
-import { catchError } from "rxjs";
+import { BehaviorSubject, catchError, filter, take } from "rxjs";
 import { switchMap } from "rxjs";
 import { throwError } from "rxjs";
 import { Observable } from "rxjs";
@@ -12,36 +12,67 @@ import { AuthService } from "../services/auth.service";
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
 
+  private isRefreshing = false;
+  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
   constructor(
     private router: Router,
     private toastr: ToastrService,
     private authService: AuthService) { }
 
+  private addAuthorizationHeader(req: HttpRequest<any>): HttpRequest<any> {
+    const accessToken = localStorage.getItem('access-token');
+    if (accessToken) {
+      // Set the 'Authorization' header with the access token
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${accessToken}`
+      });
+      return req.clone({ headers });
+    }
+    return req;
+  }
+
+
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    //mi ovdje mozemo samo presresti zahtjev,zato treba da sacekamo da dobijemo
-    //odgovor na taj zahtjev a onda da hendlujemo gresku ako se desila uopste(gledamo http status)
-    return next.handle(req)
-      .pipe(
-        catchError((errorResponse: HttpErrorResponse) => {
-          if (errorResponse.status === 401) {
-            if (localStorage.getItem('refresh-token') != null) {
-              return this.authService.refresh_token().pipe(
-                switchMap(() => {
-                  // Retry the original request with the updated tokens
-                  const newHeaders = req.headers
-                    .set('Authorization', 'Bearer ' + localStorage.getItem('access-token'));
-                  const newReq = req.clone({ headers: newHeaders });
-                  return next.handle(newReq) as Observable<HttpEvent<any>>;
-                }));
-            } else { //if we got 401 but there wasn't any token
-              this.toastr.info('Please log in to continue');
-              this.router.navigate(['login']);
-            }
-          } else if (errorResponse.status === 400) {
+    return next.handle(this.addAuthorizationHeader(req)).pipe(
+      catchError((errorResponse: HttpErrorResponse) => {
+        if (errorResponse.status === 401) {
+          if (!this.isRefreshing) {
+            this.isRefreshing = true;
+            this.refreshTokenSubject.next(null);
+
+            return this.authService.refresh_token().pipe(
+              switchMap((responseData: any) => {
+                this.isRefreshing = false;
+                this.refreshTokenSubject.next(responseData.token);
+
+                // Retry the original request with the new token
+                return next.handle(this.addAuthorizationHeader(req));
+              }),
+              catchError((refreshError) => {
+                this.isRefreshing = false;
+                this.toastr.warning('Session timed out. Please log in again.');
+                this.authService.logout();
+                this.router.navigate(['login']);
+                return throwError(refreshError);
+              })
+            );
+          } else {
+            // If the token is already being refreshed, wait for the new token
+            return this.refreshTokenSubject.pipe(
+              filter(token => token !== null),
+              take(1),
+              switchMap(() => next.handle(this.addAuthorizationHeader(req)))
+            );
+          }
+        } else if (errorResponse.status === 400 || errorResponse.status === 413) {
+          if (errorResponse.error && errorResponse.error.errors) {
             for (const error of errorResponse.error.errors)
               this.toastr.warning(error.defaultMessage);
-          } return throwError(errorResponse);
-        })
-      );
+          }
+        }
+        return throwError(errorResponse);
+      })
+    );
   }
 }

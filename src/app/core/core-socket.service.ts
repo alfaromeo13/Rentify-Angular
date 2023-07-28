@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { BehaviorSubject, filter, map, take } from "rxjs";
 import { environment } from "src/environments/environment";
 import { Client } from '@stomp/stompjs';
@@ -7,7 +7,7 @@ import * as SockJS from "sockjs-client";
 
 
 @Injectable({
-    providedIn: 'root' 
+    providedIn: 'root'
 })
 export class CoreSocketService {
     static connected: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -28,16 +28,17 @@ export class CoreSocketService {
 
     static stringify(data: any) {
         try {
-            return JSON.stringify(data); // {} =>  '{}' // application/json ~ plain text
+            return JSON.stringify(data);
+            //this method doesn't return json instead it returns json as a string 
+            //like this  {} =>  '{}' // application/json ~ it sends plain text
         } catch (e) {
-        console.log('Could not stringify object');
+            console.log('Could not stringify object');
             return '';
         }
     }
 
-
     private get url() {
-        return `http://localhost:8080/websocket/subscribe`; // ovdje ide tvoja ruta za CONNECT
+        return `http://localhost:8080/websocket/subscribe`; // ovdje ide ruta za CONNECT
     }
 
     static onConnect(callback: any) {
@@ -53,22 +54,24 @@ export class CoreSocketService {
 
     getClient = () => this._stompClient;
 
+    //ovo nam otvara soket konekciju ka definisanom url()-u na bekendu
+    //(tj na STOMP endpoint u konfiguracionoj klasi) 
     initConnection(callback?: () => void) {
         this._stompClient = new Client({
-        webSocketFactory: () => {
-            console.log(this.url);
-            return new SockJS(this.url);
-        },
-        debug: function(str: any) {
-            if (environment.production) {
-                console.log(str);
-            }
-        },
+            webSocketFactory: () => {
+                console.log(this.url);
+                return new SockJS(this.url);
+            },
+            debug: function (str: any) {
+                if (environment.production) {
+                    console.log(str);
+                }
+            },
             reconnectDelay: 5000,
             heartbeatIncoming: 4000,
             heartbeatOutgoing: 4000
         });
-
+        //ovo iznad radi reconnect svakih 5 sekundi
         this._stompClient.onConnect = CoreSocketService.onConnect.bind(this, callback);
         this._stompClient.onStompError = CoreSocketService.onStompError;
         this._stompClient.activate();

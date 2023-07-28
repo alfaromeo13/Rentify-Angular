@@ -1,0 +1,96 @@
+<div class="bg-image" style="height: 97vh;">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-12" style="margin-top:30px;">
+        <section class="hero welcome is-small shadow" style="background-color: rgba(244, 244, 244, 0.5);">
+          <div class="hero-body">
+            <div class="container">
+              <h1 class="title" style="color:hsl(141, 53%, 53%);font-weight: 300;">
+                Hello, @{{this.authService.username}}.
+              </h1>
+              <h2 class="subtitle">
+                I hope you are having a great day!
+              </h2>
+            </div>
+          </div>
+        </section>
+        <div class="columns" style="margin-top: 30px;">
+          <div class="column is-6">
+            <div class="container" style="width: 1180px;">
+              <canvas id="myChart"></canvas>
+            </div>
+          </div>
+          <div class="column is-4" style="margin-left:330px;width: 530px;">
+            <div class="card events-card" style="overflow: auto;">
+              <header class="card-header">
+                <p class="card-header-title" style="justify-content:center;color:hsl(204, 86%, 53%); font-size: 18px;">
+                  Notifications
+                  <svg xmlns="http://www.w3.org/2000/svg" height="1.3em"
+                    style="fill:hsl(44, 100%, 50%);margin-left: 10px;" viewBox="0 0 448 512">
+                    <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                    <path
+                      d="M224 0c-17.7 0-32 14.3-32 32V51.2C119 66 64 130.6 64 208v18.8c0 47-17.3 92.4-48.5 127.6l-7.4 8.3c-8.4 9.4-10.4 22.9-5.3 34.4S19.4 416 32 416H416c12.6 0 24-7.4 29.2-18.9s3.1-25-5.3-34.4l-7.4-8.3C401.3 319.2 384 273.9 384 226.8V208c0-77.4-55-142-128-156.8V32c0-17.7-14.3-32-32-32zm45.3 493.3c12-12 18.7-28.3 18.7-45.3H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7z" />
+                  </svg>
+                </p>
+              </header>
+              <div class="card-table">
+                <div style="height: 51.5vh; font-size: 20px; overflow: auto;">
+                  <table class="table is-fullwidth is-striped" style="overflow: auto;">
+                    <tbody>
+                      <tr *ngFor="let report of this.notificationService.notifications">
+                        <td class="report-cell"><i><span
+                              style="color: hsl(171, 100%, 41%);"><b>@{{report.senderUsername}}</b>
+                            </span>
+                            {{report.message}}</i>
+                          <span class="level-right"> <svg xmlns="http://www.w3.org/2000/svg" height="1.8em"
+                              viewBox="0 0 448 512" style="cursor: pointer;margin-bottom: 5px;margin: 5px;"
+                              (click)="deleteReport(report)">
+                              <path style="fill: red;"
+                                d="M170.5 51.6L151.5 80h145l-19-28.4c-1.5-2.2-4-3.6-6.7-3.6H177.1c-2.7 0-5.2 1.3-6.7 3.6zm147-26.6L354.2 80H368h48 8c13.3 0 24 10.7 24 24s-10.7 24-24 24h-8V432c0 44.2-35.8 80-80 80H112c-44.2 0-80-35.8-80-80V128H24c-13.3 0-24-10.7-24-24S10.7 80 24 80h8H80 93.8l36.7-55.1C140.9 9.4 158.4 0 177.1 0h93.7c18.7 0 36.2 9.4 46.6 24.9zM80 128V432c0 17.7 14.3 32 32 32H336c17.7 0 32-14.3 32-32V128H80zm80 64V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16z" />
+                            </svg></span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <section class="info-tiles" style="margin-left: 45px;margin-top: 20px;">
+          <div class="tile is-ancestor has-text-centered">
+            <div class="tile is-parent">
+              <article class="tile is-child box shadow">
+                <a (click)="filterMyApartments()">
+                  <p class="subtitle" style="color: hsl(204, 86%, 53%);"><b>My renting properties</b></p>
+                </a>
+              </article>
+            </div>
+            <div class="tile is-parent">
+              <article class="tile is-child box shadow">
+                <a (click)="showBookingHistory()">
+                  <p class="subtitle" style="color: hsl(204, 86%, 53%)"><b>My booking history</b></p>
+                </a>
+              </article>
+            </div>
+            <div class="tile is-parent">
+              <article class="tile is-child box shadow">
+                <a (click)="showRentingHistory()">
+                  <p class="subtitle" style="color: hsl(204, 86%, 53%)"><b>Places i visited</b></p>
+                </a>
+              </article>
+            </div>
+            <div class="tile is-parent">
+              <article class="tile is-child box shadow">
+                <a (click)="deleteAccount()">
+                  <p class="subtitle" style="color: hsl(348, 100%, 61%)"><b>Close my account</b></p>
+                </a>
+              </article>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+  <br>
+</div>

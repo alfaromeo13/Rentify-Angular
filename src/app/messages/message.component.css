@@ -1,0 +1,102 @@
+.chatbox-holder {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: flex-end;
+    height: 0;
+}
+
+.chatbox {
+    width: 400px;
+    height: 400px;
+    margin: 0 20px 0 0;
+    position: relative;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .2);
+    display: flex;
+    flex-flow: column;
+    border-radius: 10px 10px 0 0;
+    background: white;
+    bottom: 0;
+    transition: .1s ease-out;
+}
+
+.chat-messages {
+    padding: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-flow: row wrap;
+    align-content: flex-start;
+    flex: 1;
+}
+
+.bg-image {
+    background-image: url('../../images/blurred.jpeg');
+    background-size: cover;
+}
+
+.message-box-holder {
+    width: 100%;
+    margin: 0 0 15px;
+    display: flex;
+    flex-flow: column;
+    align-items: flex-end;
+}
+
+hr {
+    background-color: rgba(134, 134, 134, 0.236);
+}
+
+div.media:hover h4 {
+    color: hsl(171, 100%, 41%);
+    font-style: italic;
+}
+
+.non-selectable-button {
+    pointer-events: none;
+}
+
+.keep-styles h4 {
+    color: hsl(171, 100%, 41%) !important;
+    font-style: italic !important;
+}
+
+.message-box {
+    padding: 6px 10px;
+    border-radius: 20px;
+    position: relative;
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid rgba(100, 170, 0, .1);
+    color: rgb(0, 0, 0);
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+    max-width: 70vh;
+}
+
+.message-box:after {
+    content: "";
+    position: absolute;
+    border: 10px solid transparent;
+    border-top: 10px solid rgba(255, 255, 255, 0.8);
+    border-right: none;
+    bottom: -22px;
+    right: 15px;
+}
+
+.message-partner {
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid rgba(86, 157, 147, .1);
+    align-self: flex-start;
+    max-width: 60vh;
+}
+
+.message-partner:after {
+    right: auto;
+    bottom: auto;
+    top: -22px;
+    left: 13px;
+    border: 10px solid transparent;
+    border-bottom: 10px solid rgba(255, 255, 255, 0.8);
+    border-left: none;
+}

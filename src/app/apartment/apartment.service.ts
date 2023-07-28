@@ -1,6 +1,6 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, tap } from "rxjs";
 import { environment } from "src/environments/environment";
 import { FilterService } from "../filter/filter.service";
 import { ApartmentDTO } from "../models/apartment.model";
@@ -10,8 +10,8 @@ import { ApartmentSearch } from "../models/search.model";
 
 @Injectable({ providedIn: 'root' })
 export class ApartmentService {
-
-  selectedApartment: ApartmentDTO;
+  isFilterVisible: boolean = true;
+  selectedApartmentId: number;
   apartmentList: ApartmentDTO[] = [];
   apartmani: RoomShowcaseModel[] = [];
 
@@ -32,16 +32,11 @@ export class ApartmentService {
       rez.push(soba);
     }
     this.apartmani = rez;
-    console.log(this.apartmani);
   }
 
   setSelected(pid: number) {
-    this.apartmentList.forEach((apartment: ApartmentDTO) => {
-      if (apartment.id === pid) {
-        this.selectedApartment = apartment;
-        return;
-      }
-    });
+    this.selectedApartmentId = pid;
+    localStorage.setItem('selectedApartmentId', pid + "");
   }
 
   allFavorite(): void {
@@ -49,6 +44,7 @@ export class ApartmentService {
       (apartmentIds: number[]) => { //we get favourite ids
         const apartmentSearch: ApartmentSearch = {
           id: apartmentIds,
+          isActive: true,
         };//we getthose liked apartments with help of search specification
         this.filterService.filter(apartmentSearch, this.filterService.pageNo - 1).subscribe(
           (apartmentDTOs: ApartmentDTO[]) => {
@@ -77,5 +73,11 @@ export class ApartmentService {
   addFavorite(id: number): Observable<any> {
     const url = `${environment.apiUrl}user/favourite-apartment/${id}`;
     return this.httpClient.post(url, null);
+  }
+
+  createApartment(formData: FormData): Observable<any> {
+    const url = `${environment.apiUrl}apartment/`;
+    const headers = new HttpHeaders();
+    return this.httpClient.post(url, formData, { headers });
   }
 }

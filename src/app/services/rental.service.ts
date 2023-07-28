@@ -24,9 +24,15 @@ export class RentalService {
         return this.httpClient.post<number>(url, rentalApartmentDTO);
     }
 
-    //book
+    //book ~ post
     book(rentalApartmentDTO: RentalApartmentDTO): Observable<any> {
         const url = `${environment.apiUrl}rental/`;
         return this.httpClient.post(url, rentalApartmentDTO);
+    }
+
+    //get rentals
+    getIncomes(): Observable<number[]> {
+        const url = `${environment.apiUrl}rental/monthly-incomes`;
+        return this.httpClient.get<number[]>(url);
     }
 }
