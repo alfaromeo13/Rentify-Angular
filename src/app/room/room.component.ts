@@ -13,7 +13,7 @@ import { RoomShowcaseModel } from '../models/roomshowcase';
 export class RoomComponent implements OnInit {
 
   @Input()
-  public soba: RoomShowcaseModel = new RoomShowcaseModel(0, "", "", "", "", .2, "", .1, true);
+  public soba: RoomShowcaseModel = new RoomShowcaseModel(0, "", "", "", "", .2, "", .1, true, true);
 
   ngOnInit(): void {
     this.soba.imgLinks.forEach((baseContent: string) => {

@@ -1,0 +1,21 @@
+.centered-table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.page-item a.page-link {
+    color: hsl(0, 0%, 33%);
+}
+
+.page-item a.page-link:hover,
+.page-item a.page-link:active,
+.page-item a.page-link.active {
+    background-color: hsl(171, 100%, 41%);
+    color: white;
+    border: 1px solid white;
+}
+
+.bg-image {
+    background-image: url('../../images/blurred.jpeg');
+    background-size: cover;
+}

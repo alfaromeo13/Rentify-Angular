@@ -46,79 +46,82 @@ export class AuthService {
             .pipe(tap(responseData => {
                 this.username = loginData.username;
                 localStorage.setItem('username', this.username);
-
-                //otvaramo web soket ka bekendu
-                this.coreSocketService.initConnection();
-
-                //nakon toga se subscribujemo na topic i slusamo na dolazece poruke
-                this.globalSocketService.subscribe("/topic/incoming-conversations", (data: any) => {
-                    console.log(data); // vraca se kompletan conversation objekat
-                    const payload = JSON.parse(data.body);
-                    //dobili smo notifikaciju da je neko poceo konverzaciju sa nama ili mi sa nekim
-                    //pa se subscribujemo na tu konverzaciju
-                    this.subscribeToConversation(payload.id);
-
-                    const conversation: RedisConversation = {
-                        id: payload.id,
-                        usernameFrom: payload.usernameFrom,
-                        usernameTo: payload.usernameTo,
-                        createdAt: payload.createdAt,
-                        isOpened: payload.isOpened,
-                        messages: payload.messages,
-                    };
-
-                    conversation.isClicked = conversation.id === this.messageService.selectedConversationId ? true : false;
-                    conversation.localTime = moment(conversation.createdAt).format('DD/MM/YYYY, h:mm:ss A');
-
-                    if (conversation.usernameFrom !== this.username)
-                        conversation.showNotification = true;
-
-                    this.messageService.conversations.push(conversation);
-                });
-
-                if (this.username === 'johndoe') {
-                    this.globalSocketService.subscribe("/topic/created-apartment", (data: any) => {
-                        const apartment: ApartmentDTO = JSON.parse(data.body);
-                        this.toastr.info('You have new pending properties');
-                        this.adminService.apartmentList.push(apartment);
-                    });
-                }
-
-                this.globalSocketService.subscribe("/topic/notification", (data: any) => {
-                    const notification: NotificationDTO = JSON.parse(data.body);
-                    if (notification.receiverUsername === this.username) {
-                        console.log('stigla je notifikacija');
-                        if (this.username === 'johndoe')
-                            this.toastr.warning('You have new reports');
-                        else
-                            this.toastr.info('You have new notifications');
-                        this.notificationService.notifications.push(notification);
-                    }
-                });
-
                 const access = responseData.token;
                 const refresh = responseData["refresh-token"];
                 localStorage.setItem('access-token', access);
                 localStorage.setItem('refresh-token', refresh);
                 this.isAuthenticated.next(true);//user is logged in
-
-                //subscribuj se na sve ranije userove konverzacije
-                //u ovom trenutku ce se dodati u interceptoru nas token
-                //jer smo u securitiju zabtranili neautorizovan pristup za ove apije 
-                this.previewAllConversationsForCurrentUser();
+                this.openWS();
             }, error => {
                 this.toastr.warning('Login failed')
             }));
     }
 
+    openWS() {
+        //otvaramo web soket ka bekendu
+        this.coreSocketService.initConnection();
+        //nakon toga se subscribujemo na topic i slusamo na dolazece konverzacije
+        const topic = `/topic/incoming-conversation/${this.username}`;
+        this.globalSocketService.subscribe(topic, (data: any) => {
+            console.log(data); // vraca se kompletan conversation objekat
+            const payload = JSON.parse(data.body);
+            //dobili smo notifikaciju da je neko poceo konverzaciju sa nama ili mi sa nekim
+            //pa se subscribujemo na tu konverzaciju
+            this.subscribeToConversation(payload.id);
+
+            const conversation: RedisConversation = {
+                id: payload.id,
+                usernameFrom: payload.usernameFrom,
+                usernameTo: payload.usernameTo,
+                createdAt: payload.createdAt,
+                isOpened: payload.isOpened,
+                messages: payload.messages,
+            };
+
+            conversation.isClicked = conversation.id === this.messageService.selectedConversationId ? true : false;
+            conversation.localTime = moment(conversation.createdAt).format('DD/MM/YYYY, h:mm:ss A');
+
+            if (conversation.usernameFrom !== this.username)
+                conversation.showNotification = true;
+
+            this.messageService.conversations.push(conversation);
+        });
+
+        if (this.username === 'johndoe') {
+            this.globalSocketService.subscribe("/topic/created-apartment", (data: any) => {
+                const apartment: ApartmentDTO = JSON.parse(data.body);
+                this.toastr.info('You have new pending properties');
+                this.adminService.apartmentList.push(apartment);
+            });
+        }
+
+        this.globalSocketService.subscribe("/topic/notification", (data: any) => {
+            const notification: NotificationDTO = JSON.parse(data.body);
+            if (notification.receiverUsername === this.username) {
+                console.log('stigla je notifikacija');
+                if (this.username === 'johndoe')
+                    this.toastr.warning('You have new reports');
+                else
+                    this.toastr.info('You have new notifications');
+                this.notificationService.notifications.push(notification);
+            }
+        });
+
+        //subscribuj se na sve ranije userove konverzacije
+        //u ovom trenutku ce se dodati u interceptoru nas token
+        //jer smo u securitiju zabtranili neautorizovan pristup za ove apije 
+        this.previewAllConversationsForCurrentUser();
+    }
     //prikazujemo sve konverzacije i subscribujemo se na sve njih
     previewAllConversationsForCurrentUser() {
+        this.messageService.conversations = [];
         this.messageService
             .getAllConversationsByUser(this.username)
             .subscribe((data: RedisConversation[]) => {
                 if (data.length > 0) {
-                    this.messageService.conversations = data;
-                    for (const conversation of this.messageService.conversations) {
+                    for (const conversation of data) {
+                        if (conversation.messages.length == 0) continue;
+                        this.messageService.conversations.push(conversation);
                         conversation.isClicked = conversation.id === this.messageService.selectedConversationId ? true : false;
                         conversation.localTime = moment(conversation.createdAt).format('DD/MM/YYYY, h:mm:ss A');
                         conversation.showNotification =
@@ -190,12 +193,15 @@ export class AuthService {
         return this.httpClient.post(url, data);
     }
 
-    logout(): void { //we remove tokens
-        localStorage.removeItem('access-token');
-        localStorage.removeItem('refresh-token');
-        localStorage.removeItem('username');
-        this.coreSocketService.closeConnection();
+    logout(): void { //we remove tokens and clear localstorage
+        localStorage.clear();
+        this.closeConnection();
+        this.username = "";
         this.isAuthenticated.next(false);
+    }
+
+    closeConnection() {
+        this.coreSocketService.closeConnection();
     }
 
     confirm(mail: string, code: string) {

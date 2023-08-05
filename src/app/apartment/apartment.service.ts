@@ -10,7 +10,7 @@ import { ApartmentSearch } from "../models/search.model";
 
 @Injectable({ providedIn: 'root' })
 export class ApartmentService {
-  isFilterVisible: boolean = true;
+  showLoader: boolean = false;
   selectedApartmentId: number;
   apartmentList: ApartmentDTO[] = [];
   apartmani: RoomShowcaseModel[] = [];
@@ -25,7 +25,7 @@ export class ApartmentService {
     for (let apartment of this.apartmentList) {
       var soba = new RoomShowcaseModel(apartment.id, apartment.propertyType.name.toLowerCase(),
         apartment.title, apartment.description, apartment.address.street + ' , ' + apartment.address.neighborhood.name,
-        apartment.price, apartment.period.name, apartment.grade, apartment.liked);
+        apartment.price, apartment.period.name, apartment.grade, apartment.liked, apartment.isActive);
       apartment.images.forEach((image: ImageDTO) => {
         soba.imgLinks.push(image.path);
       });
@@ -50,6 +50,7 @@ export class ApartmentService {
           (apartmentDTOs: ApartmentDTO[]) => {
             this.apartmentList = apartmentDTOs;
             this.generateRooms();
+            this.showLoader = false;
           }, (error) => {
             console.error(error);
           }
@@ -79,5 +80,10 @@ export class ApartmentService {
     const url = `${environment.apiUrl}apartment/`;
     const headers = new HttpHeaders();
     return this.httpClient.post(url, formData, { headers });
+  }
+
+  enableOrDisable(id: number): Observable<any> {
+    const url = `${environment.apiUrl}apartment/reverse-state/${id}`;
+    return this.httpClient.put(url, null);
   }
 }

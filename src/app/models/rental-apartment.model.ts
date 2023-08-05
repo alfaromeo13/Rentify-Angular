@@ -7,6 +7,6 @@ export class RentalApartmentDTO {
     status: StatusDTO;
     user: UserDTO;
     apartmentId: number;
-    startDate: Date;
-    endDate: Date;
+    startDate: string;
+    endDate: string;
 }

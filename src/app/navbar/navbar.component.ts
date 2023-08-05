@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApartmentService } from '../apartment/apartment.service';
 import { AuthService } from '../auth/services/auth.service';
@@ -11,7 +11,7 @@ import { NavbarService } from './navbar.service';
     templateUrl: './navbar.component.html',
     styleUrls: ['navbar.component.css'],
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
 
     isMobileNavActive: boolean = false;
     isUserAuthenticated: boolean = false;
@@ -25,7 +25,6 @@ export class NavbarComponent implements OnInit {
         private apartmentService: ApartmentService,
     ) { }
 
-
     ngOnInit(): void {
         const username = localStorage.getItem('username');
         const token = localStorage.getItem('access-token');
@@ -38,6 +37,14 @@ export class NavbarComponent implements OnInit {
         this.authService.isAuthenticated.subscribe(data => {
             this.isUserAuthenticated = data;
         });
+
+        if (this.isUserAuthenticated) {
+            this.authService.openWS();
+        }
+    }
+
+    ngOnDestroy(): void {
+        this.authService.closeConnection();
     }
 
     toggleMobileView(): void {
@@ -50,6 +57,9 @@ export class NavbarComponent implements OnInit {
 
     showLiked(): void {
         this.apartmentService.filterService.pageNo = 1;
+        this.apartmentService.apartmani = [];
+        this.apartmentService.apartmentList = [];
+        localStorage.setItem('liked', 'true');
         this.apartmentService.allFavorite();
     }
 

@@ -110,6 +110,7 @@ export class AdminComponent implements OnInit {
   }
 
   setSelected(type: string) {
+    localStorage.setItem('selectedType', type);
     this.adminPropertyService.selectedType = type;
   }
 }

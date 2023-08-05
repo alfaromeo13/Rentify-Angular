@@ -36,6 +36,8 @@ import { ImageWithButtonComponent } from './image-with-button/image-with-button.
 import { ReportComponent } from './report/report.component';
 import { BookingHistoryComponent } from './booking-history/booking-history.component';
 import { VisitedPlacesComponent } from './visited-places/visited-places.component';
+import { MyPropertiesComponent } from './my-properties/my-properties.component';
+import { UpdateApartmentComponent } from './update-apartment/update-apartment.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +65,8 @@ import { VisitedPlacesComponent } from './visited-places/visited-places.componen
     ReportComponent,
     BookingHistoryComponent,
     VisitedPlacesComponent,
+    MyPropertiesComponent,
+    UpdateApartmentComponent,
   ],
   imports: [
     FormsModule,

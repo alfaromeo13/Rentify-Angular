@@ -13,12 +13,7 @@ export class AdminPropertiesService {
 
     constructor(private httpClient: HttpClient) { }
 
-    deleteById(id: number): Observable<any> {
-        const url = `${environment.apiUrl}admin/apartment/${id}`;
-        return this.httpClient.delete(url);
-    }
-
-    activateById(id: number): Observable<any> {
+    enableOrDisable(id: number): Observable<any> {
         const url = `${environment.apiUrl}admin/apartment/${id}`;
         return this.httpClient.put(url, null);
     }

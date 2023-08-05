@@ -13,7 +13,6 @@ import { NotificationService } from '../services/notification.service';
 })
 export class ApartmentComponent implements OnInit, OnDestroy {
   showEmpty: boolean = false;
-  showLoader: boolean = false;
   PAGE_TOLERANCE: number = 3;
 
   constructor(
@@ -21,7 +20,9 @@ export class ApartmentComponent implements OnInit, OnDestroy {
     public filterService: FilterService,
     public apartmentService: ApartmentService
   ) { }
+
   ngOnDestroy(): void {
+    localStorage.removeItem('liked');
     this.filterService.pageNo = 1;
   }
 
@@ -29,15 +30,18 @@ export class ApartmentComponent implements OnInit, OnDestroy {
     if (this.apartmentService.apartmentList.length !== 0) {
       this.apartmentService.generateRooms();
     } else {
-      this.showLoader = true;
+      this.apartmentService.showLoader = true;
       const storedData = localStorage.getItem('apartmentSearch');
-      if (storedData) {
+      const isLiked = localStorage.getItem('liked');
+      console.log(storedData, isLiked);
+      if (isLiked) this.apartmentService.allFavorite();
+      if (storedData && !isLiked) {
         const apartmentSearch: ApartmentSearch = JSON.parse(storedData);
         this.filterService.filter(apartmentSearch, 0).subscribe(
           (apartmentDTOs: ApartmentDTO[]) => {
             console.log(apartmentDTOs);
             this.apartmentService.apartmentList = apartmentDTOs;
-            this.showLoader = false;
+            this.apartmentService.showLoader = false;
             this.apartmentService.generateRooms();
             if (apartmentDTOs.length == 0)
               this.showEmpty = true;
@@ -53,17 +57,17 @@ export class ApartmentComponent implements OnInit, OnDestroy {
     if (newPageNo > 0) {
       this.showEmpty = false;
       this.apartmentService.apartmani = [];
-      this.showLoader = true;
+      this.apartmentService.showLoader = true;
       this.filterService.pageNo = newPageNo;
       this.filterService.filter(this.filterService.apartmentSearch, this.filterService.pageNo - 1).subscribe(
         (apartmentDTOs: ApartmentDTO[]) => {
           this.apartmentService.apartmentList = apartmentDTOs;
           this.apartmentService.generateRooms();
-          this.showLoader = false;
+          this.apartmentService.showLoader = false;
           if (apartmentDTOs.length == 0)
             this.showEmpty = true;
         }, (error) => {
-          this.showLoader = false;
+          this.apartmentService.showLoader = false;
           console.error(error);
         }
       );

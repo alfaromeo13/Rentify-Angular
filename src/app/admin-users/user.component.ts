@@ -3,6 +3,7 @@ import { Component } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { debounceTime, switchMap } from "rxjs";
+import Swal from "sweetalert2";
 import { MessageService } from "../messages/message.service";
 import { CreateConversationDTO } from "../models/create-conversation.model";
 import { UserDTO } from "../models/user.model";
@@ -54,10 +55,22 @@ export class UserComponent implements OnInit {
       }
 
       deleteUser(user: UserDTO): void {
-            this.userService.deleteById(user.id).subscribe(data => {
-                  user.isActive = false;
-            }, error => {
-                  console.log('Error occured.', error)
+            Swal.fire({
+                  title: 'Ban this user?',
+                  text: "An automatic notification will be sent to the user, informing them they have been banned.",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#d33',
+                  cancelButtonColor: '#3085d6',
+                  confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                  if (result.isConfirmed) {
+                        this.userService.deleteById(user.id).subscribe(data => {
+                              user.isActive = false;
+                        }, error => {
+                              console.log('Error occured.', error)
+                        });
+                  }
             });
       }
 

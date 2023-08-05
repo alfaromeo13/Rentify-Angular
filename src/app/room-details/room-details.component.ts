@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApartmentDTO } from '../models/apartment.model';
 import * as L from 'leaflet';
-import { AfterViewInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ApartmentService } from '../apartment/apartment.service';
 import { ImageDTO } from '../models/image.model';
 import { ReviewService } from './room-details.service';
 import { ReviewDTO } from '../models/review.model';
@@ -28,6 +26,7 @@ declare var bulmaCalendar: any;
   styleUrls: ['./room-details.component.css']
 })
 export class RoomDetailsComponent implements OnInit {
+  showLoader: boolean = true;
   pageNumber: number = 0;
   shownPrice: number = 0;
   reviews: ReviewDTO[] = [];
@@ -151,7 +150,6 @@ export class RoomDetailsComponent implements OnInit {
 
       this.filterService.filter(search, 0).subscribe(data => {
         this.apartment = data[0];
-        this.initMap();
         console.log(this.apartment);
         this.getReviews();
 
@@ -185,22 +183,31 @@ export class RoomDetailsComponent implements OnInit {
             const startDate = datepicker.data.datePicker._date.start
             const endDate = datepicker.data.datePicker._date.end;
             this.rental.apartmentId = this.apartment.id;
-            this.rental.startDate = startDate;
-            this.rental.endDate = endDate;
+            this.rental.startDate = this.formatDate(startDate);
+            this.rental.endDate = this.formatDate(endDate);
             this.rentalService.calculatePrice(this.rental).subscribe(data => {
               this.shownPrice = data;
             });
           });
         }, error => {
           console.log('error');
-        })
+        });
 
         this.apartment.images.forEach((image: ImageDTO) => {
           this.imagePreviews.push(
             this.domSanitizer.bypassSecurityTrustResourceUrl(`data:image;base64, ${image.path}`));
         });
+        this.showLoader = false;
+        this.initMap();
       });
     }
+  }
+
+  formatDate(date: Date): string {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
   }
 
   book() {
@@ -280,6 +287,7 @@ export class RoomDetailsComponent implements OnInit {
 
   // pozivas klikom na odredjeno dugme (nova konverzacija)
   openNewConversation(toUsername: string) {
+    if (this.authService.username === toUsername) return;
     if (this.authService.isAuthenticated.value) {
       // usernameFrom => username trenutno ulogovanog korisnika
       // toUsername je username korisnika sa kojim zapocinjes konverzaciju

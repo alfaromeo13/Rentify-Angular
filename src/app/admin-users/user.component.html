@@ -19,7 +19,7 @@
                 <th>E-mail</th>
                 <th>Active</th>
                 <th>Created at</th>
-                <th></th>
+                <th>--</th>
             </thead>
             <tbody>
                 <tr *ngFor="let user of users">
@@ -50,7 +50,7 @@
                     <td>
                         <span *ngIf="user.isActive; else activate" class="icon has-text-danger fa-lg"
                             (click)="deleteUser(user)">
-                            <i class="fas fa-user-minus" style="cursor: pointer"></i>
+                            <i class="fas fa-ban" style="cursor: pointer"></i>
                         </span>
                         <ng-template #activate>
                             <span class="icon has-text-success fa-lg" (click)="activateUser(user)">

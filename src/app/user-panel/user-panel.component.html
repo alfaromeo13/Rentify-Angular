@@ -23,7 +23,7 @@
           <div class="column is-4" style="margin-left:330px;width: 530px;">
             <div class="card events-card" style="overflow: auto;">
               <header class="card-header">
-                <p class="card-header-title" style="justify-content:center;color:hsl(204, 86%, 53%); font-size: 18px;">
+                <p class="card-header-title" style="justify-content:center;color:hsl(204, 74%, 59%); font-size: 18px;">
                   Notifications
                   <svg xmlns="http://www.w3.org/2000/svg" height="1.3em"
                     style="fill:hsl(44, 100%, 50%);margin-left: 10px;" viewBox="0 0 448 512">
@@ -42,7 +42,7 @@
                               style="color: hsl(171, 100%, 41%);"><b>@{{report.senderUsername}}</b>
                             </span>
                             {{report.message}}</i>
-                          <span class="level-right"> <svg xmlns="http://www.w3.org/2000/svg" height="1.8em"
+                          <span class="level-right"> <svg xmlns="http://www.w3.org/2000/svg" height="1.5em"
                               viewBox="0 0 448 512" style="cursor: pointer;margin-bottom: 5px;margin: 5px;"
                               (click)="deleteReport(report)">
                               <path style="fill: red;"
@@ -61,7 +61,7 @@
           <div class="tile is-ancestor has-text-centered">
             <div class="tile is-parent">
               <article class="tile is-child box shadow">
-                <a (click)="filterMyApartments()">
+                <a (click)="showMyProperties()">
                   <p class="subtitle" style="color: hsl(204, 86%, 53%);"><b>My renting properties</b></p>
                 </a>
               </article>

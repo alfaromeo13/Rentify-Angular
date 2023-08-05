@@ -2,9 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApartmentService } from '../apartment/apartment.service';
 import { AuthService } from '../auth/services/auth.service';
-import { FilterService } from '../filter/filter.service';
-import { ApartmentDTO } from '../models/apartment.model';
-import { ApartmentSearch } from '../models/search.model';
 import { Chart } from 'chart.js/auto';
 import { UserPanelService } from './user-panel.service';
 import Swal from 'sweetalert2';
@@ -25,7 +22,6 @@ export class UserPanelComponent implements OnInit {
     public authService: AuthService,
     public notificationService: NotificationService,
     private userPanelService: UserPanelService,
-    private filterService: FilterService,
     public apartmentService: ApartmentService) { }
 
   getReports() {
@@ -45,9 +41,6 @@ export class UserPanelComponent implements OnInit {
 
   ngOnInit(): void {
     this.getReports();
-
-    this.apartmentService.isFilterVisible = false; //?
-
     const ctx = document.getElementById('myChart') as HTMLCanvasElement;
     this.rentalService.getIncomes().subscribe(data => {
       const maxNumber = Math.max(...data); // Get the maximum number from the data
@@ -57,7 +50,7 @@ export class UserPanelComponent implements OnInit {
           labels: ['January', 'February', 'March', 'April', 'May',
             'June', 'July', 'August', 'September', 'October', 'November', 'December'],
           datasets: [{
-            label: 'Monthly Income in €',
+            label: 'Monthly income in €',
             data: data,
             backgroundColor: 'hsl(141, 53%, 53%)',
             borderColor: '#404040',
@@ -68,7 +61,7 @@ export class UserPanelComponent implements OnInit {
           plugins: {
             legend: {
               labels: {
-                color: 'hsl(141, 53%, 53%)',
+                color: 'black',
                 font: {
                   size: 16 // Set the legend font size
                 }
@@ -105,26 +98,17 @@ export class UserPanelComponent implements OnInit {
     });
   }
 
-  filterMyApartments() {
-    const apartmentSearch: ApartmentSearch = {
-      username: this.authService.username,
-    };
-    this.filterService.filter(apartmentSearch, 0).subscribe(
-      (apartmentDTOs: ApartmentDTO[]) => {
-        this.apartmentService.apartmentList = apartmentDTOs;
-        this.router.navigate(['apartments']);
-      }, (error) => {
-        console.error(error);
-      }
-    );
-  }
-
   showBookingHistory() {
     this.router.navigate(['booking-history']);
   }
 
   showRentingHistory() {
     this.router.navigate(['visited']);
+  }
+
+  showMyProperties() {
+    console.log('usao')
+    this.router.navigate(['my-properties']);
   }
 
   deleteAccount() {

@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
@@ -30,9 +30,38 @@ export class RentalService {
         return this.httpClient.post(url, rentalApartmentDTO);
     }
 
-    //get rentals
+    //get incomes
     getIncomes(): Observable<number[]> {
         const url = `${environment.apiUrl}rental/monthly-incomes`;
         return this.httpClient.get<number[]>(url);
+    }
+
+    //get visited apartments for specific user
+    getVisited(page: number): Observable<RentalApartmentDTO[]> {
+        const url = `${environment.apiUrl}rental/for-user?page=${page}&size=9`;
+        return this.httpClient.get<RentalApartmentDTO[]>(url);
+    }
+
+    //camcel specific rental
+    cancel(id: number): Observable<any> {
+        const url = `${environment.apiUrl}rental/cancel/${id}`;
+        return this.httpClient.delete(url);
+    }
+
+    //filter by conditions
+    getFiltered(page: number, to?: string, from?: string, username?: string, propertyTitle?: string)
+        : Observable<RentalApartmentDTO[]> {
+
+        let queryParams = new HttpParams()
+            .set('page', String(page))
+            .set('size', '15');
+
+        if (to) queryParams = queryParams.set('to', to);
+        if (from) queryParams = queryParams.set('from', from);
+        if (username) queryParams = queryParams.set('username', username);
+        if (propertyTitle) queryParams = queryParams.set('propertyTitle', propertyTitle);
+
+        const url = `${environment.apiUrl}rental/filter`;
+        return this.httpClient.get<RentalApartmentDTO[]>(url, { params: queryParams });
     }
 }

@@ -11,9 +11,10 @@ export class RoomShowcaseModel {
     public rating: number = 0.1;
     public imgLinks: string[] = [];
     public imagePreviews: any[] = [];
+    public isActive: boolean;
 
     constructor(pid: number, property: string, tit: string, des: string,
-        loc: string, pri: number, period: string, rat: number,liked : boolean) {
+        loc: string, pri: number, period: string, rat: number, liked: boolean, isActive: boolean) {
         this.pid = pid;
         this.property = property;
         this.title = tit;
@@ -22,6 +23,7 @@ export class RoomShowcaseModel {
         this.price = pri;
         this.period = period;
         this.rating = rat;
-        this.liked=liked;
+        this.liked = liked;
+        this.isActive = isActive;
     }
 }

@@ -1,17 +1,18 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
-import { AuthService } from "../services/auth.service";
 
 @Injectable({ providedIn: 'root' })
-export class IsAlreadyAuthenticatedGuard implements CanActivate {
+export class IsPreviewGuard implements CanActivate {
 
-    constructor(private authService: AuthService, private router: Router) { }
+    constructor(private router: Router) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        if (this.authService.username.length > 0) {
+        const storedData = localStorage.getItem('selectedApartmentId');
+        if (storedData)
+            return true;
+        else {
             this.router.navigate(['/home']);
             return false;
         }
-        return true;
     }
 }

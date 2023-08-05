@@ -31,6 +31,13 @@ export class AdminPropertiesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    if (this.propertiesService.selectedType.length == 0) {
+      const storedData = localStorage.getItem('selectedType');
+      if (storedData) {
+        this.propertiesService.selectedType = storedData;
+      }
+    }
+
     this.getAll().subscribe(data => {
       this.apartments = data;
       this.apartmentService.apartmentList = data;
@@ -85,7 +92,7 @@ export class AdminPropertiesComponent implements OnInit, OnDestroy {
   }
 
   deleteApartment(apartment: ApartmentDTO): void {
-    this.propertiesService.deleteById(apartment.id).subscribe(data => {
+    this.propertiesService.enableOrDisable(apartment.id).subscribe(data => {
       apartment.isActive = false;
     }, error => {
       console.log('Error occured.', error)
@@ -93,7 +100,7 @@ export class AdminPropertiesComponent implements OnInit, OnDestroy {
   }
 
   activateApartment(apartment: ApartmentDTO): void {
-    this.propertiesService.activateById(apartment.id).subscribe(data => {
+    this.propertiesService.enableOrDisable(apartment.id).subscribe(data => {
       apartment.isActive = true;
     }, error => {
       console.log('Error occured.', error)

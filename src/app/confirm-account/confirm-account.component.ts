@@ -11,18 +11,18 @@ import { AuthService } from '../auth/services/auth.service';
 })
 export class ConfirmAccountComponent implements OnInit {
 
-  sentMail :string="";
+  sentMail: string = "";
 
   constructor(
     private toastr: ToastrService,
     private authService: AuthService,
     private router: Router,
-    private route : ActivatedRoute,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      this.sentMail=params['mail'];
+      this.sentMail = params['mail'];
     });
   }
 
