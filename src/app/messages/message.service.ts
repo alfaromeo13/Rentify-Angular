@@ -24,8 +24,8 @@ export class MessageService {
     }
 
     // izlistavanje svih konverzacija za ulogovanog korisnika
-    getAllConversationsByUser(username: string): Observable<RedisConversation[]> {
-        const url = `${environment.apiUrl}conversations/by-user/${username}`;
+    getAllConversationsByUser(): Observable<RedisConversation[]> {
+        const url = `${environment.apiUrl}conversations/by-user`;
         return this.httpClient.get<RedisConversation[]>(url, { headers: { 'Content-Type': 'application/json' } });
     }
 

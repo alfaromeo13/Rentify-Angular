@@ -114,15 +114,15 @@
                 </svg>
               </div>
               <hr style="background-color: rgb(234, 234, 234);">
-              <div class="klasaaa">
+              <div class="klasaaa" *ngIf="this.apartment.isApproved">
                 <h2 style="margin-top: 15px; font-weight: 300;">Select period</h2>
                 <input id="datepicker" class="input inline" type="text" placeholder="Select start and end date"
                   style="margin-right:40px;">
               </div>
-              <div class="klasaaa">
+              <div class="klasaaa" *ngIf="this.apartment.isApproved">
                 <p style="font-weight: 200px; color:rgb(128, 130, 9); margin-top:10px;">Total {{shownPrice}}€</p>
               </div>
-              <div class="klasaaa">
+              <div class="klasaaa" *ngIf="this.apartment.isApproved">
                 <button class="button is-rounded is-medium is-info">
                   <span (click)="book()">Book now</span>
                 </button>
@@ -299,9 +299,10 @@
       <div id="map"></div>
     </div>
   </div>
-
-  <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;" *ngIf="!showLoader">
-    <div class="column is-6" style="margin-right:20px;margin-top: 30px;">
+  <br>
+  <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;"
+    *ngIf="!showLoader && this.apartment.isApproved">
+    <div class="column is-6" style="margin-right:20px;">
       <div class="box content custom-box-shadow">
         <div style="display: flex; flex-direction: row;gap: 20px;">
           <h2 style="color:rgb(140, 140, 140); font-weight: 300; gap: 20px;">Reviews</h2>

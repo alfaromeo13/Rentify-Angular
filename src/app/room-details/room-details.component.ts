@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ApartmentDTO } from '../models/apartment.model';
 import * as L from 'leaflet';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -168,27 +168,29 @@ export class RoomDetailsComponent implements OnInit {
             this.disableDatesBetween(modifiedStartDate, modifiedEndDate);
           }
           const datepicker = document.getElementById('datepicker');
-          const today = new Date();
-          const calendarOptions = {
-            type: 'date',
-            minDate: today.toISOString().split('T')[0],
-            disabledDates: this.invalidDates,
-            isRange: true,
-            dateFormat: 'dd-MM-yyyy',
-            timePicker: false,
-          };
-          const calendar = bulmaCalendar.attach(datepicker, calendarOptions)[0];
+          if (datepicker != null) {
+            const today = new Date();
+            const calendarOptions = {
+              type: 'date',
+              minDate: today.toISOString().split('T')[0],
+              disabledDates: this.invalidDates,
+              isRange: true,
+              dateFormat: 'dd-MM-yyyy',
+              timePicker: false,
+            };
+            const calendar = bulmaCalendar.attach(datepicker, calendarOptions)[0];
 
-          calendar.on('select', (datepicker: any) => {
-            const startDate = datepicker.data.datePicker._date.start
-            const endDate = datepicker.data.datePicker._date.end;
-            this.rental.apartmentId = this.apartment.id;
-            this.rental.startDate = this.formatDate(startDate);
-            this.rental.endDate = this.formatDate(endDate);
-            this.rentalService.calculatePrice(this.rental).subscribe(data => {
-              this.shownPrice = data;
+            calendar.on('select', (datepicker: any) => {
+              const startDate = datepicker.data.datePicker._date.start
+              const endDate = datepicker.data.datePicker._date.end;
+              this.rental.apartmentId = this.apartment.id;
+              this.rental.startDate = this.formatDate(startDate);
+              this.rental.endDate = this.formatDate(endDate);
+              this.rentalService.calculatePrice(this.rental).subscribe(data => {
+                this.shownPrice = data;
+              });
             });
-          });
+          }
         }, error => {
           console.log('error');
         });
@@ -215,7 +217,7 @@ export class RoomDetailsComponent implements OnInit {
       this.rentalService.book(this.rental).subscribe(data => {
         this.toastr.success('Apartment booked successfully!', 'Booking Confirmation');
       });
-    } else this.toastr.info('You have to be looged to book any property');
+    } else this.toastr.info('You have to be logged in to book any property');
   }
 
   disableDatesBetween(start: Date, end: Date): void {

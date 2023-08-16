@@ -10,14 +10,14 @@ export class CityService {
     constructor(private httpClient: HttpClient) { }
 
     searchByTerm(searchTerm: string): Observable<CityWithCountry[]> {
-        const url = `${environment.apiUrl}city?page=0&size=10&name=${searchTerm}`;
+        const url = `${environment.apiUrl}city?page=0&size=5&name=${searchTerm}`;
         return this.httpClient.get<CityWithCountry[]>(url);
     }
 
     searchByCityAndCountry(cityName: string, selectedCountry: string): Observable<City[]> {
         const countryCodeArray = selectedCountry.split(",");
         const countryCode = countryCodeArray.length >= 2 ? countryCodeArray[1].trim() : '';
-        const url = `${environment.apiUrl}city/by-country-code?page=0&size=10&countryCode=${countryCode}&cityName=${cityName}`;
+        const url = `${environment.apiUrl}city/by-country-code?page=0&size=5&countryCode=${countryCode}&cityName=${cityName}`;
         return this.httpClient.get<City[]>(url);
     }
 }

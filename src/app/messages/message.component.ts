@@ -6,6 +6,7 @@ import { GlobalSocketService } from "../core/socket.service";
 import { MessageDTO } from "../models/message.model";
 import { RedisConversation } from "../models/redis-conversation.model";
 import { NavbarService } from "../navbar/navbar.service";
+import { NotificationService } from "../services/notification.service";
 import { MessageService } from "./message.service";
 
 @Component({
@@ -35,6 +36,7 @@ export class MessageComponent implements OnInit, OnDestroy {
         private navbarService: NavbarService,
         public messageService: MessageService,
         private socketService: GlobalSocketService,
+        public notificationService: NotificationService,
     ) { }
 
     ngOnDestroy(): void {

@@ -7,6 +7,7 @@ import { FilterService } from '../filter/filter.service';
 import { ApartmentDTO } from '../models/apartment.model';
 import { RoomShowcaseModel } from '../models/roomshowcase';
 import { ApartmentSearch } from '../models/search.model';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-my-properties',
@@ -23,6 +24,7 @@ export class MyPropertiesComponent implements OnInit, OnDestroy {
     private toastr: ToastrService,
     public authService: AuthService,
     public apartmentService: ApartmentService,
+    public notificationService: NotificationService,
     public filterService: FilterService) { }
 
   ngOnInit(): void {

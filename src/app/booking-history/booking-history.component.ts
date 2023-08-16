@@ -12,6 +12,7 @@ import { ApartmentSearch } from '../models/search.model';
 import { RentalService } from '../services/rental.service';
 import * as moment from 'moment';
 import { debounceTime } from 'rxjs';
+import { NotificationService } from '../services/notification.service';
 
 declare var bulmaCalendar: any;
 
@@ -38,6 +39,7 @@ export class BookingHistoryComponent implements OnInit {
     private filterService: FilterService,
     private rentalService: RentalService,
     private apartmentService: ApartmentService,
+    public notificationService: NotificationService,
   ) { }
 
   set_page_no(newPageNo: number): void {

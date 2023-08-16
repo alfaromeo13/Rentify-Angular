@@ -38,6 +38,7 @@ import { BookingHistoryComponent } from './booking-history/booking-history.compo
 import { VisitedPlacesComponent } from './visited-places/visited-places.component';
 import { MyPropertiesComponent } from './my-properties/my-properties.component';
 import { UpdateApartmentComponent } from './update-apartment/update-apartment.component';
+import { ResetPasswordNextComponent } from './reset-password-next/reset-password-next.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { UpdateApartmentComponent } from './update-apartment/update-apartment.co
     VisitedPlacesComponent,
     MyPropertiesComponent,
     UpdateApartmentComponent,
+    ResetPasswordNextComponent,
   ],
   imports: [
     FormsModule,

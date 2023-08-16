@@ -53,7 +53,7 @@ export class UserPanelComponent implements OnInit {
             label: 'Monthly income in €',
             data: data,
             backgroundColor: 'hsl(141, 53%, 53%)',
-            borderColor: '#404040',
+            borderColor: 'hsl(0, 0%, 21%)',
             borderWidth: 2,
           }]
         },
@@ -61,9 +61,9 @@ export class UserPanelComponent implements OnInit {
           plugins: {
             legend: {
               labels: {
-                color: 'black',
+                color: 'hsl(0, 0%, 21%)',
                 font: {
-                  size: 16 // Set the legend font size
+                  size: 18 // Set the legend font size
                 }
               }
             }
@@ -71,7 +71,7 @@ export class UserPanelComponent implements OnInit {
           scales: {
             y: {
               ticks: {
-                color: 'hsl(0, 0%, 20%)',
+                color: 'hsl(0, 0%, 21%)',
                 font: {
                   size: 16 // Set the y-axis ticks font size
                 }
@@ -83,7 +83,7 @@ export class UserPanelComponent implements OnInit {
             },
             x: {
               ticks: {
-                color: 'white', // Set the x-axis ticks text color to white
+                color: 'hsl(0, 0%, 21%)', // Set the x-axis ticks text color to white
                 font: {
                   size: 16 // Set the x-axis ticks font size
                 }

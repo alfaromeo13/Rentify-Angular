@@ -33,9 +33,8 @@ export class ApartmentComponent implements OnInit, OnDestroy {
       this.apartmentService.showLoader = true;
       const storedData = localStorage.getItem('apartmentSearch');
       const isLiked = localStorage.getItem('liked');
-      console.log(storedData, isLiked);
       if (isLiked) this.apartmentService.allFavorite();
-      if (storedData && !isLiked) {
+      else if (storedData) {
         const apartmentSearch: ApartmentSearch = JSON.parse(storedData);
         this.filterService.filter(apartmentSearch, 0).subscribe(
           (apartmentDTOs: ApartmentDTO[]) => {

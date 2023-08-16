@@ -19,6 +19,7 @@ import { ApartmentDTO } from "../models/apartment.model";
 import Swal from "sweetalert2";
 import { ImageDTO } from "../models/image.model";
 import { DomSanitizer } from "@angular/platform-browser";
+import { NotificationService } from "../services/notification.service";
 
 @Component({
   selector: 'app-update-apartment',
@@ -27,6 +28,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 })
 export class UpdateApartmentComponent implements OnInit {
   documents: any[] = [];
+  deletedImages: number[] = [];
   apartmentForm: FormGroup;
   shouldLoad: boolean = false;
   showNotification: boolean = true;
@@ -55,9 +57,9 @@ export class UpdateApartmentComponent implements OnInit {
   selectedCountryCode: string = '';
   selectedCityName: string = '';
   selectedNeighborhoodName: string = '';
-  selectedNeighborhoodId: number = -1;
-  imagePreviews: any[] = [];
-
+  selectedNeighborhoodId: number;
+  oldImages: any[] = [];
+  newImages: any[] = [];
   countries: Country[] = [];
   cities: City[] = [];
   neighbourhoods: NeighborhoodDTO[] = [];
@@ -74,6 +76,7 @@ export class UpdateApartmentComponent implements OnInit {
     private apartmentService: ApartmentService,
     private cityService: CityService,
     private countryService: CountryService,
+    public notificationService: NotificationService,
     private neighbourhoodService: NeighbourhoodService,
   ) { }
 
@@ -99,44 +102,45 @@ export class UpdateApartmentComponent implements OnInit {
         this.apartmentForm.get('numOfBathrooms')?.setValue(this.apartment.numOfBathrooms);
         this.apartmentForm.get('number')?.setValue(this.apartment.number);
         this.apartmentForm.get('street')?.setValue(this.apartment.address.street);
-        if (this.apartment.period.name = 'day')
+        if (this.apartment.period.name === 'day')
           this.isDayClicked = true;
-        else if (this.apartment.period.name = 'month')
+        else if (this.apartment.period.name === 'month')
           this.isMonthClicked = true;
-        if (this.apartment.propertyType.name == 'Apartment')
+        if (this.apartment.propertyType.name === 'Apartment')
           this.isApartmentClicked = true;
-        else if (this.apartment.propertyType.name == 'Condo')
+        else if (this.apartment.propertyType.name === 'Condo')
           this.isCondoClicked = true;
-        else if (this.apartment.propertyType.name == 'House')
+        else if (this.apartment.propertyType.name === 'House')
           this.isHouseClicked = true;
-        else if (this.apartment.propertyType.name == 'Studio')
+        else if (this.apartment.propertyType.name === 'Studio')
           this.isStudioClicked = true;
         for (const attribute of this.apartment.apartmentAttributes) {
-          if (attribute.attribute.name == "Balcony")
-            this.isBalconyClicked = attribute.attributeValue === 'Yes';
-          else if (attribute.attribute.name == "Air Conditioning")
-            this.isAirClicked = attribute.attributeValue === 'Yes';
-          else if (attribute.attribute.name == "Parking")
-            this.isParkingClicked = attribute.attributeValue === 'Yes';
-          if (attribute.attribute.name == "Appliances")
-            this.isAppliancesClicked = attribute.attributeValue === 'Yes';
-          if (attribute.attribute.name == "Elevator")
-            this.isElevatorClicked = attribute.attributeValue === 'Yes';
-          if (attribute.attribute.name == "Furnished")
-            this.isFurnishedClicked = attribute.attributeValue === 'Yes';
-          if (attribute.attribute.name == "Pets Allowed")
-            this.isPetsClicked = attribute.attributeValue === 'Yes';
-          if (attribute.attribute.name == "WiFi")
-            this.isWifiClicked = attribute.attributeValue === 'Yes';
+          if (attribute.attribute.name === 'Balcony' && attribute.attributeValue === 'Yes')
+            this.isBalconyClicked = true;
+          else if (attribute.attribute.name === 'Air Conditioning' && attribute.attributeValue === 'Yes')
+            this.isAirClicked = true;
+          else if (attribute.attribute.name === 'Parking' && attribute.attributeValue === 'Yes')
+            this.isParkingClicked = true;
+          else if (attribute.attribute.name === 'Appliances' && attribute.attributeValue === 'Yes')
+            this.isAppliancesClicked = true;
+          else if (attribute.attribute.name === 'Elevator' && attribute.attributeValue === 'Yes')
+            this.isElevatorClicked = true;
+          else if (attribute.attribute.name === 'Furnished' && attribute.attributeValue === 'Yes')
+            this.isFurnishedClicked = true;
+          else if (attribute.attribute.name === 'Pets Allowed' && attribute.attributeValue === 'Yes')
+            this.isPetsClicked = true;
+          else if (attribute.attribute.name === 'WiFi' && attribute.attributeValue === 'Yes')
+            this.isWifiClicked = true;
         }
         this.neighbourhoodSearchForm.get('searchTerm')?.setValue(this.apartment.address.neighborhood.name);
         this.citySearchForm.get('searchTerm')?.setValue(this.apartment.address.neighborhood.city.name);
         this.countrySearchForm.get('searchTerm')?.setValue(this.apartment.address.neighborhood.city.country.name + " , " + this.apartment.address.neighborhood.city.country.shortCode);
+        this.selectedNeighborhoodId = this.apartment.address.neighborhood.id;
         this.initMap();
 
         this.apartment.images.forEach((image: ImageDTO) => {
-          this.imagePreviews.push(
-            this.domSanitizer.bypassSecurityTrustResourceUrl(`data:image;base64, ${image.path}`));
+          image.display = this.domSanitizer.bypassSecurityTrustResourceUrl(`data:image;base64, ${image.path}`)
+          this.oldImages.push(image);
         });
       });
     }
@@ -147,12 +151,11 @@ export class UpdateApartmentComponent implements OnInit {
   }
 
   onFileSelected(event: any): void {
-    this.documents = [];
     const files = event.target.files;
     if (files) {
       for (let file of files) {
         let reader = new FileReader();
-        reader.onload = (e: any) => this.imagePreviews.push(e.target.result);
+        reader.onload = (e: any) => this.newImages.push(new ImageDTO(e.target.result));
         reader.readAsDataURL(file);
         this.documents.push(file);
       }
@@ -220,146 +223,164 @@ export class UpdateApartmentComponent implements OnInit {
       });
   }
 
-  onDeleteImage(index: number) {
-    // Remove the image from the urls array based on the index
-    this.imagePreviews.splice(index, 1);
+  onDeleteOldImages(id: number, index: number) {
+    this.deletedImages.push(id);
+    this.oldImages.splice(index, 1);
+  }
+
+  onDeleteNewImages(index: number) {
     this.documents.splice(index, 1);
+    this.newImages.splice(index, 1);
   }
 
   updateApartment() {
-    // Swal.fire({
-    //   title: 'Are you sure?',
-    //   text: "Your property will become temporarily unavailable",
-    //   icon: 'question',
-    //   showCancelButton: true,
-    //   confirmButtonColor: '#3085d6',
-    //   cancelButtonColor: '#d33'
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Your property will become unavailable until approval",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.shouldLoad = true;
+        if (this.isDayClicked)
+          this.period = 'day';
+        else if (this.isMonthClicked)
+          this.period = 'month';
+        if (this.isApartmentClicked)
+          this.propertyType = 'Apartment';
+        else if (this.isCondoClicked)
+          this.propertyType = 'Condo';
+        else if (this.isHouseClicked)
+          this.propertyType = 'House';
+        else if (this.isStudioClicked)
+          this.propertyType = 'Studio';
 
-    //   }
-    // });
+        const payload = {
+          title: this.apartmentForm.value.title,
+          description: this.apartmentForm.value.description,
+          sqMeters: this.apartmentForm.value.sqMeters,
+          price: this.apartmentForm.value.price,
+          numOfBedrooms: this.apartmentForm.value.numOfBedrooms,
+          numOfBathrooms: this.apartmentForm.value.numOfBathrooms,
+          number: this.apartmentForm.value.number,
 
-    if (this.documents.length == 0) {
-      this.toastr.warning('Missing property images');
-      return;
-    }
+          address: {
+            street: this.apartmentForm.value.street,
+            x: this.latitude,
+            y: this.longitude,
 
-    this.shouldLoad = true;
-    if (this.isDayClicked)
-      this.period = 'day';
-    else if (this.isMonthClicked)
-      this.period = 'month';
-    if (this.isApartmentClicked)
-      this.propertyType = 'Apartment';
-    else if (this.isCondoClicked)
-      this.propertyType = 'Condo';
-    else if (this.isHouseClicked)
-      this.propertyType = 'House';
-    else if (this.isStudioClicked)
-      this.propertyType = 'Studio';
+            neighborhood: {
+              id: this.selectedNeighborhoodId,
+            }
+          },
 
-    const payload = {
-      title: this.apartmentForm.value.title,
-      description: this.apartmentForm.value.description,
-      sqMeters: this.apartmentForm.value.sqMeters,
-      price: this.apartmentForm.value.price,
-      numOfBedrooms: this.apartmentForm.value.numOfBedrooms,
-      numOfBathrooms: this.apartmentForm.value.numOfBathrooms,
-      number: this.apartmentForm.value.number,
+          period: {
+            name: this.period,
+          },
 
-      address: {
-        street: this.apartmentForm.value.street,
-        x: this.latitude,
-        y: this.longitude,
+          propertyType: {
+            name: this.propertyType,
+          },
 
-        neighborhood: {
-          id: this.selectedNeighborhoodId,
+          apartmentAttributes: [
+            {
+              id: this.findByAttributeName("Balcony"),
+              attribute: {
+                name: "Balcony"
+              },
+              attributeValue: this.isBalconyClicked ? "Yes" : "No",
+            },
+            {
+              id: this.findByAttributeName("Air Conditioning"),
+              attribute: {
+                name: "Air Conditioning"
+              },
+              attributeValue: this.isAirClicked ? "Yes" : "No",
+            },
+            {
+              id: this.findByAttributeName("Parking"),
+              attribute: {
+                name: "Parking"
+              },
+              attributeValue: this.isParkingClicked ? "Yes" : "No",
+            },
+            {
+              id: this.findByAttributeName("Appliances"),
+              attribute: {
+                name: "Appliances"
+              },
+              attributeValue: this.isAppliancesClicked ? "Yes" : "No",
+            },
+            {
+              id: this.findByAttributeName("Elevator"),
+              attribute: {
+                name: "Elevator"
+              },
+              attributeValue: this.isElevatorClicked ? "Yes" : "No",
+            },
+            {
+              id: this.findByAttributeName("Furnished"),
+              attribute: {
+                name: "Furnished"
+              },
+              attributeValue: this.isFurnishedClicked ? "Yes" : "No",
+            },
+            {
+              id: this.findByAttributeName("Pets Allowed"),
+              attribute: {
+                name: "Pets Allowed"
+              },
+              attributeValue: this.isPetsClicked ? "Yes" : "No",
+            },
+            {
+              id: this.findByAttributeName("WiFi"),
+              attribute: {
+                name: "WiFi"
+              },
+              attributeValue: this.isWifiClicked ? "Yes" : "No",
+            }
+          ]
+        };
+
+        // Prepare the payload
+        const formData = new FormData();
+
+        formData.append('payload', JSON.stringify(payload));
+
+        // Append newly added the images
+        if (this.documents) {
+          for (const document of this.documents)
+            formData.append('newImages', document);
         }
-      },
 
-      period: {
-        name: this.period,
-      },
-
-      propertyType: {
-        name: this.propertyType,
-      },
-
-      apartmentAttributes: [
-        {
-          attribute: {
-            name: "Balcony"
-          },
-          attributeValue: this.isBalconyClicked ? "Yes" : "No",
-        },
-        {
-          attribute: {
-            name: "Air Conditioning"
-          },
-          attributeValue: this.isAirClicked ? "Yes" : "No",
-        },
-        {
-          attribute: {
-            name: "Parking"
-          },
-          attributeValue: this.isParkingClicked ? "Yes" : "No",
-        },
-        {
-          attribute: {
-            name: "Appliances"
-          },
-          attributeValue: this.isAppliancesClicked ? "Yes" : "No",
-        },
-        {
-          attribute: {
-            name: "Elevator"
-          },
-          attributeValue: this.isElevatorClicked ? "Yes" : "No",
-        },
-        {
-          attribute: {
-            name: "Furnished"
-          },
-          attributeValue: this.isFurnishedClicked ? "Yes" : "No",
-        },
-        {
-          attribute: {
-            name: "Pets Allowed"
-          },
-          attributeValue: this.isPetsClicked ? "Yes" : "No",
-        },
-        {
-          attribute: {
-            name: "WiFi"
-          },
-          attributeValue: this.isWifiClicked ? "Yes" : "No",
+        if (this.deletedImages) {
+          for (const id of this.deletedImages)
+            formData.append('deletedImages', id + ""); //RADI LI OVO?
         }
-      ]
-    };
 
-    // Prepare the payload
-    const formData = new FormData();
-    formData.append('payload', JSON.stringify(payload));
+        // Set headers for multipart/form-data
+        const headers = new HttpHeaders();
+        headers.append('Content-Type', 'multipart/form-data');
 
-    // Append the images
-    if (this.documents) {
-      for (const document of this.documents) {
-        formData.append('images', document);
+        this.apartmentService.updateApartment(formData, this.apartment.id).subscribe(() => {
+          this.shouldLoad = false;
+          this.router.navigate(['my-properties']);
+          this.toastr.success('Apartment successfully sent for validation!');
+        }, error => {
+          this.shouldLoad = false;
+        });
       }
-    }
-
-    // Set headers for multipart/form-data
-    const headers = new HttpHeaders();
-    headers.append('Content-Type', 'multipart/form-data');
-
-    this.apartmentService.createApartment(formData).subscribe(() => {
-      this.shouldLoad = false;
-      this.router.navigate(['home']);
-      this.toastr.success('Apartment successfully sent for validation!');
-    }, error => {
-      this.shouldLoad = false;
     });
+  }
+
+  findByAttributeName(attributeName: string): number {
+    for (const apartmentAttribute of this.apartment.apartmentAttributes) {
+      if (apartmentAttribute.attribute.name === attributeName)
+        return apartmentAttribute.id;
+    }
+    return 0;
   }
 
   //at the beginning we initialize the map
@@ -370,6 +391,9 @@ export class UpdateApartmentComponent implements OnInit {
       center: centroid,
       zoom: 20
     });
+
+    this.latitude = this.apartment.address.x;
+    this.longitude = this.apartment.address.y;
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
@@ -478,6 +502,7 @@ export class UpdateApartmentComponent implements OnInit {
 
   onWifiClick() {
     this.isWifiClicked = !this.isWifiClicked;
+    console.log(this.isWifiClicked);
   }
 
   onElevatorClick() {
@@ -500,7 +525,6 @@ export class UpdateApartmentComponent implements OnInit {
 
   onNeighbourhoodSelection() {
     const searchTermControl = this.neighbourhoodSearchForm.get('searchTerm');
-
     if (searchTermControl && searchTermControl.value) {
       const selectedNeighbourhood = this.neighbourhoods.find(neighbourhood =>
         neighbourhood.name === searchTermControl.value

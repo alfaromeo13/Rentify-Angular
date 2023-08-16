@@ -13,6 +13,7 @@ import { NeighborhoodDTO } from "../models/neighbourhood.model";
 import { CityService } from "../city/city.service";
 import { CountryService } from "../services/country.service";
 import { Country } from "../models/country.model";
+import { NotificationService } from "../services/notification.service";
 
 @Component({
   selector: 'app-create-apartment',
@@ -64,6 +65,7 @@ export class CreateApartmentComponent implements OnInit, AfterViewInit {
     private apartmentService: ApartmentService,
     private cityService: CityService,
     private countryService: CountryService,
+    public notificationService: NotificationService,
     private neighbourhoodService: NeighbourhoodService,
   ) { }
 

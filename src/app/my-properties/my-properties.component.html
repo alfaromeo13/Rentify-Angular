@@ -86,3 +86,5 @@
 <div *ngIf="showEmpty" class="buk">
     <p class="title main-text">Oops! Looks empty. Nothing to see here :/</p>
 </div>
+
+<app-report *ngIf="this.notificationService.isActive"></app-report>

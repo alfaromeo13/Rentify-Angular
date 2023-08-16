@@ -20,6 +20,7 @@ import { ApartmentDTO } from "src/app/models/apartment.model";
 import { AdminService } from "src/app/admin/admin.service";
 import { NotificationDTO } from "src/app/models/notification.model";
 import { NotificationService } from "src/app/services/notification.service";
+import { Router } from "@angular/router";
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -28,6 +29,7 @@ export class AuthService {
     isAuthenticated = new BehaviorSubject<boolean>(false);
 
     constructor(
+        private router: Router,
         private toastr: ToastrService,
         private httpClient: HttpClient,
         private adminService: AdminService,
@@ -52,8 +54,6 @@ export class AuthService {
                 localStorage.setItem('refresh-token', refresh);
                 this.isAuthenticated.next(true);//user is logged in
                 this.openWS();
-            }, error => {
-                this.toastr.warning('Login failed')
             }));
     }
 
@@ -116,7 +116,7 @@ export class AuthService {
     previewAllConversationsForCurrentUser() {
         this.messageService.conversations = [];
         this.messageService
-            .getAllConversationsByUser(this.username)
+            .getAllConversationsByUser()
             .subscribe((data: RedisConversation[]) => {
                 if (data.length > 0) {
                     for (const conversation of data) {
@@ -182,10 +182,21 @@ export class AuthService {
         const params = { mail: mail };
         this.httpClient.post(url, null, { params, responseType: 'text' })
             .subscribe(response => {
-                this.toastr.success("Mail sent successfully");
+                this.toastr.success("Reset code successfully sent on email");
             }, error => {// Handle any errors here
                 this.toastr.error("Mail not found");
             });
+    }
+
+    confirmResetPassword(mail: string, code: string, password: string): void {
+        const url = `${environment.apiUrl}authenticate/reset-password`;
+        const params = { mail: mail, code: code, password: password };
+        this.httpClient.post(url, null, { params, responseType: 'text' }).subscribe(response => {
+            this.toastr.success(response);
+            this.router.navigate(['login']);
+        },error=>{
+            this.toastr.warning("Account not found");
+        });
     }
 
     signup(data: Register): Observable<any> {
@@ -212,14 +223,13 @@ export class AuthService {
 
     refresh_token(): Observable<any> {
         const url = `${environment.apiUrl}authenticate/refresh-token`;
-
-        // Set the 'refresh-token' header directly
-        const headers = new HttpHeaders({
-            'refresh-token': localStorage.getItem('refresh-token') || ''
-        });
-
+        const currentHeaders = new HttpHeaders();
+        const headers = currentHeaders
+            .append('refresh-token', localStorage.getItem('refresh-token') || '');
+        localStorage.removeItem('access-token');
+        localStorage.removeItem('refresh-token');
         // Make the HTTP POST request with the headers
-        return this.httpClient.post<any>(url, null, { headers }).pipe(
+        return this.httpClient.post<JwtToken>(url, null, { headers }).pipe(
             tap(responseData => {
                 console.log('Poslali smo zahtjev za refrseh...');
                 const access = responseData.token;

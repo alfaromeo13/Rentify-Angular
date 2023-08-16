@@ -26,6 +26,7 @@ import { IsNotAdminGuard } from "./auth/guards/is-not-admin.guard";
 import { IsUpdateable } from "./auth/guards/is-update.guard";
 import { IsPreviewGuard } from "./auth/guards/is-preview.guard";
 import { ApartmentSearchGuard } from "./auth/guards/apartment-search.guard";
+import { ResetPasswordNextComponent } from "./reset-password-next/reset-password-next.component";
 
 const routes: Routes = [
     {
@@ -39,6 +40,10 @@ const routes: Routes = [
     {
         path: 'reset', //http://localhost:4200/reset
         component: ResetPassword,
+    },
+    {
+        path: 'reset-next', //http://localhost:4200/reset-next
+        component: ResetPasswordNextComponent,
     },
     {
         path: 'confirm',

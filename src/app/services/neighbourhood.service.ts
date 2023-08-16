@@ -9,7 +9,7 @@ export class NeighbourhoodService {
     constructor(private httpClient: HttpClient) { }
 
     searchByCityAndNeighborhoodName(neighborhoodName: string, selectedCityName: string): Observable<NeighborhoodDTO[]> {
-        const url = `${environment.apiUrl}neighborhood?page=0&size=10&cityName=${selectedCityName}&neighborhoodName=${neighborhoodName}`;
+        const url = `${environment.apiUrl}neighborhood?page=0&size=5&cityName=${selectedCityName}&neighborhoodName=${neighborhoodName}`;
         return this.httpClient.get<NeighborhoodDTO[]>(url);
     }
 }

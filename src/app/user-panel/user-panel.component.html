@@ -16,11 +16,12 @@
         </section>
         <div class="columns" style="margin-top: 30px;">
           <div class="column is-6">
-            <div class="container" style="width: 1180px;">
+            <div class="container" style="width: 1180px;background-color: rgba(224, 224, 224, 0.7);
+            border-radius: 20px;">
               <canvas id="myChart"></canvas>
             </div>
           </div>
-          <div class="column is-4" style="margin-left:330px;width: 530px;">
+          <div class="column is-4" style="margin-left:330px;width: 525px;">
             <div class="card events-card" style="overflow: auto;">
               <header class="card-header">
                 <p class="card-header-title" style="justify-content:center;color:hsl(204, 74%, 59%); font-size: 18px;">
@@ -57,7 +58,7 @@
             </div>
           </div>
         </div>
-        <section class="info-tiles" style="margin-left: 45px;margin-top: 20px;">
+        <section class="info-tiles" style="margin-left: 0px;margin-top: 20px;margin-right: 5px;">
           <div class="tile is-ancestor has-text-centered">
             <div class="tile is-parent">
               <article class="tile is-child box shadow">
@@ -94,3 +95,4 @@
   </div>
   <br>
 </div>
+<app-report *ngIf="this.notificationService.isActive"></app-report>

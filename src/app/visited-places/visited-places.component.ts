@@ -5,6 +5,7 @@ import { FilterService } from '../filter/filter.service';
 import { ApartmentDTO } from '../models/apartment.model';
 import { RentalApartmentDTO } from '../models/rental-apartment.model';
 import { ApartmentSearch } from '../models/search.model';
+import { NotificationService } from '../services/notification.service';
 import { RentalService } from '../services/rental.service';
 
 @Component({
@@ -22,6 +23,7 @@ export class VisitedPlacesComponent implements OnInit, OnDestroy {
     public filterService: FilterService,
     public rentalService: RentalService,
     public apartmentService: ApartmentService,
+    public notificationService: NotificationService,
   ) { }
 
   ngOnInit(): void {

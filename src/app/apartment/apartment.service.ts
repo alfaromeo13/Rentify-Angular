@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, tap } from "rxjs";
+import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { FilterService } from "../filter/filter.service";
 import { ApartmentDTO } from "../models/apartment.model";
@@ -80,6 +80,12 @@ export class ApartmentService {
     const url = `${environment.apiUrl}apartment/`;
     const headers = new HttpHeaders();
     return this.httpClient.post(url, formData, { headers });
+  }
+
+  updateApartment(formData: FormData, id: number): Observable<any> {
+    const url = `${environment.apiUrl}apartment/${id}`;
+    const headers = new HttpHeaders();
+    return this.httpClient.put(url, formData, { headers });
   }
 
   enableOrDisable(id: number): Observable<any> {

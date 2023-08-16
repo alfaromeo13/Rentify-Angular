@@ -4,18 +4,20 @@ import { Reset } from "../auth/models/reset.model";
 import { AuthService } from "../auth/services/auth.service";
 
 @Component({
-    selector:'app-reset',
-    templateUrl:'./reset-password.component.html',
-    styleUrls: ['./reset-password.component.css']})
-export class ResetPassword{
+    selector: 'app-reset',
+    templateUrl: './reset-password.component.html',
+    styleUrls: ['./reset-password.component.css']
+})
+export class ResetPassword {
 
     constructor(
-        private router : Router,
-        private authService :AuthService){}
+        private router: Router,
+        private authService: AuthService) { }
 
-    resetPassword(resetForm: any) : void {
+    resetPassword(resetForm: any): void {
         const loginData: Reset = resetForm.value;
-        this.authService.resetPassword(resetForm.value.email);
-        this.router.navigate(['login']);
+        this.authService.resetPassword(loginData.email);
+        localStorage.setItem("email", loginData.email);
+        this.router.navigate(['reset-next']);
     }
 }

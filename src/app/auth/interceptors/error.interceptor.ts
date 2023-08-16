@@ -3,7 +3,7 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/c
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
-import { BehaviorSubject, catchError, filter, take } from "rxjs";
+import { BehaviorSubject, catchError, filter, take, tap } from "rxjs";
 import { switchMap } from "rxjs";
 import { throwError } from "rxjs";
 import { Observable } from "rxjs";
@@ -12,6 +12,7 @@ import { AuthService } from "../services/auth.service";
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
 
+  counter: number = 0;
   private isRefreshing = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
@@ -32,7 +33,6 @@ export class ErrorInterceptor implements HttpInterceptor {
     return req;
   }
 
-
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(this.addAuthorizationHeader(req)).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
@@ -40,28 +40,27 @@ export class ErrorInterceptor implements HttpInterceptor {
           if (!this.isRefreshing) {
             this.isRefreshing = true;
             this.refreshTokenSubject.next(null);
-
             return this.authService.refresh_token().pipe(
               switchMap((responseData: any) => {
+                this.counter = 0;
                 this.isRefreshing = false;
                 this.refreshTokenSubject.next(responseData.token);
-
                 // Retry the original request with the new token
                 return next.handle(this.addAuthorizationHeader(req));
-              }),
-              catchError((refreshError) => {
-                this.isRefreshing = false;
-                this.toastr.warning('Session timed out. Please log in again.');
-                this.authService.logout();
-                this.router.navigate(['login']);
-                return throwError(refreshError);
               })
             );
           } else {
+            this.counter++;
+            if (this.counter == 2) {
+              this.counter = 0;
+              this.isRefreshing = false;
+              this.toastr.warning('Session timed out. Please log in again.');
+              this.authService.logout();
+              this.router.navigate(['login']);
+            }
             // If the token is already being refreshed, wait for the new token
             return this.refreshTokenSubject.pipe(
               filter(token => token !== null),
-              take(1),
               switchMap(() => next.handle(this.addAuthorizationHeader(req)))
             );
           }

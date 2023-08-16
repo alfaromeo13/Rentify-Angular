@@ -1,14 +1,15 @@
+<app-report *ngIf="this.notificationService.isActive"></app-report>
 <div class="hero" style="display: flex;flex-direction: row; margin-top: 5px" [formGroup]="apartmentForm">
     <section class="is-fullheight">
         <div class="notification is-warning" *ngIf="showNotification"
-            style="width: 660px;font-size: 20px;margin-left: 10px;margin-top: 10px">
+            style="width: 660px;font-size: 20px;margin-left: 10px;margin-top: 10px;margin-bottom: 5px;">
             <button class="delete" (click)="hide()"></button>
-            <h2><i><strong><span style="color:hsl(348, 100%, 61%)">Warning ~ Property update pending approval :</span>
+            <h2><i><strong><span style="color:hsl(348, 100%, 61%)">Warning!!! Property update pending approval :</span>
                     </strong></i><br><i>
                     Any changes will need to go through another validation cycle before they can become visible
                     on
                     the
-                    platform. During this process, your property will become temporarily unavailable for
+                    platform. During this process, your property will become unavailable for
                     potential
                     renters
                     until the administrator approves the changes.</i></h2>
@@ -267,8 +268,12 @@
             </label>
         </div>
         <div class="image-container" style="height: 100%;  margin-left: -40px;">
-            <ng-container *ngFor="let url of imagePreviews; let i = index">
-                <app-image-with-button [imageUrl]="url" (deleteImage)="onDeleteImage(i)" class="img">
+            <ng-container *ngFor="let image of oldImages; let i = index">
+                <app-image-with-button [imageUrl]="image.display" (deleteImage)="onDeleteOldImages(image.id,i)" class="img">
+                </app-image-with-button>
+            </ng-container>
+            <ng-container *ngFor="let image of newImages; let i = index">
+                <app-image-with-button [imageUrl]="image.display" (deleteImage)="onDeleteNewImages(i)" class="img">
                 </app-image-with-button>
             </ng-container>
         </div>
