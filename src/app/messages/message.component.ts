@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Emoji } from "@ctrl/ngx-emoji-mart/ngx-emoji";
 import * as moment from "moment";
 import { ToastrService } from "ngx-toastr";
 import { AuthService } from "../auth/services/auth.service";
@@ -8,15 +9,20 @@ import { RedisConversation } from "../models/redis-conversation.model";
 import { NavbarService } from "../navbar/navbar.service";
 import { NotificationService } from "../services/notification.service";
 import { MessageService } from "./message.service";
+import { LinkifyPipe } from '../linkify.pipe'; // Adjust the path accordingly
 
 @Component({
     selector: 'app-message',
     templateUrl: './message.component.html',
     styleUrls: ['./message.component.css'],
+    providers: [LinkifyPipe],
 })
 export class MessageComponent implements OnInit, OnDestroy {
 
-    enteredText: string = ''
+    selectedFiles: File[] = []; // Array to store selected files
+    enteredText: string = '';
+    recentEmojis: string[] = [];
+    isEmojiOpen: boolean = false;
     @ViewChild('scrollMe') private myScrollContainer: ElementRef;
 
     ngAfterViewChecked() {
@@ -28,6 +34,30 @@ export class MessageComponent implements OnInit, OnDestroy {
             this.myScrollContainer.nativeElement.scrollTop =
                 this.myScrollContainer.nativeElement.scrollHeight;
         } catch (err) { }
+    }
+
+    toggleEmojiPicker() {
+        this.isEmojiOpen = !this.isEmojiOpen;
+    }
+
+    onEmojiClick(selected: Emoji) {
+        const emoji: string = (selected.emoji as any).native;
+        this.enteredText += emoji; // Add emoji to the input text
+        this.isEmojiOpen = false;
+    }
+
+    onFileSelected(event: any) { ///
+        this.selectedFiles = event.target.files;
+        this.encodeImagesToBase64();
+        this.selectedFiles = [];
+    }
+
+    encodeImagesToBase64() { ///
+        for (const file of this.selectedFiles) {
+            const reader = new FileReader();
+            reader.onload = (event: any) => this.sendImage(event.target.result);
+            reader.readAsDataURL(file);
+        }
     }
 
     constructor(
@@ -91,6 +121,21 @@ export class MessageComponent implements OnInit, OnDestroy {
             const payload = {
                 timestamp: new Date(),
                 message: this.enteredText,
+                sender: this.authService.username,
+            };
+            // slanje poruke preko socket-a
+            this.socketService.sendMessageToConversation(destination, payload);
+            this.enteredText = '';
+        } else this.toastr.info('Please select desired conversation first')
+    }
+
+    sendImage(base64: string) { ///
+        if (this.messageService.selectedConversationId.length !== 0) {
+            const destination = `/app/receive/${this.messageService.selectedConversationId}`;
+            console.log(base64)
+            const payload = {
+                timestamp: new Date(),
+                message: base64,
                 sender: this.authService.username,
             };
             // slanje poruke preko socket-a

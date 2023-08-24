@@ -28,7 +28,6 @@ import { CreateApartmentComponent } from './create-apartment/create-apartment.co
 // import { WINDOW_PROVIDERS } from '@app/core/providers/window.provider';
 import { CommonModule } from '@angular/common';
 import { MessageComponent } from './messages/message.component';
-
 import { AdminComponent } from './admin/admin.component';
 import { UserPanelComponent } from './user-panel/user-panel.component';
 import { AdminPropertiesComponent } from './admin-properties/admin-properties.component';
@@ -38,7 +37,9 @@ import { BookingHistoryComponent } from './booking-history/booking-history.compo
 import { VisitedPlacesComponent } from './visited-places/visited-places.component';
 import { MyPropertiesComponent } from './my-properties/my-properties.component';
 import { UpdateApartmentComponent } from './update-apartment/update-apartment.component';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { ResetPasswordNextComponent } from './reset-password-next/reset-password-next.component';
+import { LinkifyPipe } from './linkify.pipe';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { ResetPasswordNextComponent } from './reset-password-next/reset-password
     MyPropertiesComponent,
     UpdateApartmentComponent,
     ResetPasswordNextComponent,
+    LinkifyPipe,
   ],
   imports: [
     FormsModule,
@@ -77,6 +79,7 @@ import { ResetPasswordNextComponent } from './reset-password-next/reset-password
     CommonModule,
     HttpClientModule,
     AppRoutingModule,
+    PickerComponent,
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot({
       preventDuplicates: true,

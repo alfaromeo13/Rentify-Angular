@@ -1,6 +1,6 @@
 <img src="image.jpg" class="blurredbg">
 
-<button class="button is-light search" (click)="click()">
+<button class="button is-light search" (click)="click()" *ngIf="apartmentService.show">
   <span class="icon">
     <img src="../../assets/fit.png">
   </span>
@@ -58,6 +58,6 @@
   </div>
 </div>
 
-<div *ngIf="showEmpty" class="buk">
+<div *ngIf="this.filterService.showEmpty" class="buk">
   <p class="title main-text">Oops! Looks empty. Nothing to see here :/</p>
 </div>

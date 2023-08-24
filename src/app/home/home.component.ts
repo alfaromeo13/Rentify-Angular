@@ -57,6 +57,7 @@ export class HomeComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.filterService.pageNo = 1;
         this.authService.isAuthenticated.subscribe(data => {
             this.isUserAuthenticated = data;
         });

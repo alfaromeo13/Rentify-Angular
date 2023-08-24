@@ -24,6 +24,7 @@
             ],
             "styles": [
               "src/styles.css",
+              "node_modules/@ctrl/ngx-emoji-mart/picker.css",
               "node_modules/leaflet/dist/leaflet.css",
               "node_modules/leaflet-control-geocoder/dist/Control.Geocoder.css",
               "node_modules/bulma-calendar/dist/css/bulma-calendar.min.css",

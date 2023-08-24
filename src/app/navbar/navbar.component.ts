@@ -59,6 +59,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.apartmentService.filterService.pageNo = 1;
         this.apartmentService.apartmani = [];
         this.apartmentService.apartmentList = [];
+        this.apartmentService.show = false;
+        this.apartmentService.showLoader = true;
         localStorage.setItem('liked', 'true');
         this.apartmentService.allFavorite();
     }

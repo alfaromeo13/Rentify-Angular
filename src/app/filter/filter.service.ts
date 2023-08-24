@@ -8,8 +8,8 @@ import { HttpParams } from "@angular/common/http";
 
 @Injectable({ providedIn: 'root' })
 export class FilterService {
-
   pageNo: number = 1;
+  showEmpty: boolean = false;
   isActive: boolean = false;
   sort: string = 'Choose value';
   apartmentSearch: ApartmentSearch; //we memorize last search specification
@@ -36,6 +36,7 @@ export class FilterService {
     for (const [key, value] of Object.entries(apartmentSearch))
       if (value !== undefined) params = params.set(key, value.toString());
 
+    this.showEmpty = false;
     return this.httpClient.get<ApartmentDTO[]>(url, { params });
   }
 }

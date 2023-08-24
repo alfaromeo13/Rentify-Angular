@@ -12,8 +12,9 @@ import { NotificationService } from '../services/notification.service';
   styleUrls: ['./apartment.component.css']
 })
 export class ApartmentComponent implements OnInit, OnDestroy {
-  showEmpty: boolean = false;
+
   PAGE_TOLERANCE: number = 3;
+  selectedSearch: ApartmentSearch;
 
   constructor(
     public notificationService: NotificationService,
@@ -22,28 +23,33 @@ export class ApartmentComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnDestroy(): void {
+    this.apartmentService.show = true;
     localStorage.removeItem('liked');
-    this.filterService.pageNo = 1;
   }
 
   ngOnInit(): void {
     if (this.apartmentService.apartmentList.length !== 0) {
       this.apartmentService.generateRooms();
+      const storedData = localStorage.getItem('apartmentSearch');
+      if (storedData) this.selectedSearch = JSON.parse(storedData);
     } else {
       this.apartmentService.showLoader = true;
       const storedData = localStorage.getItem('apartmentSearch');
       const isLiked = localStorage.getItem('liked');
-      if (isLiked) this.apartmentService.allFavorite();
+      if (isLiked) {
+        this.apartmentService.show = false;
+        this.apartmentService.allFavorite();
+      }
       else if (storedData) {
-        const apartmentSearch: ApartmentSearch = JSON.parse(storedData);
-        this.filterService.filter(apartmentSearch, 0).subscribe(
+        this.selectedSearch = JSON.parse(storedData);
+        this.filterService.filter(this.selectedSearch, 0).subscribe(
           (apartmentDTOs: ApartmentDTO[]) => {
             console.log(apartmentDTOs);
             this.apartmentService.apartmentList = apartmentDTOs;
             this.apartmentService.showLoader = false;
             this.apartmentService.generateRooms();
             if (apartmentDTOs.length == 0)
-              this.showEmpty = true;
+              this.filterService.showEmpty = true;
           }, (error) => {
             console.error(error);
           }
@@ -54,17 +60,19 @@ export class ApartmentComponent implements OnInit, OnDestroy {
 
   set_page_no(newPageNo: number): void {
     if (newPageNo > 0) {
-      this.showEmpty = false;
+      this.filterService.showEmpty = false;
       this.apartmentService.apartmani = [];
       this.apartmentService.showLoader = true;
       this.filterService.pageNo = newPageNo;
-      this.filterService.filter(this.filterService.apartmentSearch, this.filterService.pageNo - 1).subscribe(
+      const storedData = localStorage.getItem('apartmentSearch');
+      if (storedData) this.selectedSearch = JSON.parse(storedData);
+      this.filterService.filter(this.selectedSearch, this.filterService.pageNo - 1).subscribe(
         (apartmentDTOs: ApartmentDTO[]) => {
           this.apartmentService.apartmentList = apartmentDTOs;
           this.apartmentService.generateRooms();
           this.apartmentService.showLoader = false;
           if (apartmentDTOs.length == 0)
-            this.showEmpty = true;
+            this.filterService.showEmpty = true;
         }, (error) => {
           this.apartmentService.showLoader = false;
           console.error(error);

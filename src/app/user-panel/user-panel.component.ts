@@ -117,21 +117,21 @@ export class UserPanelComponent implements OnInit {
       text: "You won't be able to revert this!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
           title: 'Enter your account password:',
-          input: 'text',
+          input: 'password',
           inputAttributes: {
             autocapitalize: 'off'
           },
           showCancelButton: true,
           confirmButtonText: 'Submit',
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
           showLoaderOnConfirm: true,
           preConfirm: (password) => {
             return this.userPanelService.deleteAccount(password).subscribe(

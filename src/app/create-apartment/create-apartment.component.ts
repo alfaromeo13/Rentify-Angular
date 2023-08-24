@@ -335,6 +335,17 @@ export class CreateApartmentComponent implements OnInit, AfterViewInit {
     this.isStudioClicked = false;
   }
 
+  selectAll() {
+    this.isPetsClicked = true;
+    this.isParkingClicked = true;
+    this.isAppliancesClicked = true;
+    this.isBalconyClicked = true;
+    this.isAirClicked = true;
+    this.isFurnishedClicked = true;
+    this.isWifiClicked = true;
+    this.isElevatorClicked = true;
+  }
+
   onApartmentClick() {
     this.isApartmentClicked = !this.isApartmentClicked;
     this.isCondoClicked = false;

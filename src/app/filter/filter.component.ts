@@ -294,6 +294,7 @@ export class FilterComponent implements OnInit {
 
     this.filterService.filter(apartmentSearch, 0).subscribe(
       (apartmentDTOs: ApartmentDTO[]) => {
+        this.filterService.showEmpty = apartmentDTOs.length == 0;
         this.apartmentService.apartmentList = apartmentDTOs;
         this.apartmentService.generateRooms();
         this.filterService.isActive = false; //we close modal with this...
@@ -302,5 +303,6 @@ export class FilterComponent implements OnInit {
       }
     );
     this.filterService.pageNo = 1;
+    localStorage.setItem('apartmentSearch', JSON.stringify(apartmentSearch));
   }
 }

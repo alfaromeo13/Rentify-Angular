@@ -10,6 +10,7 @@ import { ApartmentSearch } from "../models/search.model";
 
 @Injectable({ providedIn: 'root' })
 export class ApartmentService {
+  show: boolean = true;
   showLoader: boolean = false;
   selectedApartmentId: number;
   apartmentList: ApartmentDTO[] = [];
@@ -46,6 +47,7 @@ export class ApartmentService {
           id: apartmentIds,
           isActive: true,
         };//we getthose liked apartments with help of search specification
+        localStorage.setItem('apartmentSearch', JSON.stringify(apartmentSearch));
         this.filterService.filter(apartmentSearch, this.filterService.pageNo - 1).subscribe(
           (apartmentDTOs: ApartmentDTO[]) => {
             this.apartmentList = apartmentDTOs;
