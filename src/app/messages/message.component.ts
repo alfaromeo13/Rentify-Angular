@@ -46,18 +46,23 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.isEmojiOpen = false;
     }
 
-    onFileSelected(event: any) { ///
+    onFileSelected(event: any) {
         this.selectedFiles = event.target.files;
-        this.encodeImagesToBase64();
-        this.selectedFiles = [];
-    }
+        if (this.messageService.selectedConversationId.length !== 0) {
+            this.messageService.sendImages(this.selectedFiles)
+                .subscribe(
+                    () => {
+                        console.log('Images sent successfully');
+                        // Handle success, such as showing a success message
+                    },
+                    error => {
+                        console.error('Error sending images:', error);
+                        // Handle error, such as showing an error message
+                    }
+                );
 
-    encodeImagesToBase64() { ///
-        for (const file of this.selectedFiles) {
-            const reader = new FileReader();
-            reader.onload = (event: any) => this.sendImage(event.target.result);
-            reader.readAsDataURL(file);
-        }
+        } else this.toastr.info('Please select desired conversation first')
+        this.selectedFiles = [];
     }
 
     constructor(
@@ -108,10 +113,21 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.messageService.getMessagesFromConversationById(conversation.id)
             .subscribe((data: MessageDTO[]) => {
                 this.messageService.currentMessages = data;
+                console.log(data);
                 for (const msg of this.messageService.currentMessages)
                     msg.localTime = moment(msg.timestamp).format('DD/MM/YYYY, h:mm:ss A');
                 console.log(data);
             });
+    }
+
+    handleClick(event: Event) {
+        const target = event.target as HTMLElement;
+        if (target.tagName === 'IMG') {
+            const imageUrl = target.getAttribute('data-image');
+            if (imageUrl) {
+                window.open(imageUrl, '_blank');
+            }
+        }
     }
 
     // slanje poruke korisniku
@@ -121,21 +137,6 @@ export class MessageComponent implements OnInit, OnDestroy {
             const payload = {
                 timestamp: new Date(),
                 message: this.enteredText,
-                sender: this.authService.username,
-            };
-            // slanje poruke preko socket-a
-            this.socketService.sendMessageToConversation(destination, payload);
-            this.enteredText = '';
-        } else this.toastr.info('Please select desired conversation first')
-    }
-
-    sendImage(base64: string) { ///
-        if (this.messageService.selectedConversationId.length !== 0) {
-            const destination = `/app/receive/${this.messageService.selectedConversationId}`;
-            console.log(base64)
-            const payload = {
-                timestamp: new Date(),
-                message: base64,
                 sender: this.authService.username,
             };
             // slanje poruke preko socket-a

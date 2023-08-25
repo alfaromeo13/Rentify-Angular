@@ -48,7 +48,7 @@
                     </div>
 
                     <div class="message-box">
-                        <div [innerHTML]="message.message | linkify"></div>
+                        <div [innerHTML]="message.message | linkify" (click)="handleClick($event)"></div>
                         <b><sub style="color: hsl(171, 77%, 40%);padding-bottom: 5px;">
                                 {{message.localTime}}</sub></b>
                     </div>
@@ -59,7 +59,7 @@
                 </div>
                 <div class="message-box-holder" *ngIf="message.sender!==this.authService.username">
                     <div class="message-box message-partner">
-                        <div [innerHTML]="message.message | linkify"></div>
+                        <div [innerHTML]="message.message | linkify" (click)="handleClick($event)"></div>
                         <b><sub style="color: hsl(171, 77%, 40%);padding-bottom: 5px;">
                                 {{message.localTime}}</sub></b>
                     </div>
@@ -73,7 +73,7 @@
                 style='font-size:30px;margin-left: -10px;margin-right: 10px;cursor: pointer;'>😀</span>
             <emoji-mart *ngIf="isEmojiOpen" class="emoji-picker" (emojiClick)="onEmojiClick($event)">
             </emoji-mart>
-            <!-- <span style="margin-top: 10px;">
+            <span style="margin-top: 10px;">
                 <label for="fileInput">
                     <svg xmlns="http://www.w3.org/2000/svg" height="2em"
                         style="fill:white;margin-top:2px;margin-left:10px;margin-right: 20px;cursor:pointer"
@@ -84,7 +84,7 @@
                 </label>
                 <input type="file" id="fileInput" (change)="onFileSelected($event)" accept="image/*"
                     style="display: none;" multiple>
-            </span> -->
+            </span>
             <input class="input is-medium is-rounded is-success is-focused" [(ngModel)]="enteredText" type="text"
                 placeholder="Enter message...." (keydown.enter)="sendMessage()">
             <div class="control">
