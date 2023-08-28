@@ -135,6 +135,7 @@ export class RoomDetailsComponent implements OnInit {
     if (this.authService.isAuthenticated.getValue()) {
       this.reviewService.addReview(new ReviewApartmentDTO(this.selectedRating, this.enteredText, this.apartment.id)).subscribe(data => {
         this.enteredText = "";
+        this.toastr.success("Your review has been posted successfully!");
         this.getReviews();
       });
     } else this.toastr.info("You have to be logged in to add a review");
@@ -286,7 +287,6 @@ export class RoomDetailsComponent implements OnInit {
     this.getReviews();
   }
 
-
   // pozivas klikom na odredjeno dugme (nova konverzacija)
   openNewConversation(toUsername: string) {
     if (this.authService.username === toUsername) return;
@@ -305,7 +305,6 @@ export class RoomDetailsComponent implements OnInit {
       });
     } else this.toastr.info('You have to be looged to send someone a message');
   }
-
 
   private initMap(): void {
     const centroid: L.LatLngExpression = [this.apartment.address.x, this.apartment.address.y];

@@ -30,6 +30,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.4.0",
     "@fortawesome/free-regular-svg-icons": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@material/tooltip": "^15.0.0-canary.90291f2e2.0",
     "@ngneat/helipopper": "^3.4.0",
     "@ngneat/overview": "^5.1.1",
     "@stomp/stompjs": "^7.0.0",

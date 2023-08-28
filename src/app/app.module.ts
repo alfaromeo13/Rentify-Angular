@@ -40,6 +40,7 @@ import { UpdateApartmentComponent } from './update-apartment/update-apartment.co
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { ResetPasswordNextComponent } from './reset-password-next/reset-password-next.component';
 import { LinkifyPipe } from './linkify.pipe';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import { LinkifyPipe } from './linkify.pipe';
     HttpClientModule,
     AppRoutingModule,
     PickerComponent,
+    // MatTooltipModule,
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot({
       preventDuplicates: true,

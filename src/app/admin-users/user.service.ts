@@ -9,7 +9,7 @@ export class UserService {
     constructor(private httpClient: HttpClient) { }
 
     getAll(): Observable<UserDTO[]> {
-        const url = `${environment.apiUrl}admin/all-users?page=0&size=25`;
+        const url = `${environment.apiUrl}admin/all-users?page=0&size=5`;
         return this.httpClient.get<UserDTO[]>(url);
     }
 
