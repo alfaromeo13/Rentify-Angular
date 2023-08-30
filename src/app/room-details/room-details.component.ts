@@ -299,6 +299,7 @@ export class RoomDetailsComponent implements OnInit {
       };
       this.messageService.createNewConversation(conversation).subscribe((data: any) => {
         this.messageService.selectedConversationId = data.conversationId;
+        this.authService.subscribeToConversation(data.conversationId);
         this.router.navigate(['messages']);
       }, error => {
         console.log(error);

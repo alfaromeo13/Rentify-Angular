@@ -5,11 +5,17 @@ import { Client } from '@stomp/stompjs';
 import * as SockJS from "sockjs-client";
 // import { WINDOW } from '@app/core/providers/window.provider';
 
-
 @Injectable({
     providedIn: 'root'
 })
 export class CoreSocketService {
+    /* ova klasa samo otvara soket i sadrzi neke metode kao za parsiranje odgovora jer
+      cemo neke podatke primati kroz soket.Ti podaci su u cistom JSON stringu i moraju se
+      parsirati da bi se dobio neki objekat za to nam sluzi metoda standardParse(data: any) 
+      koja od data sto je JSON string pravi objekat sa JSON.parse().
+      Takodje imamo metodu stringify() koja sluzi za slanje podataka jer kada saljemo podatke
+      ne mozemo ih slati u JSON formatu vec moramo kao JSON string tj neki json samo '{name:...}'
+    */
     static connected: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     private _stompClient: Client;
@@ -71,7 +77,9 @@ export class CoreSocketService {
             heartbeatIncoming: 4000,
             heartbeatOutgoing: 4000
         });
-        //ovo iznad radi reconnect svakih 5 sekundi
+
+        //ovo iznad ako dodje do neke greske pri konekciji radi reconnect automatski svakih 5 sekundi s
+
         this._stompClient.onConnect = CoreSocketService.onConnect.bind(this, callback);
         this._stompClient.onStompError = CoreSocketService.onStompError;
         this._stompClient.activate();

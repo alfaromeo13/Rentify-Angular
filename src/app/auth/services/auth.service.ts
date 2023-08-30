@@ -60,12 +60,12 @@ export class AuthService {
     openWS() {
         //otvaramo web soket ka bekendu
         this.coreSocketService.initConnection();
-        //nakon toga se subscribujemo na topic i slusamo na dolazece konverzacije
+        //nakon toga se subscribujemo na topic i slusamo na dolazece konverzacije za nas username
         const topic = `/topic/incoming-conversation/${this.username}`;
         this.globalSocketService.subscribe(topic, (data: any) => {
             console.log(data); // vraca se kompletan conversation objekat
             const payload = JSON.parse(data.body);
-            //dobili smo notifikaciju da je neko poceo konverzaciju sa nama ili mi sa nekim
+            //dobili smo notifikaciju da je neko poceo konverzaciju sa nama
             //pa se subscribujemo na tu konverzaciju
             this.subscribeToConversation(payload.id);
 
