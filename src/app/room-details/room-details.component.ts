@@ -17,6 +17,8 @@ import { CreateConversationDTO } from '../models/create-conversation.model';
 import { Router } from '@angular/router';
 import { FilterService } from '../filter/filter.service';
 import { ApartmentSearch } from '../models/search.model';
+import { RedisConversation } from '../models/redis-conversation.model';
+import { MessageDTO } from '../models/message.model';
 
 declare var bulmaCalendar: any;
 
@@ -300,6 +302,17 @@ export class RoomDetailsComponent implements OnInit {
       this.messageService.createNewConversation(conversation).subscribe((data: any) => {
         this.messageService.selectedConversationId = data.conversationId;
         this.authService.subscribeToConversation(data.conversationId);
+        const redisConversation: RedisConversation = {
+          id: data.conversationId,
+          usernameFrom: this.authService.username,
+          usernameTo: this.apartment.user.username,
+          createdAt: new Date(),
+          isOpened: true,
+          messages: [],
+          localTime: moment(new Date()).format('DD/MM/YYYY, h:mm:ss A'),
+          isClicked: true,
+        }
+        this.messageService.conversations.push(redisConversation);
         this.router.navigate(['messages']);
       }, error => {
         console.log(error);

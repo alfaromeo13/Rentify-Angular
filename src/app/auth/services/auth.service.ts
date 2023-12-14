@@ -115,8 +115,7 @@ export class AuthService {
     //prikazujemo sve konverzacije i subscribujemo se na sve njih
     previewAllConversationsForCurrentUser() {
         this.messageService.conversations = [];
-        this.messageService
-            .getAllConversationsByUser()
+        this.messageService.getAllConversationsByUser()
             .subscribe((data: RedisConversation[]) => {
                 if (data.length > 0) {
                     for (const conversation of data) {

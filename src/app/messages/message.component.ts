@@ -40,9 +40,14 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.isEmojiOpen = !this.isEmojiOpen;
     }
 
-    onEmojiClick(selected: Emoji) {
-        const emoji: string = (selected.emoji as any).native;
-        this.enteredText += emoji; // Add emoji to the input text
+    // onEmojiClick(selected: Emoji) {
+    //     const emoji: string = (selected.emoji as any).native;
+    //     this.enteredText += emoji; // Add emoji to the input text
+    //     this.isEmojiOpen = false;
+    // }
+
+    onEmojiClick(event: { emoji: { native: any; }; }) {
+        this.enteredText = `${this.enteredText}${event.emoji.native}`;
         this.isEmojiOpen = false;
     }
 

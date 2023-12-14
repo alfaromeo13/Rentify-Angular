@@ -35,7 +35,7 @@ export class MessageService {
         return this.httpClient.get<MessageDTO[]>(url, { headers: { 'Content-Type': 'application/json' } });
     }
 
-    //we send images threw http request not threw websoket connection
+    //we send images through http request not through websoket connection
     sendImages(images: File[]): Observable<any> {
         const url = `${environment.apiUrl}image/${this.selectedConversationId}`;
         const formData = new FormData();
